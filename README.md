@@ -1,5 +1,5 @@
-Symfony Standard Edition
-========================
+Symfony Standard Edition with Openshift Support
+===============================================
 
 Welcome to the Symfony Standard Edition - a fully-functional Symfony2
 application that you can use as the skeleton for your new applications.
@@ -8,56 +8,44 @@ This document contains information on how to download, install, and start
 using Symfony. For a more detailed explanation, see the [Installation][1]
 chapter of the Symfony Documentation.
 
-1) Installing the Standard Edition
-----------------------------------
+1) Getting Started
+------------------
 
-When it comes to installing the Symfony Standard Edition, you have the
-following options.
+To use this repo with Openshift:
+* Provision a php application (mysql-5.5 and phpmyadmin-4 are optional)
 
-### Use Composer (*recommended*)
+    rhc app create MYAPP php-5.4 mysql-5.5 phpmyadmin-4 --from-code=https://github.com/xcompass/openshift-symfony.git
 
-As Symfony uses [Composer][2] to manage its dependencies, the recommended way
-to create a new project is to use it.
+Once the application is created, Openshift will give out the URL of the app, SSH address and git repo. 
+Those information can be obtained by running the following command as well:
 
-If you don't have Composer yet, download it following the instructions on
-http://getcomposer.org/ or just run the following command:
+    rhc app show MYAPP
 
-    curl -s http://getcomposer.org/installer | php
-
-Then, use the `create-project` command to generate a new Symfony application:
-
-    php composer.phar create-project symfony/framework-standard-edition path/to/install
-
-Composer will install Symfony and all its dependencies under the
-`path/to/install` directory.
-
-### Download an Archive File
-
-To quickly test Symfony, you can also download an [archive][3] of the Standard
-Edition and unpack it somewhere under your web server root directory.
-
-If you downloaded an archive "without vendors", you also need to install all
-the necessary dependencies. Download composer (see above) and run the
-following command:
-
-    php composer.phar install
+The database parameters are setup in app/config/params.php, which is imported by app/config/config.yml.
 
 2) Checking your System Configuration
 -------------------------------------
 
-Before starting coding, make sure that your local system is properly
+Before starting coding, make sure that your system is properly
 configured for Symfony.
 
 Execute the `check.php` script from the command line:
 
+    ssh OPENSHIFT_SSH_ADDRESS
+    cd $OPENSHIFT_REPO_DIR
     php app/check.php
 
 The script returns a status code of `0` if all mandatory requirements are met,
 `1` otherwise.
 
-Access the `config.php` script from a browser:
+To access the `config.php` script from a browser, a ssh tunnel has to be created 
+as config.php is only accessible from localhost
 
-    http://localhost/path/to/symfony/app/web/config.php
+    rhc port-forward
+
+Then open the URL from the browser:
+
+    http://your_openshift_domain/config.php
 
 If you get any warnings or recommendations, fix them before moving on.
 
@@ -103,6 +91,16 @@ playing with it, you can remove it by following these steps:
   * remove the `security.providers`, `security.firewalls.login` and
     `security.firewalls.secured_area` entries in the `security.yml` file or
     tweak the security configuration to fit your needs.
+
+5) To access other component directly
+-------------------------------------
+
+If mysql or other database is installed and you want to access it directly. E.g. using 
+MySQLBench or other tools. You can use the port forward mentioned above.
+
+    rhc port-forward
+
+The port will be forwarded to localhost and you can setup your tool to connect to localhost.
 
 What's inside?
 ---------------
