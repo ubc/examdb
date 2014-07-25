@@ -11,8 +11,7 @@ chapter of the Symfony Documentation.
 1) Getting Started
 ------------------
 
-To use this repo with Openshift:
-* Provision a php application (mysql-5.5 and phpmyadmin-4 are optional)
+Provision a php application (mysql-5.5 and phpmyadmin-4 are optional)
 
     rhc app create MYAPP php-5.4 mysql-5.5 phpmyadmin-4 --from-code=https://github.com/xcompass/openshift-symfony.git
 
