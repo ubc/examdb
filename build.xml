@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="ExamDB" basedir="." default="build">
+
+    <php expression="include('vendor/autoload.php')"/>
+
+    <property name="sourcedir" value="${project.basedir}/src" />
+    <property name="builddir" value="${project.basedir}/build" />
+    <property name="vendordir" value="${project.basedir}/vendor" />
+
+    <target name="build"
+        depends="prepare,lint,phploc,pdepend,phpmd,phpcs,phpcpd,phpdoc,test,phpcb"/>
+
+    <target name="build-ci"
+        depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdoc,test,phpcb"/>
+
+    <target name="clean" description="Cleanup build artifacts">
+        <delete dir="${builddir}/api"/>
+        <delete dir="${builddir}/code-browser"/>
+        <delete dir="${builddir}/coverage"/>
+        <delete dir="${builddir}/logs"/>
+        <delete dir="${builddir}/pdepend"/>
+    </target>
+
+    <target name="prepare" depends="clean"
+        description="Prepare for build">
+        <mkdir dir="${builddir}/api"/>
+        <mkdir dir="${builddir}/code-browser"/>
+        <mkdir dir="${builddir}/coverage"/>
+        <mkdir dir="${builddir}/logs"/>
+        <mkdir dir="${builddir}/pdepend"/>
+        <!-- set the permission on cache and logs-->
+        <exec command="chmod -R 777 ${sourcedir}/cache"/>
+        <exec command="chmod -R 777 ${sourcedir}/logs"/>
+    </target>
+
+    <target name="lint">
+        <phplint haltonfailure="true" cachefile="${builddir}/lint.cache">
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+        </phplint>
+    </target>
+
+    <target name="phploc" description="Measure project size using PHPLOC">
+        <exec executable="phploc">
+            <arg value="--log-csv" />
+            <arg value="${builddir}/logs/phploc.csv" />
+            <arg path="${sourcedir}" />
+        </exec>
+    </target>
+
+    <target name="pdepend"
+        description="Calculate software metrics using PHP_Depend">
+        <phpdepend>
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+            <logger type="jdepend-xml" outfile="${builddir}/logs/jdepend.xml" />
+            <logger type="jdepend-chart" outfile="${builddir}/pdepend/dependencies.svg" />
+            <logger type="overview-pyramid" outfile="${builddir}/pdepend/overview-pyramid.svg" />
+        </phpdepend>
+    </target>
+
+    <target name="phpmd"
+        description="Perform project mess detection using PHPMD and print human readable output. Intended for usage on the command line before committing.">
+        <phpmd rulesets="codesize,unusedcode">
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+        </phpmd>
+    </target>
+
+    <target name="phpmd-ci"
+        description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
+        <phpmd rulesets="codesize,unusedcode">
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="xml" outfile="${builddir}/logs/pmd.xml"/>
+        </phpmd>
+    </target>
+
+    <target name="phpcs"
+        description="Find coding standard violations using PHP_CodeSniffer and print human readable output. Intended for usage on the command line before committing.">
+        <phpcodesniffer standard="${vendordir}/ubc/ctlt-coding-standard/ruleset.xml">
+            <config name="installed_paths" value="${vendordir}/m6web/symfony2-coding-standard"/>
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+        </phpcodesniffer>
+    </target>
+
+    <target name="phpcs-ci"
+        description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
+        <phpcodesniffer standard="${vendordir}/ubc/ctlt-coding-standard/ruleset.xml">
+            <config name="installed_paths" value="${vendordir}/m6web/symfony2-coding-standard"/>
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="checkstyle" outfile="${builddir}/logs/checkstyle.xml" />
+        </phpcodesniffer>
+    </target>
+
+    <target name="phpcpd" description="Find duplicate code using PHPCPD">
+        <phpcpd>
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+            <formatter type="pmd" outfile="${builddir}/logs/pmd-cpd.xml" />
+        </phpcpd>
+    </target>
+
+    <target name="phpdoc"
+        description="Generate API documentation using PHPDocumentor">
+        <phpdoc2 destdir="${builddir}/api" template="responsive-twig">
+            <fileset dir="${sourcedir}">
+                <include name="**/*.php" />
+            </fileset>
+        </phpdoc2>
+    </target>
+
+    <target name="test" description="Run unit tests">
+        <exec executable="bin/phpunit" passthru="true" checkreturn="true">
+            <arg value="-c" />
+            <arg value="app" />
+        </exec>
+    </target>
+
+    <target name="phpcb"
+        description="Aggregate tool output with PHP_CodeBrowser">
+        <exec executable="phpcb">
+            <arg value="--log" />
+            <arg path="${builddir}/logs" />
+            <arg value="--source" />
+            <arg path="${sourcedir}" />
+            <arg value="--output" />
+            <arg path="${builddir}/code-browser" />
+        </exec>
+    </target>
+</project>
