@@ -124,6 +124,12 @@
 
     <target name="test" description="Run unit tests">
         <exec executable="bin/phpunit" passthru="true" checkreturn="true">
+            <arg value="--log-junit" />
+            <arg value="${builddir}/logs/junit.xml" />
+            <arg value="--coverage-clover" />
+            <arg value="${builddir}/logs/clover.xml" />
+            <arg value="--coverage-html" />
+            <arg value="${builddir}/coverage" />
             <arg value="-c" />
             <arg value="app" />
         </exec>
