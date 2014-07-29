@@ -35,11 +35,13 @@
     </target>
 
     <target name="lint">
-        <phplint haltonfailure="true" cachefile="${builddir}/lint.cache">
+        <apply executable="php" checkreturn="1">
+            <arg value="-l" />
+
             <fileset dir="${sourcedir}">
                 <include name="**/*.php" />
             </fileset>
-        </phplint>
+        </apply>
     </target>
 
     <target name="phploc" description="Measure project size using PHPLOC">
