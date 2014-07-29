@@ -11,9 +11,6 @@
     <target name="build"
         depends="prepare,lint,phploc,pdepend,phpmd,phpcs,phpcpd,phpdoc,test,phpcb"/>
 
-    <target name="build-ci"
-        depends="prepare,lint,phploc,pdepend,phpmd-ci,phpcs-ci,phpcpd,phpdoc,test,phpcb"/>
-
     <target name="clean" description="Cleanup build artifacts">
         <delete dir="${builddir}/api"/>
         <delete dir="${builddir}/code-browser"/>
@@ -70,16 +67,8 @@
             <fileset dir="${sourcedir}">
                 <include name="**/*.php" />
             </fileset>
-        </phpmd>
-    </target>
-
-    <target name="phpmd-ci"
-        description="Perform project mess detection using PHPMD creating a log file for the continuous integration server">
-        <phpmd rulesets="codesize,unusedcode">
-            <fileset dir="${sourcedir}">
-                <include name="**/*.php" />
-            </fileset>
             <formatter type="xml" outfile="${builddir}/logs/pmd.xml"/>
+            <formatter type="text" usefile="false" />
         </phpmd>
     </target>
 
@@ -90,16 +79,7 @@
             <fileset dir="${sourcedir}">
                 <include name="**/*.php" />
             </fileset>
-        </phpcodesniffer>
-    </target>
-
-    <target name="phpcs-ci"
-        description="Find coding standard violations using PHP_CodeSniffer creating a log file for the continuous integration server">
-        <phpcodesniffer standard="${vendordir}/ubc/ctlt-coding-standard/ruleset.xml">
-            <config name="installed_paths" value="${vendordir}/m6web/symfony2-coding-standard"/>
-            <fileset dir="${sourcedir}">
-                <include name="**/*.php" />
-            </fileset>
+            <formatter type="full" usefile="false" />
             <formatter type="checkstyle" outfile="${builddir}/logs/checkstyle.xml" />
         </phpcodesniffer>
     </target>
