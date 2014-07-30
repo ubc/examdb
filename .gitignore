@@ -8,3 +8,8 @@
 /vendor/
 /bin/
 /composer.phar
+.DS_Store
+.project
+.buildpath
+.settings/*
+.vagrant/*
