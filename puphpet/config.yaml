@@ -15,7 +15,7 @@ vagrantfile-local:
                     guest: '22'
                 Lc7NfsXu0bkB:
                     host: '8089'
-                    guest: '22'
+                    guest: '80'
         provider:
             virtualbox:
                 modifyvm:
