@@ -13,6 +13,9 @@ vagrantfile-local:
                 Lc7NfsXu0bkH:
                     host: '8366'
                     guest: '22'
+                Lc7NfsXu0bkB:
+                    host: '8089'
+                    guest: '22'
         provider:
             virtualbox:
                 modifyvm:
@@ -92,7 +95,7 @@ apache:
         hx5TVr2zRTNV:
             servername: examdb.dev
             serveraliases:
-                - www.awesome.dev
+                - www.examdb.dev
             docroot: /var/www/web
             port: '80'
             setenv:
