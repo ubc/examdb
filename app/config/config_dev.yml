@@ -26,6 +26,6 @@ monolog:
 
 assetic:
     use_controller: true
-
+    bundles:        [ UBCExamMainBundle ]
 #swiftmailer:
 #    delivery_address: me@example.com

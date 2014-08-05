@@ -1,0 +1,34 @@
+@CHARSET "UTF-8";
+body.full-width {
+  background-color: #FFF; 
+}
+.full-width .full-width-container {
+  margin-right: auto;
+  margin-left: auto;
+}
+.full-width-container {
+  width: 940px;
+  margin-top: 0;
+  margin-right: auto;
+  margin-bottom: 0;
+  margin-left: auto;
+  padding: 0;
+}
+@media screen and (max-width: 979px) {
+  .full-width-container {
+    margin-left: 0;
+    margin-right: 0;
+    width: auto;
+  }
+}
+@media screen and (min-width: 1200px) {
+  .full-width-container {
+    width: 1170px;
+    display: block;
+    margin: 0 auto;
+  }
+  .home .full-width-container .entry-content {
+    margin-right: -15px;
+    margin-left: -15px;
+  }
+}

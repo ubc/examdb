@@ -1,0 +1,7 @@
+parameters:
+#    ubc_exam_main.example.class: UBC\Exam\MainBundle\Example
+
+services:
+#    ubc_exam_main.example:
+#        class: %ubc_exam_main.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

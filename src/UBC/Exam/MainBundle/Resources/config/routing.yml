@@ -1,0 +1,3 @@
+ubc_exam_main_homepage:
+    path:     /exam
+    defaults: { _controller: UBCExamMainBundle:Default:index }
