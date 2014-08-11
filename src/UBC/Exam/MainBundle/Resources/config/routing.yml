@@ -1,3 +1,8 @@
 ubc_exam_main_homepage:
     path:     /exam
-    defaults: { _controller: UBCExamMainBundle:Default:index }
+    defaults: { _controller: "UBCExamMainBundle:Default:index" }
+
+exam_upload:
+    path:     /exam/upload
+    defaults: { _controller: "UBCExamMainBundle:Default:upload" }
+    
