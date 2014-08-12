@@ -8,8 +8,6 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 /**
  * This class holds the concept of exam (aka file associated with course)
  * 
- * @TOTHINK: should I use compound key?
- * 
  * @ORM\Entity
  * @ORM\Table(name="exam")
  * @ORM\HasLifecycleCallbacks

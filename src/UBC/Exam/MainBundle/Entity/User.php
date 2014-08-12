@@ -120,11 +120,14 @@ class User implements UserInterface, \Serializable
      *
      * @see \Serializable::unserialize()
      */
-    public function unserialize($serialized) {
-        list ( $this->id, $this->username, $this->password, 
+    public function unserialize($serialized)
+    {
+        list (
+            $this->id,
+            $this->username,
+            $this->password,
             // see section on salt below
             // $this->salt
-        ))
- = unserialize ( $serialized );
+        ) = unserialize($serialized);
     }
 }
