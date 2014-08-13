@@ -77,6 +77,8 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
 
 4. Install Dependencies
 
+    vagrant ssh
+    cd /vagrant
     composer install
 
 5. Develop!
