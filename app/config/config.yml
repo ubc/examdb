@@ -64,6 +64,17 @@ stof_doctrine_extensions:
         default:
             timestampable: true
 
+be_simple_sso_auth:
+    admin_sso:
+        protocol:
+            id: cas
+            version: 2
+        server:
+            id: cas
+            login_url: http://cas.dev:8088/cas/login
+            logout_url: http://cas.dev:8088/cas/logout
+            validation_url: http://cas.dev:8088/cas/serviceValidate
+ 
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"

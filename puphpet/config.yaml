@@ -146,6 +146,7 @@ php:
             - intl
             - mcrypt
             - xsl
+            - curl
         pear: {  }
         pecl:
             - pecl_http

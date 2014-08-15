@@ -6,3 +6,6 @@ exam_upload:
     path:     /exam/upload
     defaults: { _controller: "UBCExamMainBundle:Default:upload" }
     
+loggged_in:
+    path: /exam/loggedin
+    defaults: { _controller: "UBCExamMainBundle:Default:loggedin" }

@@ -12,6 +12,15 @@ security:
                 users:
                     user:  { password: userpass, roles: [ 'ROLE_USER' ] }
                     admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    jleleu: { password: passworddoesnotmatter, roles: [ 'ROLE_USER'] }
+                    
+        administrators:
+            entity:
+                class: UBCExamMainBundle:User
+                property: username
+        ubc_chain_provider:
+            chain:
+                providers: [ in_memory, administrators ]
 
     firewalls:
         dev:
@@ -21,6 +30,17 @@ security:
         login:
             pattern:  ^/demo/secured/login$
             security: false
+
+        ubc_secured_area:
+            pattern: ^/exam
+            anonymous: ~
+            trusted_sso:
+                manager: admin_sso
+                login_action: false         # BeSimpleSsoAuthBundle:TrustedSso:login
+                logout_action: false        # BeSimpleSsoAuthBundle:TrustedSso:logout
+                create_users: true
+                created_users_roles: [ ROLE_USER ]
+                check_path: /exam/loggedin  # created a loggedinAction in DefaultController, but no sure what to do there.
 
         secured_area:
             pattern:    ^/demo/secured/
@@ -35,5 +55,7 @@ security:
             #    realm: "Secured Demo Area"
 
     access_control:
+        - { path: ^/exam/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/exam/, roles: ROLE_USER }
         - { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

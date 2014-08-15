@@ -12,7 +12,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity
  * @ORM\Table(name="user")
  */
-class User implements UserInterface, \Serializable 
+class User implements UserInterface, \Serializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -58,6 +58,7 @@ class User implements UserInterface, \Serializable
      *      @ORM\Column(type="datetime")
      */
     private $modified;
+
     public function __construct() {
         $this->isActive = true;
         // may not be needed, see section on salt below
