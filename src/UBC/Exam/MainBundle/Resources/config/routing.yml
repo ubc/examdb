@@ -9,3 +9,11 @@ exam_upload:
 loggged_in:
     path: /exam/loggedin
     defaults: { _controller: "UBCExamMainBundle:Default:loggedin" }
+    
+list:
+    path: /exam/list
+    defaults: { _controller: "UBCExamMainBundle:Default:list" }
+    
+refresh:
+    path: /exam/refresh
+    defaults: { _controller: "UBCExamMainBundle:Default:refresh" }

@@ -23,14 +23,20 @@ class Exam
     protected $id;
     
     /**
-     * @ORM\Column(type="string", length=4)
+     * @ORM\Column(type="string", length=50)
+     */
+    protected $faculty;
+    
+    /**
+     * @ORM\Column(type="string", length=50)
      */
     protected $dept;
     
+    
     /**
-     * @ORM\Column(type="string", length=4)
+     * @ORM\Column(type="string", length=10)
      */
-    protected $number;
+    protected $subject_code;
     
     /**
      * @ORM\Column(type="integer")
@@ -48,6 +54,31 @@ class Exam
     protected $comments;
     
     /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $cross_listed;
+    
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+	protected $legal_content_owner;
+	
+	/**
+	 * @ORM\Column(type="string", length=100)
+	 */
+	protected $legal_uploader;
+	
+	/**
+	 * @ORM\Column(type="date")
+	 */
+	protected $legal_date;
+	
+	/**
+	 * @ORM\Column(type="boolean")
+	 */
+	protected $legal_agreed;
+	
+    /**
      * 
      * @ORM\OneToOne(targetEntity="User")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
@@ -62,8 +93,14 @@ class Exam
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    public $path;
+    protected $path;
 
+    /**
+     * file
+     * @var unknown
+     */
+    private $file;
+    
     /**
      * @var datetime $created
      *
@@ -80,11 +117,7 @@ class Exam
      */
     private $modified;
     
-    /**
-     * file
-     * @var unknown
-     */
-    private $file;
+    private $temp;
     
     /**
      * Sets file.
@@ -111,7 +144,7 @@ class Exam
      * @ORM\PreUpdate()
      */
     public function preUpload()
-    {
+    { 
         if (null !== $this->getFile()) {
             // do whatever you want to generate a unique name
             $filename = sha1(uniqid(mt_rand(), true));
@@ -125,25 +158,22 @@ class Exam
      */
     public function upload()
     {
-        // the file property can be empty if the field is not required
         if (null === $this->getFile()) {
             return;
         }
-    
-        // use the original file name here but you should
-        // sanitize it at least to avoid any security issues
-    
-        // move takes the target directory and then the
-        // target filename to move to
-        $this->getFile()->move(
-                $this->getUploadRootDir(),
-                $this->getFile()->getClientOriginalName()
-        );
-    
-        // set the path property to the filename where you've saved the file
-        $this->path = $this->getFile()->getClientOriginalName();
-    
-        // clean up the file property as you won't need it anymore
+
+        // if there is an error when moving the file, an exception will
+        // be automatically thrown by move(). This will properly prevent
+        // the entity from being persisted to the database on error
+        $this->getFile()->move($this->getUploadRootDir(), $this->path);
+
+        // check if we have an old image
+        if (isset($this->temp)) {
+            // delete the old image
+            unlink($this->getUploadRootDir().'/'.$this->temp);
+            // clear the temp image path
+            $this->temp = null;
+        }
         $this->file = null;
     }
     
@@ -207,6 +237,29 @@ class Exam
     }
 
     /**
+     * Set faculty
+     *
+     * @param string $faculty
+     * @return Exam
+     */
+    public function setFaculty($faculty)
+    {
+    	$this->faculty = $faculty;
+    
+    	return $this;
+    }
+    
+    /**
+     * Get dept
+     *
+     * @return string
+     */
+    public function getFaculty()
+    {
+    	return $this->faculty;
+    }
+    
+    /**
      * Set dept
      *
      * @param string $dept
@@ -230,26 +283,36 @@ class Exam
     }
 
     /**
-     * Set number
+     * Set subject_code
      *
      * @param string $number
      * @return Exam
      */
-    public function setNumber($number)
+    public function setSubjectcode($subject_code)
     {
-        $this->number = $number;
+        $this->subject_code = $subject_code;
     
         return $this;
     }
 
     /**
-     * Get number
+     * Get subject_code (aka APSC, ADHE, etc)
      *
      * @return string 
      */
-    public function getNumber()
+    public function getSubjectcode()
     {
-        return $this->number;
+        return $this->subject_code;
+    }
+    
+    /**
+     * Get path
+     *
+     * @return string
+     */
+    public function getPath()
+    {
+    	return $this->path;
     }
 
     /**
@@ -314,13 +377,116 @@ class Exam
     /**
      * Get comments
      *
-     * @return string 
+     * @return string
      */
     public function getComments()
     {
-        return $this->comments;
+    	return $this->comments;
     }
 
+    /**
+     * Get cross_listed
+     *
+     * @return string 
+     */
+    public function getCrossListed()
+    {
+        return $this->cross_listed;
+    }
+
+    /**
+     * Set cross_listed
+     *
+     * @param string $cross_listed
+     * @return Exam
+     */
+    public function setCrossListed($cross_listed)
+    {
+    	$this->cross_listed = $cross_listed;
+    
+    	return $this;
+    }
+    
+	/**
+	 * set legal_content_owner
+	 * @param string $legal_content_owner
+	 * @return \UBC\Exam\MainBundle\Entity\Exam
+	 */
+    public function setLegalContentOwner($legal_content_owner) 
+    {
+    	$this->legal_content_owner = $legal_content_owner;
+
+    	return $this;
+    }
+    
+    /**
+     * gets legal_content_owner
+     * 
+     * return string
+     */
+    public function getLegalContentOwner() 
+    {
+    	return $this->legal_content_owner;
+    }
+    
+    /**
+     * sets legal_uploader
+     * 
+     * @param string $legal_uploader
+     * @return \UBC\Exam\MainBundle\Entity\Exam
+     */
+    public function setLegalUploader($legal_uploader) 
+    {
+    	$this->legal_uploader = $legal_uploader;
+
+    	return $this;
+    }
+    
+    /**
+     * gets legal_uploader
+     * 
+     * return string
+     */
+    public function getLegalUploader() 
+    {
+    	return $this->legal_uploader;
+    }
+    
+    /**
+     * sets legal_date
+     * 
+     * @param string $legal_date
+     * @return \UBC\Exam\MainBundle\Entity\Exam
+     */
+    public function setLegalDate($legal_date) 
+    {
+    	if (is_string($legal_date)) {
+    		$this->legal_date = new \DateTime(strtotime($legal_date));
+    	} else if (is_object($legal_date) && get_class($legal_date) == 'DateTime') {
+    		$this->legal_date = $legal_date;
+    	} else {
+    		throw new \Exception();
+    	}
+    	
+    	return $this;
+    }
+    
+    public function getLegalDate()
+    {
+    	return $this->legal_date;
+    }
+    
+    public function setLegalAgreed($legal_agreed)
+    {
+    	$this->legal_agreed = $legal_agreed;
+    	
+    	return $this;
+    }
+    
+    public function getLegalAgreed()
+    {
+    	return $this->legal_agreed;
+    }
     /**
      * Set uploaded_by
      *

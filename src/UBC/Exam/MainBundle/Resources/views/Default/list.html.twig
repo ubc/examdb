@@ -1,0 +1,9 @@
+{% extends 'UBCExamMainBundle::layout.html.twig' %}
+
+{% block body %}
+<ul>
+ {% for exam in exams %}
+   <li>id:{{ exam.id }} || dept: {{ exam.dept }} || faculty: {{ exam.faculty }} || year: {{ exam.year }} || path: {{ exam.path }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
