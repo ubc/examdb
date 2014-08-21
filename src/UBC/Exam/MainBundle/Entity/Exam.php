@@ -61,27 +61,27 @@ class Exam
     /**
      * @ORM\Column(type="string", length=100)
      */
-	protected $legal_content_owner;
-	
-	/**
-	 * @ORM\Column(type="string", length=100)
-	 */
-	protected $legal_uploader;
-	
-	/**
-	 * @ORM\Column(type="date")
-	 */
-	protected $legal_date;
-	
-	/**
-	 * @ORM\Column(type="boolean")
-	 */
-	protected $legal_agreed;
-	
+    protected $legal_content_owner;
+    
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    protected $legal_uploader;
+    
+    /**
+     * @ORM\Column(type="date")
+     */
+    protected $legal_date;
+    
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    protected $legal_agreed;
+
     /**
      * 
      * @ORM\OneToOne(targetEntity="User")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="uploaded_by", referencedColumnName="id")
      */
     protected $uploaded_by;
     
@@ -138,7 +138,7 @@ class Exam
             $this->path = 'initial';
         }
     }
-    
+
     /**
      * @ORM\PrePersist()
      * @ORM\PreUpdate()
@@ -176,7 +176,7 @@ class Exam
         }
         $this->file = null;
     }
-    
+
     /**
      * @ORM\PostRemove()
      */
@@ -186,7 +186,7 @@ class Exam
             unlink($file);
         }
     }   
-    
+
     /**
      * Get file.
      *
@@ -196,17 +196,17 @@ class Exam
     {
         return $this->file;
     }
-    
+
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
-    
+
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
     }
-    
+
     /**
      * Please see http://symfony.com/doc/2.3/cookbook/doctrine/file_uploads.html#using-lifecycle-callbacks to remove 
      * hard coded __DIR__
@@ -218,14 +218,14 @@ class Exam
         // documents should be saved
         return __DIR__.'/../../../../../web/'.$this->getUploadDir();
     }
-    
+
     protected function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
         // when displaying uploaded doc/image in the view.
         return 'uploads/documents';
     }
-    
+
     /**
      * Get id
      *
@@ -248,7 +248,7 @@ class Exam
     
     	return $this;
     }
-    
+
     /**
      * Get dept
      *
@@ -258,7 +258,7 @@ class Exam
     {
     	return $this->faculty;
     }
-    
+
     /**
      * Set dept
      *
@@ -304,7 +304,7 @@ class Exam
     {
         return $this->subject_code;
     }
-    
+
     /**
      * Get path
      *
@@ -381,7 +381,7 @@ class Exam
      */
     public function getComments()
     {
-    	return $this->comments;
+        return $this->comments;
     }
 
     /**
@@ -403,22 +403,22 @@ class Exam
     public function setCrossListed($cross_listed)
     {
     	$this->cross_listed = $cross_listed;
-    
+
     	return $this;
     }
-    
-	/**
-	 * set legal_content_owner
-	 * @param string $legal_content_owner
-	 * @return \UBC\Exam\MainBundle\Entity\Exam
-	 */
+
+    /**
+     * set legal_content_owner
+     * @param string $legal_content_owner
+     * @return \UBC\Exam\MainBundle\Entity\Exam
+     */
     public function setLegalContentOwner($legal_content_owner) 
     {
     	$this->legal_content_owner = $legal_content_owner;
 
     	return $this;
     }
-    
+
     /**
      * gets legal_content_owner
      * 
@@ -428,7 +428,7 @@ class Exam
     {
     	return $this->legal_content_owner;
     }
-    
+
     /**
      * sets legal_uploader
      * 
@@ -461,7 +461,7 @@ class Exam
     public function setLegalDate($legal_date) 
     {
     	if (is_string($legal_date)) {
-    		$this->legal_date = new \DateTime(strtotime($legal_date));
+    		$this->legal_date = new \DateTime($legal_date);
     	} else if (is_object($legal_date) && get_class($legal_date) == 'DateTime') {
     		$this->legal_date = $legal_date;
     	} else {
@@ -470,23 +470,40 @@ class Exam
     	
     	return $this;
     }
-    
+
+    /**
+     * get legal date
+     * 
+     * @return \DateTime
+     */
     public function getLegalDate()
     {
     	return $this->legal_date;
     }
-    
+
+    /**
+     * set legal agreed checkbox result
+     * 
+     * @param bool $legal_agreed
+     * @return \UBC\Exam\MainBundle\Entity\Exam
+     */
     public function setLegalAgreed($legal_agreed)
     {
     	$this->legal_agreed = $legal_agreed;
     	
     	return $this;
     }
-    
+
+    /**
+     * get legal chekbox result
+     * 
+     * @return boolean
+     */
     public function getLegalAgreed()
     {
     	return $this->legal_agreed;
     }
+
     /**
      * Set uploaded_by
      *

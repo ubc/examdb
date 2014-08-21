@@ -7,20 +7,20 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        in_memory:
-            memory:
-                users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
-                    jleleu: { password: passworddoesnotmatter, roles: [ 'ROLE_USER'] }
+#        in_memory:
+#            memory:
+#                users:
+#                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+#                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+#                    jleleu: { password: passworddoesnotmatter, roles: [ 'ROLE_USER'] }
                     
         administrators:
             entity:
                 class: UBCExamMainBundle:User
-                property: username
-        ubc_chain_provider:
-            chain:
-                providers: [ in_memory, administrators ]
+#                property: username
+#        ubc_chain_provider:
+#            chain:
+#                providers: [ in_memory, administrators ]
 
     firewalls:
         dev:
@@ -38,7 +38,7 @@ security:
                 manager: admin_sso
                 login_action: false         # BeSimpleSsoAuthBundle:TrustedSso:login
                 logout_action: false        # BeSimpleSsoAuthBundle:TrustedSso:logout
-                create_users: true
+                create_users: false
                 created_users_roles: [ ROLE_USER ]
                 check_path: /exam/loggedin  # created a loggedinAction in DefaultController, but no sure what to do there.
 

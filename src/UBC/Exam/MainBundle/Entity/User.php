@@ -9,7 +9,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * Holds information about the user who logged into the system
  * 
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\UserRepository")
  * @ORM\Table(name="user")
  */
 class User implements UserInterface, \Serializable
@@ -27,12 +27,12 @@ class User implements UserInterface, \Serializable
     private $username;
     
     /**
-     * @ORM\Column(type="string", length=64)
+     * @ORM\Column(type="string", length=64, nullable=true)
      */
     private $password;
     
     /**
-     * @ORM\Column(type="string", length=60, unique=true)
+     * @ORM\Column(type="string", length=60, unique=true, nullable=true)
      */
     private $email;
     
@@ -65,13 +65,30 @@ class User implements UserInterface, \Serializable
         // $this->salt = md5(uniqid(null, true));
     }
     
+
+    /**
+     * returns user's id
+     *
+     * @return string
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
     /**
      * @inheritDoc
      */
     public function getUsername() {
         return $this->username;
     }
-    
+
+    public function setUsername($username) {
+        $this->username = $username;
+        
+        return $this;
+    }
+
     /**
      * @inheritDoc
      */
@@ -80,14 +97,14 @@ class User implements UserInterface, \Serializable
         // see section on salt below
         return null;
     }
-    
+
     /**
      * @inheritDoc
      */
     public function getPassword() {
         return $this->password;
     }
-    
+
     /**
      * @inheritDoc
      */
@@ -96,13 +113,13 @@ class User implements UserInterface, \Serializable
                 'ROLE_USER' 
         );
     }
-    
+
     /**
      * @inheritDoc
      */
     public function eraseCredentials() {
     }
-    
+
     /**
      *
      * @see \Serializable::serialize()
@@ -116,7 +133,7 @@ class User implements UserInterface, \Serializable
         // $this->salt,
                 ) );
     }
-    
+
     /**
      *
      * @see \Serializable::unserialize()
