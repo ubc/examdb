@@ -26,4 +26,6 @@ delete_exam:
 update_exam:
     path: /exam/update_exam/{examID}
     defaults: { _controller: "UBCExamMainBundle:Default:updateexam" }
-    
+ubc_exam_logout:
+    path: /exam/logout
+    defaults: { _controller: "UBCExamMainBundle:Default:login" }
