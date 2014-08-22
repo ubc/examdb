@@ -110,9 +110,8 @@ class DefaultController extends Controller
      * @param unknown $something
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function loggedinAction($something) {
-            $this->get('logger')->info(print_r($something,true));
-            return new Response();
+    public function loggedinAction() {
+            return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
 
     /**
