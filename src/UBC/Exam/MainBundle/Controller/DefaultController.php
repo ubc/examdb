@@ -105,4 +105,13 @@ class DefaultController extends Controller
             $this->get('logger')->info(print_r($something,true));
             return new Response();
     }
+
+    /**
+     * if you type in login url, it will redirect to main exam page.
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function loginAction() {
+        return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
+    }
 }

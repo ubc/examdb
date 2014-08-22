@@ -73,7 +73,7 @@ be_simple_sso_auth:
             id: cas
             login_url: https://cas.stg.id.ubc.ca/ubc-cas/login
             logout_url: https://cas.stg.id.ubc.ca/ubc-cas/logout
-            validation_url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate  #using cas2, not saml. will this work?
+            validation_url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate
 #            login_url: http://cas.dev:8088/cas/login
 #            logout_url: http://cas.dev:8088/cas/logout
 #            validation_url: http://cas.dev:8088/cas/serviceValidate

@@ -17,3 +17,6 @@ list:
 refresh:
     path: /exam/refresh
     defaults: { _controller: "UBCExamMainBundle:Default:refresh" }
+login:
+    path: /exam/login
+    defaults: { _controller: "UBCExamMainBundle:Default:login" }
