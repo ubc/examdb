@@ -1,9 +1,41 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block body %}
-<ul>
- {% for exam in exams %}
-   <li>id:{{ exam.id }} || dept: {{ exam.dept }} || faculty: {{ exam.faculty }} || year: {{ exam.year }} || path: {{ exam.path }}</li>
-  {% endfor %}
-</ul>
+
+<table border=1>
+    <caption>Exams uploaded by {{ user.username }}</caption>
+    <thead>
+        <tr>
+        <th>Faculty</th>
+        <th>Department</th>
+        <th>Subject Code</th>
+        <th>Year</th>
+        <th>Term</th>
+        <th>Access Level</th>
+        <th>Comments</th>
+        <th>Cross Listed</th>
+        <th>Content Owner</th>
+        <th>File</th>
+        <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for exam in exams %}
+        <tr>
+            <td>{{ exam.faculty }}</td>
+            <td>{{ exam.dept }}</td>
+            <td>{{ exam.subjectcode }}</td>
+            <td>{{ exam.year }}</td>
+            <td>{{ exam.term }}</td>
+            <td>{{ exam.getAccessLevelString }}</td>
+            <td>{{ exam.comments }}</td>
+            <td>{{ exam.crosslisted }}</td>
+            <td>{{ exam.legalcontentowner }}</td>
+            <td><a href="{{ exam.getWebPath }}">{{ exam.path }}</a></td>
+            <td><a href="{{ url('delete_exam', {'examID': exam.id}) }}"><i class="icon-remove-sign"></i></a> | <a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-refresh"></i></a></td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
 {% endblock %}

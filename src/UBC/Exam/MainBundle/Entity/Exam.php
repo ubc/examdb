@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Exam 
 {
+    static public $ACCESS_LEVELS = array('1' => 'Public', '2' => 'CWL', '3' => 'Department', '4' => 'Course');
     
     /**
      * @ORM\Column(type="integer")
@@ -49,7 +50,7 @@ class Exam
     protected $term;
     
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     protected $comments;
     
@@ -80,7 +81,7 @@ class Exam
 
     /**
      * 
-     * @ORM\OneToOne(targetEntity="User")
+     * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="uploaded_by", referencedColumnName="id")
      */
     protected $uploaded_by;
@@ -548,5 +549,10 @@ class Exam
     public function getAccessLevel()
     {
         return $this->access_level;
+    }
+    
+    public function getAccessLevelString()
+    {
+        return self::$ACCESS_LEVELS[$this->access_level];
     }
 }

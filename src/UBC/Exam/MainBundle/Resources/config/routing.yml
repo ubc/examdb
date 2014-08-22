@@ -20,3 +20,10 @@ refresh:
 login:
     path: /exam/login
     defaults: { _controller: "UBCExamMainBundle:Default:login" }
+delete_exam:
+    path: /exam/delete_exam/{examID}
+    defaults: { _controller: "UBCExamMainBundle:Default:deleteexam" }
+update_exam:
+    path: /exam/update_exam/{examID}
+    defaults: { _controller: "UBCExamMainBundle:Default:updateexam" }
+    
