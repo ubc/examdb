@@ -45,5 +45,6 @@ security:
                 target: _demo
 
     access_control:
+        - { path: ^/exam/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/, roles: ROLE_USER }
         - { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
