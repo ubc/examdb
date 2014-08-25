@@ -1,5 +1,5 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block body %}
-{{ form(form) }}
+{{ include('UBCExamMainBundle:Default:upload-form.html.twig', {'form': form}) }}
 {% endblock %}

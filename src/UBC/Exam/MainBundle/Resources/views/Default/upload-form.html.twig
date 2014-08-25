@@ -1,0 +1,82 @@
+{{ form_start(form) }}
+    {{ form_errors(form) }}
+
+    {{ form_row(form.faculty) }}
+    {{ form_row(form.dept) }}
+    {{ form_row(form.subject_code) }}
+    {{ form_row(form.comments) }}
+    {{ form_row(form.year) }}
+    {{ form_row(form.term) }}
+    {{ form_row(form.cross_listed) }}
+    {{ form_row(form.access_level) }}
+    {{ form_row(form.legal_date) }}
+    {{ form_row(form.legal_content_owner) }}
+    {{ form_row(form.legal_uploader) }}
+
+	<small>
+	<h4 class="text-center">
+		THE UNIVERSITY OF BRITISH COLUMBIA ("UBC")
+	</h4>
+	<h4 class="text-center">
+		LICENCE FOR WORKS
+	</h4>
+	<p>
+	WHEREAS:
+	</p>
+	<ol type="A">
+		<li>You have created the work described in the Schedule to this License (the "Work"); and</li>
+		<li>UBC wishes to obtain your consent to use your Work as set out below.</li>
+	</ol>
+	<p>
+	You agree as follows:
+	</p>
+	<ol type="1">
+		<li>
+			You hereby grant to UBC a worldwide, royalty-free, non-exclusive, perpetual licence to:
+			<ol type="a">
+				<li>use, copy, distribute, display, broadcast, and otherwise make your Work available in a way that allows an UBC affiliate (Student, Faculty, Staff) or a member of the public to have restricted access to the Work from a place and at a time individually chosen by that affiliate or member of the public, without charge in any manner at all, for any research, academic, educational or other purposes in connection with the promotion of UBC and its activities (the "Purposes").</li>
+			</ol>
+		</li>
+		<li>
+			You represent and warrant to UBC that:
+			<ol type="a" start="2">
+				<li>the Work nor use of the Work as contemplated herein does not and will not infringe any copyright or other intellectual property rights of any other person; and</li>
+				<li>the Work does not contain any confidential or proprietary information belonging to any other person unless contained in the Work with such person's express consent.</li>
+			</ol>
+		</li>
+		<li>
+			You acknowledge and agree that personal information, including your name, Images, and any other personal information provided by you to UBC in connection with the Work, is being collected pursuant to Section 26 of the Freedom of Information &amp; Protection of Privacy Act, R.S.B.C. 1996, c.165.  You consent to use of such information by UBC for the Purposes and in accordance with this License.
+		</li>
+		<li>
+			You hereby covenant and agree to indemnify and save harmless UBC, its Board of Governors, faculty, staff, students, officers, employees and agents, from any and all claims, demands, damages and proceedings arising from or relating to any use by UBC or any other person (including third parties) of the Work.  This Section 4 shall survive any termination or expiry of this Consent.
+		</li>
+		<li>
+			This Consent shall be governed by and construed in accordance with the laws of the Province of British Columbia.  The parties hereby attorn to the exclusive jurisdiction of the Supreme Court of British Columbia.
+		</li>
+		<li>
+			You hereby acknowledge and agree that you have read and understood this License before signing below.
+		</li>
+	</ol>
+	<p>
+	<strong>Schedule: </strong> Description of the Work
+	</p>
+	<p>
+	The "work" described in this license may refer to
+	</p>
+	<ol type="1">
+			<li>Examination samples (midterm or final) in its original format as presented to students</li>
+			<li>Examination samples (midterm or final) that contain mock or practice questions or modified format</li>
+			<li>Practice question sets</li>
+			<li>Any evaluation material that deemed useful for students by the instructor</li>
+	</ol>
+	</small>
+	{# to make checkbox lined up with label, need additional customization #}
+	<div class="checkbox">
+		{{ form_widget(form.legal_agreed) }}
+		{{ form_label(form.legal_agreed) }}
+		{{ form_errors(form.legal_agreed) }}
+	</div>
+    {{ form_row(form.file) }}
+    {{ form_row(form.upload) }}
+{{ form_end(form) }}
+
