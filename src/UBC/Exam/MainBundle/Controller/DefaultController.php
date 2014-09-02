@@ -4,9 +4,11 @@ namespace UBC\Exam\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use UBC\Exam\MainBundle\Entity\Exam;
+use UBC\Exam\MainBundle\Entity\Faculty;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DomCrawler\Crawler;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class DefaultController extends Controller
 {
@@ -18,9 +20,18 @@ class DefaultController extends Controller
         $exam = new Exam();
         $exam->setYear(date('Y'));
         $exam->setLegalDate(new \DateTime(date('Y-m-d')));
-
+        
+        //get faculties
+        $em = $this->getDoctrine()->getManager();
+        $faculty_query = $em->createQueryBuilder()
+                ->select(array('f.name'))
+                ->from('UBCExamMainBundle:Faculty', 'f');
+        $results = $faculty_query->getQuery()->getResult();
+        $faculties = array_map(create_function('$o', 'return $o["name"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
+        $faculties = array_combine(array_values($faculties), array_values($faculties));
+        
         $form = $this->createFormBuilder($exam)
-            ->add('faculty', 'text')
+            ->add('faculty', 'choice', array('choices' =>$faculties))
             ->add('dept', 'text')
             ->add('subject_code', 'text')
             ->add('comments', 'textarea')
@@ -40,8 +51,6 @@ class DefaultController extends Controller
             $form->handleRequest($request);
 
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-
                 //setup who did it!
                 $user = $this->get('security.context')->getToken()->getUser();
                 $exam->setUploadedBy($user);
@@ -93,15 +102,31 @@ class DefaultController extends Controller
         $crawler = $crawler->filter('body table#mainTable tbody tr');
        	//checks if results empty, then don't update!
         if (count($crawler) > 0) {
+            $faculties = array();
             foreach ($crawler as $domElement) {
                 $children = $domElement->childNodes;
-                foreach ($children as $i => $child) {
-    //              echo $i. ': '. $child->nodeValue;
-                }
-    //          echo '<br>';
+                $faculties[] = $children->item(2)->nodeValue;
             }
+            $faculties = array_unique($faculties);
+            sort($faculties);
+        
+            //dump old faculties
+            $em = $this->getDoctrine()->getEntityManager();
+            $cmd = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\Faculty');
+            $connection = $em->getConnection();
+            $dbPlatform = $connection->getDatabasePlatform();
+            $dbPlatform->getTruncateTableSql($cmd->getTableName());
+            
+            //insert new faculties
+            foreach ($faculties as $faculty) {
+                $new_faculty = new Faculty();
+                $new_faculty->setName($faculty);
+                $em->persist($new_faculty);
+            }
+            $em->flush();
         }
-        return new Response('<html><head><title>UBC</title></head><body>worked!</body></html>');
+        
+        return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
 
     /**
