@@ -555,4 +555,24 @@ class Exam
     {
         return self::$ACCESS_LEVELS[$this->access_level];
     }
+    
+    /**
+     * Get created
+     *
+     * @return \DateTime
+     */
+    public function getCreated()
+    {
+        return $this->created;
+    }
+    
+    /**
+     * Get modified
+     *
+     * @return \DateTime
+     */
+    public function getModified()
+    {
+        return $this->modified;
+    }
 }

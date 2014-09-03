@@ -12,11 +12,24 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 class DefaultController extends Controller
 {
-    public function indexAction() {
+    /**
+     * just shows empty page. need to determine what to show on default page.
+     * 
+     */
+    public function indexAction()
+    {
         return $this->render('UBCExamMainBundle:Default:index.html.twig');
     }
 
-    public function uploadAction(Request $request) {
+    /**
+     * Handles upload page
+     * 
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function uploadAction(Request $request)
+    {
         $exam = new Exam();
         $exam->setYear(date('Y'));
         $exam->setLegalDate(new \DateTime(date('Y-m-d')));
@@ -65,8 +78,16 @@ class DefaultController extends Controller
 
         return $this->render('UBCExamMainBundle:Default:upload.html.twig', array('form' => $form->createView()));
     }
-
-    public function listAction(Request $request) {
+    
+    /**
+     * page for listing exams the person has uploaded
+     * 
+     * @param Request $request
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listAction(Request $request)
+    {
         $user = $this->get('security.context')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
 
@@ -84,10 +105,13 @@ class DefaultController extends Controller
     /**
      * special call to refresh info from https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0
      * I stil need to think about the best way to do this.
+     * 
      * @param Request $request
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function refreshAction(Request $request) {
+    public function refreshAction(Request $request)
+    {
         //get page content
         $ch = curl_init('https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -133,9 +157,11 @@ class DefaultController extends Controller
      * not sure what this is.  It's set in security.yaml check_path of the firewalls.ubc_secured_area.trusted_sso.checkpath.
      * 
      * @param unknown $something
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function loggedinAction() {
+    public function loggedinAction()
+    {
             return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
 
@@ -144,16 +170,20 @@ class DefaultController extends Controller
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function loginAction() {
+    public function loginAction()
+    {
         return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
     
     /**
      * deletes exam.  
+     * 
      * @param integer $examID
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function deleteexamAction($examID) {
+    public function deleteexamAction($examID)
+    {
         //checks that an exam id is passed in
         if (!$examID) {
             throw $this->createNotFoundException('No exam selected');
@@ -185,9 +215,11 @@ class DefaultController extends Controller
      * allows uploader to update exam
      * 
      * @param unknown $examID
+     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function updateexamAction($examID) {
+    public function updateexamAction($examID)
+    {
         //checks that an exam id is passed in
         if (!$examID) {
             throw $this->createNotFoundException('No exam selected');
