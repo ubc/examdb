@@ -56,6 +56,7 @@ class Faculty
      * Set name
      *
      * @param string $name
+     * 
      * @return Faculty
      */
     public function setName($name)

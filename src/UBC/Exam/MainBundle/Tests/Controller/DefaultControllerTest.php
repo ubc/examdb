@@ -4,9 +4,17 @@ namespace UBC\Exam\MainBundle\Tests\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
+/**
+ * tests default controller
+ * 
+ * @author loongchan
+ *
+ */
 class DefaultControllerTest extends WebTestCase
 {
-	//make sure you can visit main page
+    /**
+     * Tests main page
+     */
     public function testIndex()
     {
         $client = static::createClient();
@@ -17,5 +25,15 @@ class DefaultControllerTest extends WebTestCase
         $this->assertTrue($crawler->filter('#ubc7-header')->count() === 1);
     }
     
-    
+    /**
+     * Tests listing of courses
+     */
+    public function testList()
+    {
+        $client = static::createClient();
+        
+        $crawler = $client->request('GET', '/exam/list');
+        
+        $this->assertTrue($crawler->filter('table.list-uploads')->count() === 1);
+    }
 }

@@ -69,6 +69,9 @@ class User implements UserInterface, \Serializable
      */
     private $modified;
 
+    /**
+     * constructor to make default user active.
+     */
     public function __construct() {
         $this->isActive = true;
         // may not be needed, see section on salt below
@@ -88,17 +91,23 @@ class User implements UserInterface, \Serializable
 
     /**
      * @inheritDoc
+     * 
+     * @ return String
      */
-    public function getUsername() {
+    public function getUsername()
+    {
         return $this->username;
     }
 
     /**
      * sets the user's username
+     * 
      * @param string $username
+     * 
      * @return \UBC\Exam\MainBundle\Entity\User
      */
-    public function setUsername($username) {
+    public function setUsername($username)
+    {
         $this->username = $username;
         
         return $this;
@@ -106,8 +115,11 @@ class User implements UserInterface, \Serializable
 
     /**
      * @inheritDoc
+     * 
+     * @return null
      */
-    public function getSalt() {
+    public function getSalt()
+    {
         // you *may* need a real salt depending on your encoder
         // see section on salt below
         return null;
@@ -115,16 +127,22 @@ class User implements UserInterface, \Serializable
 
     /**
      * @inheritDoc
+     * 
+     * @return String
      */
-    public function getPassword() {
+    public function getPassword()
+    {
         return $this->password;
     }
 
     /**
      * @inheritDoc
+     * 
+     * @return array
      */
-    public function getRoles() {
-        return array (
+    public function getRoles()
+    {
+        return array(
                 'ROLE_USER' 
         );
     }
@@ -132,30 +150,34 @@ class User implements UserInterface, \Serializable
     /**
      * @inheritDoc
      */
-    public function eraseCredentials() {
+    public function eraseCredentials()
+    {
     }
 
     /**
-     *
      * @see \Serializable::serialize()
+     * 
+     * @return String
      */
-    public function serialize() {
-        return serialize ( array (
+    public function serialize()
+    {
+        return serialize( array(
                 $this->id,
                 $this->username,
                 $this->password 
         // see section on salt below
         // $this->salt,
-                ) );
+                ));
     }
 
     /**
+     * @param String $serialized
      *
      * @see \Serializable::unserialize()
      */
     public function unserialize($serialized)
     {
-        list (
+        list(
             $this->id,
             $this->username,
             $this->password,
@@ -168,6 +190,7 @@ class User implements UserInterface, \Serializable
      * Set firstname
      *
      * @param string $firstname
+     * 
      * @return Exam
      */
     public function setFirstname($firstname)
@@ -191,6 +214,7 @@ class User implements UserInterface, \Serializable
      * Set lastname
      *
      * @param string $lastname
+     * 
      * @return Exam
      */
     public function setLastname($lastname)
@@ -213,7 +237,8 @@ class User implements UserInterface, \Serializable
     /**
      * Set email
      *
-     * @param string $email
+     * @param String $email
+     * 
      * @return Exam
      */
     public function setEmail($email)

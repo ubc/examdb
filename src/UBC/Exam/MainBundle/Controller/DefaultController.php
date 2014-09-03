@@ -10,11 +10,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DomCrawler\Crawler;
 use Doctrine\Common\Collections\ArrayCollection;
 
+/**
+ * Main controller class
+ * 
+ * @author loongchan
+ *
+ */
 class DefaultController extends Controller
 {
     /**
      * just shows empty page. need to determine what to show on default page.
      * 
+     * @return \Symfony\Component\HttpFoundation\Response 
      */
     public function indexAction()
     {
@@ -36,10 +43,10 @@ class DefaultController extends Controller
         
         //get faculties
         $em = $this->getDoctrine()->getManager();
-        $faculty_query = $em->createQueryBuilder()
+        $facultyQuery = $em->createQueryBuilder()
                 ->select(array('f.name'))
                 ->from('UBCExamMainBundle:Faculty', 'f');
-        $results = $faculty_query->getQuery()->getResult();
+        $results = $facultyQuery->getQuery()->getResult();
         $faculties = array_map(create_function('$o', 'return $o["name"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
         $faculties = array_combine(array_values($faculties), array_values($faculties));
         
@@ -115,14 +122,14 @@ class DefaultController extends Controller
         //get page content
         $ch = curl_init('https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $curl_scraped_page = curl_exec($ch);
+        $curlScrapedPage = curl_exec($ch);
         curl_close($ch);
 
         //clean up spaces between elements, cause by default, spaces between element tags are considered textnodes! whaaaaaa?
-        $curl_scraped_page_cleaned = preg_replace("/>\s+</", "><", $curl_scraped_page);
+        $curlScrapedPageCleaned = preg_replace("/>\s+</", "><", $curlScrapedPage);
 
         //ok, NOW start parsing
-        $crawler = new Crawler($curl_scraped_page_cleaned);
+        $crawler = new Crawler($curlScrapedPageCleaned);
         $crawler = $crawler->filter('body table#mainTable tbody tr');
        	//checks if results empty, then don't update!
         if (count($crawler) > 0) {
@@ -143,9 +150,9 @@ class DefaultController extends Controller
             
             //insert new faculties
             foreach ($faculties as $faculty) {
-                $new_faculty = new Faculty();
-                $new_faculty->setName($faculty);
-                $em->persist($new_faculty);
+                $newFaculty = new Faculty();
+                $newFaculty->setName($faculty);
+                $em->persist($newFaculty);
             }
             $em->flush();
         }

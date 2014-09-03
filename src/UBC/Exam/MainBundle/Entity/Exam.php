@@ -124,6 +124,7 @@ class Exam
      * Sets file.
      *
      * @param UploadedFile $file
+     * 
      * @return void
      */
     public function setFile(UploadedFile $file = null)
@@ -259,9 +260,9 @@ class Exam
      */
     public function setFaculty($faculty)
     {
-    	$this->faculty = $faculty;
+        $this->faculty = $faculty;
     
-    	return $this;
+        return $this;
     }
 
     /**
@@ -271,7 +272,7 @@ class Exam
      */
     public function getFaculty()
     {
-    	return $this->faculty;
+        return $this->faculty;
     }
 
     /**
@@ -301,7 +302,7 @@ class Exam
     /**
      * Set subject_code
      *
-     * @param string $number
+     * @param string
      * 
      * @return Exam
      */
@@ -329,7 +330,7 @@ class Exam
      */
     public function getPath()
     {
-    	return $this->path;
+        return $this->path;
     }
 
     /**
@@ -423,9 +424,9 @@ class Exam
      */
     public function setCrossListed($cross_listed)
     {
-    	$this->cross_listed = $cross_listed;
+        $this->cross_listed = $cross_listed;
 
-    	return $this;
+        return $this;
     }
 
     /**
@@ -437,19 +438,19 @@ class Exam
      */
     public function setLegalContentOwner($legal_content_owner) 
     {
-    	$this->legal_content_owner = $legal_content_owner;
+        $this->legal_content_owner = $legal_content_owner;
 
-    	return $this;
+        return $this;
     }
 
     /**
      * gets legal_content_owner
      * 
-     * return string
+     * @return string
      */
     public function getLegalContentOwner() 
     {
-    	return $this->legal_content_owner;
+        return $this->legal_content_owner;
     }
 
     /**
@@ -461,19 +462,19 @@ class Exam
      */
     public function setLegalUploader($legal_uploader) 
     {
-    	$this->legal_uploader = $legal_uploader;
+    $this->legal_uploader = $legal_uploader;
 
-    	return $this;
+    return $this;
     }
     
     /**
      * gets legal_uploader
      * 
-     * return string
+     * @return string
      */
     public function getLegalUploader() 
     {
-    	return $this->legal_uploader;
+        return $this->legal_uploader;
     }
     
     /**
@@ -485,15 +486,15 @@ class Exam
      */
     public function setLegalDate($legal_date) 
     {
-    	if (is_string($legal_date)) {
-    		$this->legal_date = new \DateTime($legal_date);
-    	} else if (is_object($legal_date) && get_class($legal_date) == 'DateTime') {
-    		$this->legal_date = $legal_date;
-    	} else {
-    		throw new \Exception();
-    	}
-    	
-    	return $this;
+        if (is_string($legal_date)) {
+            $this->legal_date = new \DateTime($legal_date);
+        } else if (is_object($legal_date) && get_class($legal_date) == 'DateTime') {
+            $this->legal_date = $legal_date;
+        } else {
+            throw new \Exception();
+        }
+        
+        return $this;
     }
 
     /**
@@ -503,7 +504,7 @@ class Exam
      */
     public function getLegalDate()
     {
-    	return $this->legal_date;
+        return $this->legal_date;
     }
 
     /**
@@ -515,9 +516,9 @@ class Exam
      */
     public function setLegalAgreed($legal_agreed)
     {
-    	$this->legal_agreed = $legal_agreed;
-    	
-    	return $this;
+        $this->legal_agreed = $legal_agreed;
+        
+        return $this;
     }
 
     /**
@@ -527,7 +528,7 @@ class Exam
      */
     public function getLegalAgreed()
     {
-    	return $this->legal_agreed;
+        return $this->legal_agreed;
     }
 
     /**
@@ -580,6 +581,8 @@ class Exam
     
     /**
      * converts integer representation of access level to string
+     * 
+     * @return String
      */
     public function getAccessLevelString()
     {

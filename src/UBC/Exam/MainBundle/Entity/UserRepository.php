@@ -11,8 +11,21 @@ use Doctrine\ORM\NoResultException;
 use UBC\Exam\MainBundle\Entity\User;
 use BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface;
 
+/**
+ * This is the class that creates the user if one is not found by cas
+ * 
+ * @author loongchan
+ *
+ */
 class UserRepository extends EntityRepository implements UserProviderInterface//, UserFactoryInterface
 {
+    /**
+     * This function is called when user logs into cas.  checks if user exists, if not then creates one (non-PHPdoc)
+     * 
+     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByUsername()
+     * 
+     * @return \Entities\User
+     */
     public function loadUserByUsername($username)
     {
         $q = $this
@@ -27,7 +40,7 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
             $user = $q->getSingleResult();
         } catch (NoResultException $e) {
             /*
-             * instead of throwing exception, why not create a user!  CHEATING!!!!!
+             * instead of throwing exception, why not create a user!  WORK-AROUND!!!!!
              * What SHOULD happen is:
              * 1)in security.yml, security.firewalls.ubc_secured_area.trusted_sso.create_users: true
              * 2)uncomment ln 10/14 in this file
@@ -36,17 +49,17 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
              */
             $user = $this->createUser($username, array(), array());
             return $user;
-//             $message = sprintf(
-//                 'Unable to find an active admin UBCExamMainBundle:User object identified by "%s".',
-//                 $username
-//             );
-
-//             throw new UsernameNotFoundException($message, 0, $e);
         }
 
         return $user;
     }
 
+    /**
+     * I think it's called when refreshing user session.(non-PHPdoc)
+     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::refreshUser()
+     * 
+     * @return \Entities\User
+     */
     public function refreshUser(UserInterface $user)
     {
         $class = get_class($user);
@@ -62,6 +75,15 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
         return $this->loadUserByUsername($user->getUsername());
     }
 
+    /**
+     * (non-PHPdoc)
+     * 
+     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
+     * 
+     * @param String
+     * 
+     * @return boolean
+     */
     public function supportsClass($class)
     {
         return $this->getEntityName() === $class
@@ -69,15 +91,20 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
     }
     
     /**
+     * function that can be called to create a new user.
+     * 
      * @inheritDoc
+     * 
+     * @return \Entities\User
      */
-    public function createUser($username, array $roles, array $attributes) {
-    	$new_user = new User();
-    	$new_user->setUsername($username);
-    	$em = $this->getEntityManager();
-    	$em->persist($new_user);
-    	$em->flush();
+    public function createUser($username, array $roles, array $attributes)
+    {
+        $new_user = new User();
+        $new_user->setUsername($username);
+        $em = $this->getEntityManager();
+        $em->persist($new_user);
+        $em->flush();
 
-    	return $new_user;
+        return $new_user;
     }
 }
