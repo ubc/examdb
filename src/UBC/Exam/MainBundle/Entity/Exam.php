@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * @ORM\Table(name="exam")
  * @ORM\HasLifecycleCallbacks
  */
-class Exam 
+class Exam
 {
     static public $ACCESS_LEVELS = array('1' => 'Public', '2' => 'CWL', '3' => 'Faculty', '4' => 'Course');
     
@@ -198,11 +198,19 @@ class Exam
         return $this->file;
     }
 
+    /**
+     * returns null or absolute system path to file
+     * @return Ambigous <NULL, string>
+     */
     public function getAbsolutePath()
     {
         return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
     }
 
+    /**
+     * returns either null or relative web path to file
+     * @return mixed <NULL, string>
+     */
     public function getWebPath()
     {
         return null === $this->path ? null : $this->getUploadDir().'/'.$this->path;
@@ -220,6 +228,11 @@ class Exam
         return __DIR__.'/../../../../../web/'.$this->getUploadDir();
     }
 
+    /**
+     * returns upload directory
+     * 
+     * @return string
+     */
     protected function getUploadDir()
     {
         // get rid of the __DIR__ so it doesn't screw up
@@ -241,6 +254,7 @@ class Exam
      * Set faculty
      *
      * @param string $faculty
+     * 
      * @return Exam
      */
     public function setFaculty($faculty)
@@ -264,6 +278,7 @@ class Exam
      * Set dept
      *
      * @param string $dept
+     * 
      * @return Exam
      */
     public function setDept($dept)
@@ -287,6 +302,7 @@ class Exam
      * Set subject_code
      *
      * @param string $number
+     * 
      * @return Exam
      */
     public function setSubjectcode($subject_code)
@@ -320,6 +336,7 @@ class Exam
      * Set year
      *
      * @param integer $year
+     * 
      * @return Exam
      */
     public function setYear($year)
@@ -343,6 +360,7 @@ class Exam
      * Set term
      *
      * @param string $term
+     * 
      * @return Exam
      */
     public function setTerm($term)
@@ -366,6 +384,7 @@ class Exam
      * Set comments
      *
      * @param string $comments
+     * 
      * @return Exam
      */
     public function setComments($comments)
@@ -399,6 +418,7 @@ class Exam
      * Set cross_listed
      *
      * @param string $cross_listed
+     * 
      * @return Exam
      */
     public function setCrossListed($cross_listed)
@@ -410,7 +430,9 @@ class Exam
 
     /**
      * set legal_content_owner
+     * 
      * @param string $legal_content_owner
+     * 
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
     public function setLegalContentOwner($legal_content_owner) 
@@ -434,6 +456,7 @@ class Exam
      * sets legal_uploader
      * 
      * @param string $legal_uploader
+     * 
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
     public function setLegalUploader($legal_uploader) 
@@ -457,6 +480,7 @@ class Exam
      * sets legal_date
      * 
      * @param string $legal_date
+     * 
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
     public function setLegalDate($legal_date) 
@@ -486,6 +510,7 @@ class Exam
      * set legal agreed checkbox result
      * 
      * @param bool $legal_agreed
+     * 
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
     public function setLegalAgreed($legal_agreed)
@@ -509,6 +534,7 @@ class Exam
      * Set uploaded_by
      *
      * @param integer $uploadedBy
+     * 
      * @return Exam
      */
     public function setUploadedBy($uploadedBy)
@@ -532,6 +558,7 @@ class Exam
      * Set access_level
      *
      * @param integer $accessLevel
+     * 
      * @return Exam
      */
     public function setAccessLevel($accessLevel)
@@ -551,6 +578,9 @@ class Exam
         return $this->access_level;
     }
     
+    /**
+     * converts integer representation of access level to string
+     */
     public function getAccessLevelString()
     {
         return self::$ACCESS_LEVELS[$this->access_level];
