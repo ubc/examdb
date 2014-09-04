@@ -3,7 +3,16 @@
 
     {{ form_row(form.faculty) }}
     {{ form_row(form.dept) }}
-    {{ form_row(form.subject_code) }}
+    {# upload has select box + text box, while edit only has textbox #}
+    {% if form.subject_code.vars.form.vars.block_prefixes.1 is same as("choice") %}
+        <div>
+            {{ form_label(form.subject_code) }}
+            {{ form_errors(form.subject_code_number) }}
+            {{ form_widget(form.subject_code) }} {{ form_widget(form.subject_code_number) }}
+        </div>
+    {% else %}
+        {{ form_row(form.subject_code) }}
+    {% endif %}
     {{ form_row(form.comments) }}
     {{ form_row(form.year) }}
     {{ form_row(form.term) }}

@@ -5,6 +5,7 @@ namespace UBC\Exam\MainBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use UBC\Exam\MainBundle\Entity\Exam;
 use UBC\Exam\MainBundle\Entity\Faculty;
+use UBC\Exam\MainBundle\Entity\SubjectCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DomCrawler\Crawler;
@@ -25,7 +26,10 @@ class DefaultController extends Controller
      */
     public function indexAction()
     {
-        return $this->render('UBCExamMainBundle:Default:index.html.twig');
+        $sc = $this->get('security.context');
+        $isLoggedIn = $sc->isGranted('IS_AUTHENTICATED_FULLY');
+        
+        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('isLoggedIn' => $isLoggedIn));
     }
 
     /**
@@ -48,13 +52,35 @@ class DefaultController extends Controller
                 ->from('UBCExamMainBundle:Faculty', 'f');
         $results = $facultyQuery->getQuery()->getResult();
         $faculties = array_map(create_function('$o', 'return $o["name"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
-        $faculties = array_combine(array_values($faculties), array_values($faculties));
+        $facultyValues = array_values($faculties);
+        $faculties = array_combine($facultyValues, $facultyValues);
         
-        $form = $this->createFormBuilder($exam)
-            ->add('faculty', 'choice', array('choices' =>$faculties))
-            ->add('dept', 'text')
-            ->add('subject_code', 'text')
-            ->add('comments', 'textarea')
+        $subjectCodeQuery = $em->createQueryBuilder()
+                ->select(array('s.code'))
+                ->from('UBCExamMainBundle:SubjectCode', 's');
+        $results = $subjectCodeQuery->getQuery()->getResult();
+        $subjectCode =  array_map(create_function('$s', 'return $s["code"];'), $results);
+        $subjectCodeValues = array_values($subjectCode);
+        $subjectCode = array_combine($subjectCodeValues, $subjectCodeValues);
+        
+        $form = $this->createFormBuilder($exam);
+        
+        if (count($faculties) > 1) {
+            $form->add('faculty', 'choice', array('choices' =>$faculties));
+        } else {
+            $form->add('faculty', 'text');
+        }
+        
+        $form->add('dept', 'text');
+        
+        if (count($subjectCode) > 1) {
+            $form->add('subject_code', 'choice', array('choices' => $subjectCode))
+                 ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false));  //extra field to
+        } else {
+            $form->add('subject_code', 'text');
+        }
+        
+        $form->add('comments', 'textarea')
             ->add('year')
             ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
             ->add('cross_listed', 'text', array('required' => false))
@@ -64,12 +90,14 @@ class DefaultController extends Controller
             ->add('legal_uploader', 'text')
             ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
             ->add('file', 'file')
-            ->add('upload', 'submit')
-            ->getForm();
+            ->add('upload', 'submit');
+        
+        $form = $form->getForm();
 
         if ($this->getRequest()->getMethod() == "POST") {
             $form->handleRequest($request);
-
+            $exam->setSubjectcode($exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData()));
+            
             if ($form->isValid()) {
                 //setup who did it!
                 $user = $this->get('security.context')->getToken()->getUser();
@@ -131,28 +159,40 @@ class DefaultController extends Controller
         //ok, NOW start parsing
         $crawler = new Crawler($curlScrapedPageCleaned);
         $crawler = $crawler->filter('body table#mainTable tbody tr');
+        
        	//checks if results empty, then don't update!
         if (count($crawler) > 0) {
             $faculties = array();
+            $subjectCode = array();
             foreach ($crawler as $domElement) {
                 $children = $domElement->childNodes;
                 $faculties[] = $children->item(2)->nodeValue;
+                $subjectCode[] = preg_replace('/[^A-Z]/', '', $children->item(0)->nodeValue);
             }
             $faculties = array_unique($faculties);
+            $subjectCode = array_unique($subjectCode);
             sort($faculties);
-        
-            //dump old faculties
+            sort($subjectCode);
+            
+            //dump old faculties and subject code
             $em = $this->getDoctrine()->getEntityManager();
-            $cmd = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\Faculty');
+            $cmdF = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\Faculty');
+            $cmdSC = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\SubjectCode');
             $connection = $em->getConnection();
             $dbPlatform = $connection->getDatabasePlatform();
-            $dbPlatform->getTruncateTableSql($cmd->getTableName());
+            $dbPlatform->getTruncateTableSql($cmdF->getTableName());
+            $dbPlatform->getTruncateTableSql($cmdSC->getTableName());
             
             //insert new faculties
             foreach ($faculties as $faculty) {
                 $newFaculty = new Faculty();
                 $newFaculty->setName($faculty);
                 $em->persist($newFaculty);
+            }
+            foreach ($subjectCode as $code) {
+                $newSubjectCode = new SubjectCode();
+                $newSubjectCode->setCode($code);
+                $em->persist($newSubjectCode);
             }
             $em->flush();
         }

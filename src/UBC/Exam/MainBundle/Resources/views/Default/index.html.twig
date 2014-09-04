@@ -1,1 +1,7 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
+
+{% block body %}
+    {% if isLoggedIn == false %}
+        <a href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
+    {% endif %}
+{% endblock %}
