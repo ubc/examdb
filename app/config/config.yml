@@ -71,9 +71,9 @@ be_simple_sso_auth:
             version: 2
         server:
             id: cas
-            login_url: "%login.url%"
-            logout_url: "%logout.url%"
-            validation_url: "%validation.url%"
+            login_url: https://cas.stg.id.ubc.ca/ubc-cas/login
+            logout_url: https://cas.stg.id.ubc.ca/ubc-cas/logout
+            validation_url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate
  
 # Swiftmailer Configuration
 swiftmailer:
