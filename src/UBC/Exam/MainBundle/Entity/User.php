@@ -72,7 +72,8 @@ class User implements UserInterface, \Serializable
     /**
      * constructor to make default user active.
      */
-    public function __construct() {
+    public function __construct()
+    {
         $this->isActive = true;
         // may not be needed, see section on salt below
         // $this->salt = md5(uniqid(null, true));
@@ -92,7 +93,7 @@ class User implements UserInterface, \Serializable
     /**
      * @inheritDoc
      * 
-     * @ return String
+     * @return String
      */
     public function getUsername()
     {

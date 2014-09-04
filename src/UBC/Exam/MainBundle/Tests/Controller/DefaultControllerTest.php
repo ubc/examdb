@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * tests default controller
  * 
- * @author loongchan
+ * @author Loong Chan <loong.chan@ubc.ca>
  *
  */
 class DefaultControllerTest extends WebTestCase

@@ -14,7 +14,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 /**
  * Main controller class
  * 
- * @author loongchan
+ * @author Loong Chan <loong.chan@ubc.ca>
  *
  */
 class DefaultController extends Controller
@@ -160,7 +160,7 @@ class DefaultController extends Controller
         $crawler = new Crawler($curlScrapedPageCleaned);
         $crawler = $crawler->filter('body table#mainTable tbody tr');
         
-       	//checks if results empty, then don't update!
+        //checks if results empty, then don't update!
         if (count($crawler) > 0) {
             $faculties = array();
             $subjectCode = array();
@@ -202,8 +202,6 @@ class DefaultController extends Controller
 
     /**
      * not sure what this is.  It's set in security.yaml check_path of the firewalls.ubc_secured_area.trusted_sso.checkpath.
-     * 
-     * @param unknown $something
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */

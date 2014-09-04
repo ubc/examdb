@@ -14,13 +14,15 @@ use BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface;
 /**
  * This is the class that creates the user if one is not found by cas
  * 
- * @author loongchan
+ * @author Loong Chan <loong.chan@ubc.ca>
  *
  */
 class UserRepository extends EntityRepository implements UserProviderInterface//, UserFactoryInterface
 {
     /**
      * This function is called when user logs into cas.  checks if user exists, if not then creates one (non-PHPdoc)
+     * 
+     * @param String $username
      * 
      * @see \Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByUsername()
      * 
@@ -56,6 +58,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
 
     /**
      * I think it's called when refreshing user session.(non-PHPdoc)
+     * 
+     * @param UserInterface $user
+     * 
      * @see \Symfony\Component\Security\Core\User\UserProviderInterface::refreshUser()
      * 
      * @return \Entities\User
@@ -78,9 +83,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
     /**
      * (non-PHPdoc)
      * 
-     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
+     * @param String $class
      * 
-     * @param String
+     * @see \Symfony\Component\Security\Core\User\UserProviderInterface::supportsClass()
      * 
      * @return boolean
      */
@@ -91,7 +96,11 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
     }
     
     /**
-     * function that can be called to create a new user.
+     * function that can be called to create a new user. (was supposed to be from BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface)
+     * 
+     * @param String $username
+     * @param Array $roles
+     * @param Array $attributes
      * 
      * @inheritDoc
      * 
@@ -99,12 +108,12 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
      */
     public function createUser($username, array $roles, array $attributes)
     {
-        $new_user = new User();
-        $new_user->setUsername($username);
+        $newUser = new User();
+        $newUser->setUsername($username);
         $em = $this->getEntityManager();
-        $em->persist($new_user);
+        $em->persist($newUser);
         $em->flush();
 
-        return $new_user;
+        return $newUser;
     }
 }
