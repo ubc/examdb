@@ -64,24 +64,45 @@ Development
 -----------
 
 1. Install Vagrant
-The project environment can be provision by [Vagrant](http://www.vagrantup.com/). Follow the instruction on the site to install vagrant first.
+The project environment can be provision by [Vagrant](http://www.vagrantup.com/). Follow the instruction on the site to install vagrant first. Then install vagrant-hostmanager plugin if you want vagrant to manage your /etc/hosts for you.
+
+    ```
+    vagrant plugin install vagrant-hostmanager
+    ```
+    
+    Otherwise, you will need to manually add the following line to your /etc/hosts
+
+    ```
+    127.0.0.1 examdb.dev
+    ```
 
 2. Checkout the Source
 
+    ```
     git clone git@github.com:ubc/examdb.git
-
+    ```
+    
 3. Setup the Dev VM
 
-    cd examdb
-    vagrant up
+    ```
+    cd examdb && vagrant up
+    ```
 
 4. Install Dependencies
 
+    ```
     vagrant ssh
     cd /vagrant
     composer install
+    ```
 
-5. Develop!
+5. Open a browser from host
+    
+    ```
+    http://examdb.dev:8089
+    ```
+    
+6. Develop!
 
 Running Tests
 -------------
