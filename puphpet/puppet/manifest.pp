@@ -1862,5 +1862,10 @@ if hash_key_equals($rabbitmq_values, 'install', 1) {
       action => 'accept',
     }
   }
+
+  file {["${vhost['docroot']}/app/cache", "${vhost['docroot']}/app/logs"]:
+    ensure => directory,
+    mode   => 0777
+  }
 }
 
