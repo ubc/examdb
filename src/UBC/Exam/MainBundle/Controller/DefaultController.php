@@ -4,8 +4,7 @@ namespace UBC\Exam\MainBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use UBC\Exam\MainBundle\Entity\Exam;
-use UBC\Exam\MainBundle\Entity\Faculty;
-use UBC\Exam\MainBundle\Entity\SubjectCode;
+use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\DomCrawler\Crawler;
@@ -29,7 +28,14 @@ class DefaultController extends Controller
         $sc = $this->get('security.context');
         $isLoggedIn = $sc->isGranted('IS_AUTHENTICATED_FULLY');
         
-        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('isLoggedIn' => $isLoggedIn));
+        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
+        $query = $repo->createQueryBuilder('e')
+        ->orderBy('e.created', 'DESC')
+        ->getQuery();
+        
+        $exams = $query->getResult();
+
+        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('caption' => 'List of Exams', 'isLoggedIn' => $isLoggedIn, 'exams' => $exams));
     }
 
     /**
@@ -47,21 +53,18 @@ class DefaultController extends Controller
         
         //get faculties
         $em = $this->getDoctrine()->getManager();
-        $facultyQuery = $em->createQueryBuilder()
-                ->select(array('f.name'))
-                ->from('UBCExamMainBundle:Faculty', 'f');
-        $results = $facultyQuery->getQuery()->getResult();
-        $faculties = array_map(create_function('$o', 'return $o["name"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
-        $facultyValues = array_values($faculties);
-        $faculties = array_combine($facultyValues, $facultyValues);
-        
-        $subjectCodeQuery = $em->createQueryBuilder()
-                ->select(array('s.code'))
-                ->from('UBCExamMainBundle:SubjectCode', 's');
-        $results = $subjectCodeQuery->getQuery()->getResult();
-        $subjectCode =  array_map(create_function('$s', 'return $s["code"];'), $results);
-        $subjectCodeValues = array_values($subjectCode);
-        $subjectCode = array_combine($subjectCodeValues, $subjectCodeValues);
+        $subjectFacultyQuery = $em->createQueryBuilder()
+                    ->select(array('s.code', 's.faculty'))
+                    ->from('UBCExamMainBundle:SubjectFaculty', 's');
+        $results = $subjectFacultyQuery->getQuery()->getResult();
+        $faculties = array_map(create_function('$o', 'return $o["faculty"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
+        $subjectCode = array_map(create_function('$o', 'return $o["code"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
+        $facultiesValue = array_unique(array_values($faculties));
+        $subjectCodeValue = array_unique(array_values($subjectCode));
+        asort($facultiesValue);
+        asort($subjectCodeValue);
+        $faculties = array_combine($facultiesValue, $facultiesValue);
+        $subjectCode = array_combine($subjectCodeValue, $subjectCodeValue);
         
         $form = $this->createFormBuilder($exam);
         
@@ -125,16 +128,16 @@ class DefaultController extends Controller
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-
+        $exams = array();
+        
         $query = $repo->createQueryBuilder('e')
                 ->where('e.uploaded_by = :user')
                 ->setParameter('user', $user)
                 ->orderBy('e.created', 'DESC')
                 ->getQuery();
-
         $exams = $query->getResult();
-
-        return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams, 'user' => $user));
+        
+        return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams, 'username' => $user->getUsername()));
     }
     
     /**
@@ -162,37 +165,27 @@ class DefaultController extends Controller
         
         //checks if results empty, then don't update!
         if (count($crawler) > 0) {
-            $faculties = array();
-            $subjectCode = array();
+            $subjectsFaculties = array();
             foreach ($crawler as $domElement) {
                 $children = $domElement->childNodes;
-                $faculties[] = $children->item(2)->nodeValue;
-                $subjectCode[] = preg_replace('/[^A-Z]/', '', $children->item(0)->nodeValue);
+                $subjectsFaculties[] = array('code' => preg_replace('/[^A-Z]/', '', $children->item(0)->nodeValue),
+                                        'title' => $children->item(1)->nodeValue,
+                                        'faculty' => $children->item(2)->nodeValue);
             }
-            $faculties = array_unique($faculties);
-            $subjectCode = array_unique($subjectCode);
-            sort($faculties);
-            sort($subjectCode);
             
-            //dump old faculties and subject code
+            //dump old subjectfaculty table
             $em = $this->getDoctrine()->getEntityManager();
-            $cmdF = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\Faculty');
-            $cmdSC = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\SubjectCode');
-            $connection = $em->getConnection();
-            $dbPlatform = $connection->getDatabasePlatform();
-            $dbPlatform->getTruncateTableSql($cmdF->getTableName());
-            $dbPlatform->getTruncateTableSql($cmdSC->getTableName());
+            $cmd = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\SubjectFaculty');
+            $dbPlatform = $em->getConnection()->getDatabasePlatform();
+            $dbPlatform->getTruncateTableSql($cmd->getTableName());
             
-            //insert new faculties
-            foreach ($faculties as $faculty) {
-                $newFaculty = new Faculty();
-                $newFaculty->setName($faculty);
-                $em->persist($newFaculty);
-            }
-            foreach ($subjectCode as $code) {
-                $newSubjectCode = new SubjectCode();
-                $newSubjectCode->setCode($code);
-                $em->persist($newSubjectCode);
+            //insert new subjectfaculties
+            foreach ($subjectsFaculties as $subjectFaculty) {
+                $newSubjectFaculty = new SubjectFaculty();
+                $newSubjectFaculty->setCode($subjectFaculty['code']);
+                $newSubjectFaculty->setTitle($subjectFaculty['title']);
+                $newSubjectFaculty->setFaculty($subjectFaculty['faculty']);
+                $em->persist($newSubjectFaculty);
             }
             $em->flush();
         }

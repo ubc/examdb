@@ -5,14 +5,13 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
-
 /**
- * This class holds the faculties in UBC
+ * This class holds the 4 letters representing course codes in UBC
  *
  * @ORM\Entity
- * @ORM\Table(name="faculty")
+ * @ORM\Table(name="subjectfaculty")
  */
-class Faculty
+class SubjectFaculty
 {
     /**
      * @ORM\Column(type="integer")
@@ -24,8 +23,18 @@ class Faculty
     /**
      * @ORM\Column(type="string", length=100)
      */
-    protected $name;
-
+    protected $code;
+    
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    protected $title;
+    
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    protected $faculty;
+    
     /**
      * @var datetime $created
      *
@@ -55,27 +64,75 @@ class Faculty
     /**
      * Set name
      *
-     * @param string $name
+     * @param string $code
      * 
-     * @return Faculty
+     * @return SubjectFaculty
      */
-    public function setName($name)
+    public function setCode($code)
     {
-        $this->name = $name;
+        $this->code = $code;
     
         return $this;
     }
-
+    
     /**
-     * Get name
+     * Get code
      *
      * @return string 
      */
-    public function getName()
+    public function getCode()
     {
-        return $this->name;
+        return $this->code;
     }
-
+    
+    /**
+     * Set faculty
+     *
+     * @param string $faculty
+     *
+     * @return SubjectFaculty
+     */
+    public function setFaculty($faculty)
+    {
+        $this->faculty = $faculty;
+    
+        return $this;
+    }
+    
+    /**
+     * Get faculty
+     *
+     * @return string
+     */
+    public function getFaculty()
+    {
+        return $this->faculty;
+    }
+    
+    /**
+     * Set title
+     *
+     * @param string $title
+     *
+     * @return SubjectFaculty
+     */
+    public function setTitle($title)
+    {
+        $this->title = $title;
+    
+        return $this;
+    }
+    
+    /**
+     * Get title
+     *
+     * @return string
+     */
+    public function getTitle()
+    {
+        return $this->title;
+    }
+    
     /**
      * Get created
      *
