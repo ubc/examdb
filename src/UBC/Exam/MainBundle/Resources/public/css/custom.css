@@ -21,38 +21,38 @@
 /**** START EXAM DB CSS ****/
 
 /* more spacing between form groups */
-fieldset {
+.content fieldset {
     margin: 1.5em 0;
 }
     
     /* more spacing between rows */
-    .row-fluid {
+    .content .row-fluid {
         margin-bottom: .5em;
     }
     
     /* de-emphasize labels a bit */
-    label {
+    .content label {
         color: #555;
         font-size: .95em;
     }
     
     /* required-star class added to each label of a required field */
-    .required-star:after {
+    .content .required-star:after {
         content: ' *';
         color: #ab1f2e;
     }
     
     /* expand inputs to wider than default */
-    input,
-    textarea {
+    .content input,
+    .content textarea {
         width: 90%;
     }
-    select {
+    .content select {
         width: 92.5%;
     }
     
     /* license class used on div wrapping legal agreement */
-    .license {
+    .content .license {
         margin-bottom: 2em;
         padding: 2em;
         height: 120px;
@@ -67,35 +67,35 @@ fieldset {
     }
     
     /* for agreement, date of agreement fields (stacked on top of each other) */
-    .inner-rows > div {
+    .content .inner-rows > div {
         margin-bottom: .8em;
     }
     
     /* remove default to fix alignment */
-    .checkbox {
+    .content .checkbox {
         padding-left: 0;
     }
     
         /* override default to fix alignment */
-        .checkbox input[type="checkbox"] {
+        .content .checkbox input[type="checkbox"] {
             margin: 4px 8px 0 0;
         }
         
         /* agreement text is label next to checkbox */
-        .agreement-text {
+        .content .agreement-text {
             margin-bottom: 1em;
             color: #333;
             font-size: 1.1em;
         }
     
     /* this is the id already added to the browse input for the upload */
-    #form_file {
+    .content #form_file {
         padding-top: 0;
         padding-left: 0;
     }
     
     /* save button */
-    .btn-save {
+    .content .btn-save {
         margin: 1em 0 2em 0;
     }
 
