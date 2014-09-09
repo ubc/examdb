@@ -1,5 +1,11 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block body %}
-{{ include('UBCExamMainBundle:Default:upload-form.html.twig', {'form': form}) }}
+    
+    <h1>Upload An Exam</h1>
+
+    <p>Thank you for contributing to this valuable resource! Simply fill in the required fields, read and consent to the license, and upload your exam file below.</p>
+    
+    {{ include('UBCExamMainBundle:Default:upload-form.html.twig', {'form': form}) }}
+
 {% endblock %}
