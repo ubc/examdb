@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class Exam
 {
-    static public $ACCESS_LEVELS = array('1' => 'Public', '2' => 'CWL', '3' => 'Faculty', '4' => 'Course');
+    static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'UBC Community', '3' => 'Faculty', '4' => 'Course Participants');
     
     /**
      * @ORM\Column(type="integer")
