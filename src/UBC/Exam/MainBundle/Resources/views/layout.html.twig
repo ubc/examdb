@@ -14,7 +14,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<title>{% block title 'University of British Columbia' %}</title>
+<title>{% block title 'UBC Exams Archive' %}</title>
 <meta name="viewport" content="width=device-width">
 <meta name="description" content="">
 <meta name="author" content="">
@@ -102,7 +102,7 @@
 	            <!-- Read more about Unit Name Treatment on http://brand.ubc.ca/clf -->
 	            <!-- No Faculty Treatment -->
 	            <div id="ubc7-unit-name" class="ubc7-single-element">
-	               <span id="ubc7-unit-identifier"><a href="/exam">Unit Name</a></span>
+	               <span id="ubc7-unit-identifier"><a href="/exam">Exams Archive</a></span>
 	            </div>
 	        </div>
 		</div>
@@ -114,11 +114,16 @@
             <div class="container">
                 <div class="nav-collapse collapse" id="ubc7-unit-navigation">
                     <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">First Link</a></li>
-                        <li><a href="#">Second Link</a></li>
-                        <li><a href="#">Third Link</a></li>
-                        <li class="dropdown">
+                        <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
+			  <a href="/exam">Home</a>
+			</li>
+                        <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
+			  <a href="/exam/upload">Upload New</a>
+			</li>
+                        <li class="{% if app.request.attributes.get('_route') == 'list' %}active{% endif %}">
+			  <a href="/exam/list">Manage Existing</a>
+			</li>
+                        <!-- <li class="dropdown">
                             <div class="btn-group">
                                 <a class="btn" href="http://www.ubc.ca/">Dropdown</a>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="ubc7-arrow blue down-arrow"></span></button>
@@ -131,7 +136,7 @@
                                     <li><a href="#">One more separated link</a></li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div><!-- /.nav-collapse -->
             </div>
@@ -163,11 +168,16 @@
             <div class="container">
                 <div class="nav-collapse collapse">
                     <ul class="nav">
-                        <li class="active"><a href="#">Home</a></li>
-                        <li><a href="#">First Link</a></li>
-                        <li><a href="#">Second Link</a></li>
-                        <li><a href="#">Third Link</a></li>
-                        <li class="dropdown">
+                        <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
+			  <a href="/exam">Home</a>
+			</li>
+                        <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
+			  <a href="/exam/upload">Upload New</a>
+			</li>
+                        <li class="{% if app.request.attributes.get('_route') == 'list' %}active{% endif %}">
+			  <a href="/exam/list">Manage Existing</a>
+			</li>
+                        <!-- <li class="dropdown">
                             <div class="btn-group">
                                 <a class="btn">Dropdown</a>
                                 <button class="btn dropdown-toggle" data-toggle="dropdown"><span class="ubc7-arrow blue down-arrow"></span></button>
@@ -180,7 +190,7 @@
                                     <li><a href="#">One more separated link</a></li>
                                 </ul>
                             </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div><!-- /.nav-collapse -->
             </div>
@@ -191,23 +201,23 @@
         <div class="row-fluid expand" id="ubc7-unit-footer">
         	<div class="container">
 	            <div class="span10" id="ubc7-unit-address">
-	                <div id="ubc7-address-unit-name">Unit Name</div>
-	                <div id="ubc7-address-campus">Vancouver Campus | Okanagan Campus</div>
-	                <div id="ubc7-address-street">1234 Street Name</div>
+	                <div id="ubc7-address-unit-name">Centre for Teaching, Learning and Technology</div>
+	                <div id="ubc7-address-campus">Vancouver Campus</div>
+	                <div id="ubc7-address-street">214 - 1961 East Mall</div>
 	                <div id="ubc7-address-location">
-	                    <span id="ubc7-address-city">Vancouver | Kelowna</span>, <span id="ubc7-address-province">BC</span> <span id="ubc7-address-country">Canada</span> <span id="ubc7-address-postal">V0V 0V0</span>
+	                    <span id="ubc7-address-city">Vancouver</span>, <span id="ubc7-address-province">BC</span> <span id="ubc7-address-country">Canada</span> <span id="ubc7-address-postal">V6T 1Z1</span>
 	                </div>
-	                <div id="ubc7-address-phone">Tel XXX XXX XXXX</div>
-	                <div id="ubc7-address-email">E-mail email@ubc.ca</div>
+	                <div id="ubc7-address-phone">Tel 604.827.4494</div>
+	                <div id="ubc7-address-email">Website <a href="http://ctlt.ubc.ca">ctlt.ubc.ca</a></div>
 	            </div>
 	            <div class="span2">
-	                <strong>Find us on</strong>
+	                <!-- <strong>Find us on</strong>
 	                <div id="ubc7-unit-social-icons">
 	                    <a href="http://www.ubc.ca/"><i class="icon-facebook-sign"></i></a>&nbsp;
 	                    <a href="http://www.ubc.ca/"><i class="icon-twitter-sign"></i></a>
-	                </div>
+	                </div> -->
 	            </div>
-			</div>
+		</div>
         </div>
         <div class="row-fluid expand ubc7-back-to-top">
         	<div class="container">
