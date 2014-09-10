@@ -120,7 +120,8 @@
                         <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 			  <a href="/exam/upload">Upload New</a>
 			</li>
-                        <li class="{% if app.request.attributes.get('_route') == 'list' %}active{% endif %}">
+                        <li class="{% if app.request.attributes.get('_route') == 'list' or
+				         app.request.attributes.get('_route') == 'update_exam' %}active{% endif %}">
 			  <a href="/exam/list">Manage Existing</a>
 			</li>
                         <!-- <li class="dropdown">
@@ -174,7 +175,8 @@
                         <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 			  <a href="/exam/upload">Upload New</a>
 			</li>
-                        <li class="{% if app.request.attributes.get('_route') == 'list' %}active{% endif %}">
+                        <li class="{% if app.request.attributes.get('_route') == 'list' or
+				         app.request.attributes.get('_route') == 'update_exam' %}active{% endif %}">
 			  <a href="/exam/list">Manage Existing</a>
 			</li>
                         <!-- <li class="dropdown">
