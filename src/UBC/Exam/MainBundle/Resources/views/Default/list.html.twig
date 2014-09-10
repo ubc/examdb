@@ -1,5 +1,11 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
-{% set caption = "Exams Uploaded by" ~ username %}
+
+{% set caption = "Exams uploaded by " ~ username %}
+
 {% block body %}
-{{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams, 'caption': caption, 'list': true }) }}
+    
+    <h1>Manage Existing Exams</h1>
+        
+    {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams, 'caption': caption, 'list': true }) }}
+
 {% endblock %}
