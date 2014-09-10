@@ -83,12 +83,12 @@ class DefaultController extends Controller
             $form->add('subject_code', 'text');
         }
         
-        $form->add('comments', 'textarea')
+        $form->add('comments', 'textarea', array('required' => false))
             ->add('year')
             ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
             ->add('cross_listed', 'text', array('required' => false))
             ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
-            ->add('legal_date', 'date', array('widget' => 'single_text'))
+            ->add('legal_date', 'date', array('widget' => 'single_text', 'disabled' => true))
             ->add('legal_content_owner', 'text')
             ->add('legal_uploader', 'text')
             ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
@@ -110,7 +110,7 @@ class DefaultController extends Controller
                 $em->persist($exam);
                 $em->flush();
 
-                return $this->redirect($this->generateUrl('exam_upload'));
+                return $this->redirect($this->generateUrl('list'));
             }
         }
 
@@ -256,7 +256,7 @@ class DefaultController extends Controller
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function updateexamAction($examID)
+    public function updateexamAction($examID, Request $request)
     {
         //checks that an exam id is passed in
         if (!$examID) {
@@ -282,16 +282,16 @@ class DefaultController extends Controller
         ->add('faculty', 'text')
         ->add('dept', 'text')
         ->add('subject_code', 'text')
-        ->add('comments', 'textarea')
+        ->add('comments', 'textarea', array('required' => false))
         ->add('year')
         ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
         ->add('cross_listed', 'text', array('required' => false))
         ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
-        ->add('legal_date', 'date', array('widget' => 'single_text'))
+        ->add('legal_date', 'date', array('widget' => 'single_text', 'disabled' => true))
         ->add('legal_content_owner', 'text')
-        ->add('legal_uploader', 'text')
-        ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
-        ->add('file', 'file')
+        ->add('legal_uploader', 'text', array('disabled' => true))
+        ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'disabled' => true))
+        ->add('file', 'file', array('required' => false))
         ->add('upload', 'submit')
         ->getForm();
 
@@ -308,6 +308,8 @@ class DefaultController extends Controller
                 //save to DB
                 $em->persist($exam);
                 $em->flush();
+                
+                return $this->redirect($this->generateUrl('list'));
             }
         }
             return $this->render('UBCExamMainBundle:Default:update.html.twig', array('form' => $form->createView()));
