@@ -18,6 +18,7 @@
     padding: 0;
 }
 
+
 /**** START EXAM DB CSS ****/
 
 /* more spacing between form groups */
@@ -43,7 +44,9 @@
     }
     
     /* expand inputs to wider than default */
-    .content input,
+    .content input[type="text"],
+    .content input[type="number"],
+    .content input[type="date"],
     .content textarea {
         width: 90%;
     }
@@ -96,10 +99,20 @@
     
     /* save button */
     .content .btn-save {
-        margin: 1em 0 2em 0;
+        margin: .5em 0 2em 0;
     }
 
+@media screen and (max-width: 767px) {
+    
+    /* limit scrolling div width */
+    .content .license {
+	max-width: 84%;
+    }
+    
+}
+
 /**** END EXAM DB CSS ****/
+
 
 @media screen and (max-width: 979px) {
 
@@ -108,7 +121,7 @@
 	margin-right: 0;
 	width: auto;
     }
-
+    
 }
 
 @media screen and (min-width: 1200px) {
