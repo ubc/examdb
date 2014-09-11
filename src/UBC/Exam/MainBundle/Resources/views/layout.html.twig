@@ -114,8 +114,9 @@
             <div class="container">
                 <div class="nav-collapse collapse" id="ubc7-unit-navigation">
                     <ul class="nav">
+		        <!-- **changes here need to be replicated in the footer mobile navigation below!** -->
                         <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-			  <a href="/exam">Home</a>
+			  <a href="/exam">Search</a>
 			</li>
                         <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 			  <a href="/exam/upload">Upload New</a>
@@ -169,8 +170,9 @@
             <div class="container">
                 <div class="nav-collapse collapse">
                     <ul class="nav">
+		        <!-- **changes here need to be replicated in the main navigation above!** -->
                         <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-			  <a href="/exam">Home</a>
+			  <a href="/exam">Search</a>
 			</li>
                         <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 			  <a href="/exam/upload">Upload New</a>
