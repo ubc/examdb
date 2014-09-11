@@ -1,26 +1,25 @@
-<table class="table table-bordered table-striped list-uploads">
+<table class="table table-striped list-uploads">
     <caption>
         {% if caption is defined %}
-            {{ caption }}
+            {{ caption }}  <a href="/exam/upload" class="btn btn-primary btn-small pull-right"><i class="icon-plus"></i> Add New</a>
         {% endif %}
     </caption>
     {% if exams %}
-        <a href="/exam/upload" class="btn btn-primary btn-small pull-right"><i class="icon-plus"></i> Add New</a>
+        
         <thead>
             <tr>
                 {% if list is defined %}
                     <th>Edit</th>
-                    <th>File</th>
                 {% endif %}
-                <th>Year</th>
-                <th>Term</th>
-                <th>Subject Code</th>
-                <th>Cross-Listed As</th>
+                <th class="hidden-phone">Uploaded</th>
+                <th>Course</th>
+                {% if list is defined %}
+                    <th>Exam</th>
+                {% endif %}
                 <th>Access Level</th>
-                <th>Notes</th>
+                <th class="hidden-phone">Notes</th>
                 <th>Content Owner</th>
-                <th>Faculty</th>
-                <th>Department</th>
+                <th class="hidden-phone">Faculty &amp; Department</th>
                 {% if list is defined %}
                     <th>Delete</th>
                 {% endif %}
@@ -30,20 +29,19 @@
             {% for exam in exams %}
                 <tr>
                     {% if list is defined %}
-                        <td class="icon-td"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-edit"></i></a></td>
-                        <td><a href="{{ exam.getWebPath }}">View file</a></td>         
+                        <td class="td-icon"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-edit"></i></a></td>       
                     {% endif %}
-                    <td>{{ exam.year }}</td>
-                    <td>{{ exam.term | capitalize }}</td>
-                    <td>{{ exam.subjectcode }}</td>
-                    <td>{{ exam.crosslisted }}</td>
-                    <td>{{ exam.getAccessLevelString }}</td>
-                    <td>{{ exam.comments }}</td>
-                    <td>{{ exam.legalcontentowner }}</td>
-                    <td>{{ exam.faculty }}</td>
-                    <td>{{ exam.dept }}</td>
+                    <td class="hidden-phone">{{ exam.created|date('M j, Y') }}</td>
+                    <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
                     {% if list is defined %}
-                        <td class="icon-td"><a href="{{ url('delete_exam', {'examID': exam.id}) }}"><i class="icon-trash"></i></a></td>
+                        <td><a href="{{ exam.getWebPath }}">View</a></td>         
+                    {% endif %}
+                    <td>{{ exam.getAccessLevelString }}</td>
+                    <td class="hidden-phone">{{ exam.comments }}</td>
+                    <td>{{ exam.legalcontentowner }}</td>
+                    <td class="hidden-phone">{{ exam.faculty }} - {{ exam.dept }}</td>
+                    {% if list is defined %}
+                        <td class="td-icon"><a href="{{ url('delete_exam', {'examID': exam.id}) }}" onclick="return confirm('Are you sure you want to delete this exam for {{exam.subjectcode}}?');"><i class="icon-trash"></i></a></td>
                     {% endif %}
                 </tr>
             {% endfor %}

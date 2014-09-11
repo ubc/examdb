@@ -295,7 +295,7 @@ class DefaultController extends Controller
         ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
         ->add('legal_content_owner', 'text')
         ->add('legal_uploader', 'text', array('read_only' => true))
-        ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'read_only' => true))
+        ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'disabled' => true))
         ->add('file', 'file', array('required' => false))
         ->add('upload', 'submit')
         ->getForm();

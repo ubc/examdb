@@ -104,6 +104,46 @@
         margin: .5em 0 2em 0;
     }
 
+/* table used on manage screen */    
+.content table {
+    margin: 2em 0 3em 0;
+}
+
+    /* caption = "Exams uploaded by" */
+    .content caption {
+	padding-bottom: .5em;
+	font-size: 1.7em;
+	text-align: left;
+	border-bottom: 2px dotted #d7e0e7;
+    }
+    
+    /* headings sometimes 2 lines */
+    .content th {
+	line-height: 130%;
+    }
+    
+    /* td-course used for cell with course name */
+    .content .td-course {
+	font-size: 1.15em;
+    }
+    
+    /* td-icon used for cells with icons (edit, delete) */
+    .content .td-icon {
+	font-size: 1.4em;
+	text-align: center;
+	vertical-align: middle;
+    }
+    
+	/* no underline for icon links */
+	.content .td-icon a {
+	    text-decoration: none;
+	}
+	
+	/* change default for icons */
+	.content .td-icon i:before {
+	    cursor: pointer;
+	}
+
 @media screen and (max-width: 767px) {
     
     /* limit scrolling div width */
