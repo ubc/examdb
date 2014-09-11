@@ -66,6 +66,11 @@ class DefaultController extends Controller
         $faculties = array_combine($facultiesValue, $facultiesValue);
         $subjectCode = array_combine($subjectCodeValue, $subjectCodeValue);
         
+        //get user
+        $user = $this->get('security.context')->getToken()->getUser();
+        $first = $user->getFirstname();
+        $last = $user->getLastname();
+        
         $form = $this->createFormBuilder($exam);
         
         if (count($faculties) > 1) {
@@ -88,9 +93,9 @@ class DefaultController extends Controller
             ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
             ->add('cross_listed', 'text', array('required' => false))
             ->add('access_level', 'choice', array('empty_value' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
-            ->add('legal_date', 'date', array('widget' => 'single_text', 'disabled' => true))
+            ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
             ->add('legal_content_owner', 'text')
-            ->add('legal_uploader', 'text')
+            ->add('legal_uploader', 'text', array('data' => $first.' '.$last))
             ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
             ->add('file', 'file')
             ->add('upload', 'submit');
@@ -287,10 +292,10 @@ class DefaultController extends Controller
         ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
         ->add('cross_listed', 'text', array('required' => false))
         ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
-        ->add('legal_date', 'date', array('widget' => 'single_text', 'disabled' => true))
+        ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
         ->add('legal_content_owner', 'text')
-        ->add('legal_uploader', 'text', array('disabled' => true))
-        ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'disabled' => true))
+        ->add('legal_uploader', 'text', array('read_only' => true))
+        ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'read_only' => true))
         ->add('file', 'file', array('required' => false))
         ->add('upload', 'submit')
         ->getForm();
