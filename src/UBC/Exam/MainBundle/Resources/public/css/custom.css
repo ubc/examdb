@@ -81,14 +81,16 @@
     
         /* override default to fix alignment */
         .content .checkbox input[type="checkbox"] {
-            margin: 4px 8px 0 0;
+            margin: 2px 8px 0 0;
+	    -webkit-transform: scale(1.4);
+	    transform: scale(1.4);
         }
         
         /* agreement text is label next to checkbox */
         .content .agreement-text {
             margin-bottom: 1em;
             color: #333;
-            font-size: 1.1em;
+            font-size: 1.2em;
         }
     
     /* this is the id already added to the browse input for the upload */

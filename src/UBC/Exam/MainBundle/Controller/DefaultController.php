@@ -69,7 +69,7 @@ class DefaultController extends Controller
         $form = $this->createFormBuilder($exam);
         
         if (count($faculties) > 1) {
-            $form->add('faculty', 'choice', array('choices' =>$faculties));
+            $form->add('faculty', 'choice', array('empty_value' => '- Choose faculty -','choices' => $faculties));
         } else {
             $form->add('faculty', 'text');
         }
@@ -77,7 +77,7 @@ class DefaultController extends Controller
         $form->add('dept', 'text');
         
         if (count($subjectCode) > 1) {
-            $form->add('subject_code', 'choice', array('choices' => $subjectCode))
+            $form->add('subject_code', 'choice', array('empty_value' => '- Choose subject -', 'choices' => $subjectCode))
                  ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false));  //extra field to
         } else {
             $form->add('subject_code', 'text');
@@ -85,9 +85,9 @@ class DefaultController extends Controller
         
         $form->add('comments', 'textarea', array('required' => false))
             ->add('year')
-            ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
+            ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
             ->add('cross_listed', 'text', array('required' => false))
-            ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
+            ->add('access_level', 'choice', array('empty_value' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
             ->add('legal_date', 'date', array('widget' => 'single_text', 'disabled' => true))
             ->add('legal_content_owner', 'text')
             ->add('legal_uploader', 'text')
