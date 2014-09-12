@@ -251,7 +251,7 @@ class User implements UserInterface, \Serializable
     
     /**
      * Get email
-     *
+     * 
      * @return string
      */
     public function getEmail()
