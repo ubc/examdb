@@ -20,6 +20,23 @@ security:
             pattern:  ^/demo/secured/login$
             security: false
 
+# /** this section is used for "gorg/cas-bundle" bundle.  also need to comment out ubc_secured_area and secured_area **/
+#        secured_area:
+#            pattern:    ^/exam
+#            anonymous: true
+#            logout:     
+#                success_handler: security.logout.success_handler
+#            cas:
+#                cas_server: "%cas_server%"
+#                cas_port: "%cas_port%"
+#                cas_path: "%cas_path%"
+#                ca_cert_path: ~
+#                cas_protocol: S1
+#                cas_mapping_attribute: false
+#                check_path: /exam/loggedin
+#                login_path: /exam/login
+
+# this section used for besimple/sso-auth-bundle
         ubc_secured_area:
             pattern: ^/exam
             anonymous: ~

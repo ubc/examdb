@@ -3,3 +3,5 @@ login:
     pattern: /exam/login
 logout:
     pattern: /exam/logout
+login_check:
+    pattern: /exam/loggedin

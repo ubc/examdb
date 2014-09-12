@@ -64,6 +64,7 @@ stof_doctrine_extensions:
         default:
             timestampable: true
 
+# related to besimple/sso-auth-bundle
 be_simple_sso_auth:
     admin_sso:
         protocol:

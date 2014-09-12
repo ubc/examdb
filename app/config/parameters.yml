@@ -12,6 +12,10 @@ parameters:
     mailer_password: null
     locale: en
     secret: ThisTokenIsNotSoSecretChangeIt
+#    This following 3 lines is for "gorg/cas-bundle"
+    cas_server: cas.dev
+    cas_port: 8088
+    cas_path: /cas/
 #    login.url: https://cas.stg.id.ubc.ca/ubc-cas/login
 #    logout.url: https://cas.stg.id.ubc.ca/ubc-cas/logout
 #    validation.url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate

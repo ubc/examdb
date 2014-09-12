@@ -55,7 +55,8 @@
         "bin-dir": "bin"
     },
     "include-path": ["vendor/pdepend/pdepend/src/main/php"],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
+    "prefer-stability": true,
     "extra": {
         "symfony-app-dir": "app",
         "symfony-web-dir": "web",
