@@ -1,7 +1,14 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
+
 {% block body %}
-    {% if isLoggedIn == false %}
-        <a href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
-    {% endif %}
-    {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams, 'caption': caption}) }}
+
+    <h1>Search Exams Archive</h1>
+
+    <!-- {% if isLoggedIn == false %}
+        <p>Please log in with CWL:</p>
+        <p><a href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a></p>
+    {% endif %} -->
+
+    <p>Public-facing interface to go here.</p>
+
 {% endblock %}

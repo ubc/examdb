@@ -1,34 +1,182 @@
 @CHARSET "UTF-8";
-body.full-width {
-  background-color: #FFF; 
+
+.full-width {
+    background-color: #FFF; 
 }
+
 .full-width .full-width-container {
-  margin-right: auto;
-  margin-left: auto;
+    margin-right: auto;
+    margin-left: auto;
 }
+
 .full-width-container {
-  width: 940px;
-  margin-top: 0;
-  margin-right: auto;
-  margin-bottom: 0;
-  margin-left: auto;
-  padding: 0;
+    width: 940px;
+    margin-top: 0;
+    margin-right: auto;
+    margin-bottom: 0;
+    margin-left: auto;
+    padding: 0;
 }
+
+
+/**** START EXAM DB CSS ****/
+
+/* more spacing between form groups */
+.content fieldset {
+    margin: 1.5em 0;
+}
+    
+    /* more spacing between rows */
+    .content .row-fluid {
+        margin-bottom: .5em;
+    }
+    
+    /* de-emphasize labels a bit */
+    .content label {
+        color: #555;
+        font-size: .95em;
+    }
+    
+    /* required-star class added to each label of a required field */
+    .content .required-star:after {
+        content: ' *';
+        color: #ab1f2e;
+    }
+    
+    /* expand inputs to wider than default */
+    .content input[type="text"],
+    .content input[type="number"],
+    .content input[type="date"],
+    .content textarea {
+        width: 90%;
+    }
+    .content select {
+        width: 92.5%;
+    }
+    
+    /* license class used on div wrapping legal agreement */
+    .content .license {
+        margin-bottom: 2em;
+        padding: 2em;
+        height: 120px;
+        font-size: .85em;
+        line-height: 130%;
+        overflow: scroll;
+        border: 1px solid #e5e5e5;
+        background: #f9f9f9;
+        -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.075) inset;
+        -moz-box-shadow:    0 0 3px rgba(0, 0, 0, 0.075) inset;
+        box-shadow:         0 0 3px rgba(0, 0, 0, 0.075) inset;
+    }
+    
+    /* for agreement, date of agreement fields (stacked on top of each other) */
+    .content .inner-rows > div {
+        margin-bottom: .8em;
+    }
+    
+    /* remove default to fix alignment */
+    .content .checkbox {
+        padding-left: 0;
+    }
+    
+        /* override default to fix alignment */
+        .content .checkbox input[type="checkbox"] {
+            margin: 2px 8px 0 0;
+	    -webkit-transform: scale(1.4);
+	    transform: scale(1.4);
+        }
+        
+        /* agreement text is label next to checkbox */
+        .content .agreement-text {
+            margin-bottom: 1em;
+            color: #333;
+            font-size: 1.2em;
+        }
+    
+    /* this is the id already added to the browse input for the upload */
+    .content #form_file {
+        padding-top: 0;
+        padding-left: 0;
+    }
+    
+    /* save button */
+    .content .btn-save {
+        margin: .5em 0 2em 0;
+    }
+
+/* table used on manage screen */    
+.content table {
+    margin: 2em 0 3em 0;
+}
+
+    /* caption = "Exams uploaded by" */
+    .content caption {
+	padding-bottom: .5em;
+	font-size: 1.7em;
+	text-align: left;
+	border-bottom: 2px dotted #d7e0e7;
+    }
+    
+    /* headings sometimes 2 lines */
+    .content th {
+	line-height: 130%;
+    }
+    
+    /* td-course used for cell with course name */
+    .content .td-course {
+	font-size: 1.15em;
+    }
+    
+    /* td-icon used for cells with icons (edit, delete) */
+    .content .td-icon {
+	font-size: 1.4em;
+	text-align: center;
+	vertical-align: middle;
+    }
+    
+	/* no underline for icon links */
+	.content .td-icon a {
+	    text-decoration: none;
+	}
+	
+	/* change default for icons */
+	.content .td-icon i:before {
+	    cursor: pointer;
+	}
+
+@media screen and (max-width: 767px) {
+    
+    /* limit scrolling div width */
+    .content .license {
+	max-width: 84%;
+    }
+    
+}
+
+/**** END EXAM DB CSS ****/
+
+
 @media screen and (max-width: 979px) {
-  .full-width-container {
-    margin-left: 0;
-    margin-right: 0;
-    width: auto;
-  }
+
+    .full-width-container {
+	margin-left: 0;
+	margin-right: 0;
+	width: auto;
+    }
+    
 }
+
 @media screen and (min-width: 1200px) {
-  .full-width-container {
-    width: 1170px;
-    display: block;
-    margin: 0 auto;
-  }
-  .home .full-width-container .entry-content {
-    margin-right: -15px;
-    margin-left: -15px;
-  }
+
+    .full-width-container {
+	width: 1170px;
+	display: block;
+	margin: 0 auto;
+    }
+    
+    .home .full-width-container .entry-content {
+	margin-right: -15px;
+	margin-left: -15px;
+    }
+
 }

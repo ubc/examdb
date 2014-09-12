@@ -1,43 +1,61 @@
-<table class="list-uploads" border=1>
-    <caption>{% if caption is defined %}{{ caption }}{% endif %}</caption>
-    <thead>
-        <tr>
-        <th>Faculty</th>
-        <th>Department</th>
-        <th>Subject Code</th>
-        <th>Year</th>
-        <th>Term</th>
-        <th>Access Level</th>
-        <th>Comments</th>
-        <th>Cross Listed</th>
-        <th>Content Owner</th>
-        {% if list is defined %}
-            <th>File</th>
-            <th>Actions</th>
-        {% else %}
-            
+<table class="table table-striped list-uploads">
+    <caption>
+        {% if caption is defined %}
+            {{ caption }}  <a href="/exam/upload" class="btn btn-primary btn-small pull-right"><i class="icon-plus"></i> Add New</a>
         {% endif %}
-        </tr>
-    </thead>
-    <tbody>
-    {% for exam in exams %}
-        <tr>
-            <td>{{ exam.faculty }}</td>
-            <td>{{ exam.dept }}</td>
-            <td>{{ exam.subjectcode }}</td>
-            <td>{{ exam.year }}</td>
-            <td>{{ exam.term }}</td>
-            <td>{{ exam.getAccessLevelString }}</td>
-            <td>{{ exam.comments }}</td>
-            <td>{{ exam.crosslisted }}</td>
-            <td>{{ exam.legalcontentowner }}</td>
-            {% if list is defined %}
-                <td><a href="{{ exam.getWebPath }}">{{ exam.path }}</a></td>
-                <td><a href="{{ url('delete_exam', {'examID': exam.id}) }}"><i class="icon-remove-sign"></i></a> | <a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-refresh"></i></a></td>
-            {% else %}
-            
-            {% endif %}
-        </tr>
-    {% endfor %}
-    </tbody>
+    </caption>
+    {% if exams %}
+        
+        <thead>
+            <tr>
+                {% if list is defined %}
+                    <th>Edit</th>
+                {% endif %}
+                <th class="hidden-phone">Uploaded</th>
+                <th>Course</th>
+                {% if list is defined %}
+                    <th>Exam</th>
+                {% endif %}
+                <th>Access Level</th>
+                <th class="hidden-phone">Notes</th>
+                <th>Content Owner</th>
+                <th class="hidden-phone">Faculty &amp; Department</th>
+                {% if list is defined %}
+                    <th>Delete</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for exam in exams %}
+                <tr>
+                    {% if list is defined %}
+                        <td class="td-icon"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-edit"></i></a></td>       
+                    {% endif %}
+                    <td class="hidden-phone">{{ exam.created|date('M j, Y') }}</td>
+                    <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
+                    {% if list is defined %}
+                        <td><a href="{{ exam.getWebPath }}">View</a></td>         
+                    {% endif %}
+                    <td>{{ exam.getAccessLevelString }}</td>
+                    <td class="hidden-phone">{{ exam.comments }}</td>
+                    <td>{{ exam.legalcontentowner }}</td>
+                    <td class="hidden-phone">{{ exam.faculty }} - {{ exam.dept }}</td>
+                    {% if list is defined %}
+                        <td class="td-icon"><a href="{{ url('delete_exam', {'examID': exam.id}) }}" onclick="return confirm('Are you sure you want to delete this exam for {{exam.subjectcode}}?');"><i class="icon-trash"></i></a></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    {% else %}
+        <thead>
+            <tr>
+                <th>No exams currently in the database</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Would you like to <a href="/exam/upload">upload an exam</a>?</td>
+            </tr>
+        </tbody>
+    {% endif %}
 </table>
