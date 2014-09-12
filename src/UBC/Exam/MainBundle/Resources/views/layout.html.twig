@@ -116,14 +116,21 @@
                     <ul class="nav">
 		        <!-- **changes here need to be replicated in the footer mobile navigation below!** -->
                         <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-			  <a href="/exam">Search</a>
+			  <a href="{{ url('ubc_exam_main_homepage') }}">Search Exams</a>
 			</li>
                         <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
-			  <a href="/exam/upload">Upload New</a>
+			  <a href="{{ url('exam_upload') }}">Upload New</a>
 			</li>
                         <li class="{% if app.request.attributes.get('_route') == 'list' or
 				         app.request.attributes.get('_route') == 'update_exam' %}active{% endif %}">
-			  <a href="/exam/list">Manage Existing</a>
+			  <a href="{{ url('list') }}">Manage Existing</a>
+			</li>
+			<li class="pull-right">
+			  {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+			    <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
+			  {% else %}
+			    <a href="{{ url('logout') }}"><i class="icon-signout"></i> Log Out</a>
+			  {% endif %}
 			</li>
                         <!-- <li class="dropdown">
                             <div class="btn-group">
@@ -171,15 +178,22 @@
                 <div class="nav-collapse collapse">
                     <ul class="nav">
 		        <!-- **changes here need to be replicated in the main navigation above!** -->
-                        <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-			  <a href="/exam">Search</a>
+			<li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
+			  <a href="{{ url('ubc_exam_main_homepage') }}">Search Exams</a>
 			</li>
                         <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
-			  <a href="/exam/upload">Upload New</a>
+			  <a href="{{ url('exam_upload') }}">Upload New</a>
 			</li>
                         <li class="{% if app.request.attributes.get('_route') == 'list' or
 				         app.request.attributes.get('_route') == 'update_exam' %}active{% endif %}">
-			  <a href="/exam/list">Manage Existing</a>
+			  <a href="{{ url('list') }}">Manage Existing</a>
+			</li>
+			<li class="pull-right">
+			  {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+			    <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
+			  {% else %}
+			    <a href="{{ url('logout') }}"><i class="icon-signout"></i> Log Out</a>
+			  {% endif %}
 			</li>
                         <!-- <li class="dropdown">
                             <div class="btn-group">

@@ -21,6 +21,18 @@
 
 /**** START EXAM DB CSS ****/
 
+/* need to overwrite some defaults to align login/logout nav at right */
+.navbar .nav {
+    float: none;
+}
+    .navbar .nav > .pull-right {
+	float: right;
+    }
+	#ubc7-unit-menu .nav > .pull-right > .a-img-cwl,
+	#ubc7-unit-alternate-navigation .nav > .pull-right > .a-img-cwl {
+	    padding: 7px 10px;  
+	}
+
 /* more spacing between form groups */
 .content fieldset {
     margin: 1.5em 0;
@@ -153,9 +165,6 @@
     
 }
 
-/**** END EXAM DB CSS ****/
-
-
 @media screen and (max-width: 979px) {
 
     .full-width-container {
@@ -164,7 +173,19 @@
 	width: auto;
     }
     
+    /* reset overwrites */
+    .navbar .nav > .pull-right {
+	float: none;
+    }
+    	#ubc7-unit-menu .nav > .pull-right > .a-img-cwl,
+	#ubc7-unit-alternate-navigation .nav > .pull-right > .a-img-cwl {
+	    padding: 10px 20px;  
+	}
+    
 }
+
+/**** END EXAM DB CSS ****/
+
 
 @media screen and (min-width: 1200px) {
 
