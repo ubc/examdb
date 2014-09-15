@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Main controller class
- * 
+ *  
  * @author Loong Chan <loong.chan@ubc.ca>
  *
  */
