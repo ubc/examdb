@@ -4,12 +4,14 @@
     
     <ul class="breadcrumb expand">
         <li>
-            <a href="/exam/list">Manage Existing</a> <span class="divider">/</span>
+            <a href="{{ url('list') }}">Manage Existing</a> <span class="divider">/</span>
         </li>
         <li class="active">Update Exam</li>
     </ul>
 
     <h1>Update Exam</h1>
+    
+    <p>Edit any details below. If you need to replace an exam file, please <a href="{{ url('exam_upload') }}">upload a new exam</a> instead, and delete this old exam from your <a href="{{ url('list') }}">existing exams</a>.</p>
     
     {{ include('UBCExamMainBundle:Default:upload-form.html.twig', {'form': form}) }}
 
