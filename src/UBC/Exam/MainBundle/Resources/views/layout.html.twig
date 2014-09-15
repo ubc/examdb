@@ -129,7 +129,7 @@
 			  {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 			    <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
 			  {% else %}
-			    <a href="{{ url('logout') }}"><i class="icon-signout"></i> Log Out</a>
+			    <a href="{{ url('logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
 			  {% endif %}
 			</li>
                         <!-- <li class="dropdown">
@@ -192,7 +192,7 @@
 			  {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 			    <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
 			  {% else %}
-			    <a href="{{ url('logout') }}"><i class="icon-signout"></i> Log Out</a>
+			    <a href="{{ url('logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
 			  {% endif %}
 			</li>
                         <!-- <li class="dropdown">

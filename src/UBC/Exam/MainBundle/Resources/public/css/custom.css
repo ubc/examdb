@@ -81,6 +81,17 @@
         box-shadow:         0 0 3px rgba(0, 0, 0, 0.075) inset;
     }
     
+    /* try to force scrollbar, at least for webkit */    
+    ::-webkit-scrollbar {
+	-webkit-appearance: none;
+	width: 7px;
+    }
+    ::-webkit-scrollbar-thumb {
+       border-radius: 4px;
+       background-color: rgba(0,0,0,.5);
+       -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
+    }
+    
     /* for agreement, date of agreement fields (stacked on top of each other) */
     .content .inner-rows > div {
         margin-bottom: .8em;
@@ -91,6 +102,11 @@
         padding-left: 0;
     }
     
+	/* label has more spacing */
+	.content .checkbox label {
+	    margin-bottom: .9em;
+	}
+	
         /* override default to fix alignment */
         .content .checkbox input[type="checkbox"] {
             margin: 2px 8px 0 0;
@@ -100,10 +116,15 @@
         
         /* agreement text is label next to checkbox */
         .content .agreement-text {
-            margin-bottom: 1em;
+            margin-bottom: 1.4em;
             color: #333;
             font-size: 1.2em;
         }
+    
+    /* class for hiding fields that should be hidden on update exam page */
+    .content .hide-this {
+	display: none;
+    }
     
     /* this is the id already added to the browse input for the upload */
     .content #form_file {
@@ -114,7 +135,7 @@
     /* save button */
     .content .btn-save {
         margin: .5em 0 2em 0;
-    }
+    }   
 
 /* table used on manage screen */    
 .content table {

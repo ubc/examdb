@@ -29,12 +29,12 @@
             {% for exam in exams %}
                 <tr>
                     {% if list is defined %}
-                        <td class="td-icon"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-edit"></i></a></td>       
+                        <td class="td-icon"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-pencil"></i></a></td>       
                     {% endif %}
                     <td class="hidden-phone">{{ exam.created|date('M j, Y') }}</td>
                     <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
                     {% if list is defined %}
-                        <td><a href="{{ exam.getWebPath }}">View</a></td>         
+                        <td><a href="{{ exam.getWebPath }}">View Exam</a></td>         
                     {% endif %}
                     <td>{{ exam.getAccessLevelString }}</td>
                     <td class="hidden-phone">{{ exam.comments }}</td>
