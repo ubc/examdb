@@ -68,34 +68,34 @@ class DefaultController extends Controller
         
         //get user
         $user = $this->get('security.context')->getToken()->getUser();
-        $first = $user->getFirstname();
-        $last = $user->getLastname();
+        $first = $user->getFirstname() != ' ' ? null : $user->getFirstname().' ';
+        $last = $user->getLastname() != ' ' ? null : $user->getLastname();
         
         $form = $this->createFormBuilder($exam);
         
         if (count($faculties) > 1) {
             $form->add('faculty', 'choice', array('empty_value' => '- Choose faculty -','choices' => $faculties));
         } else {
-            $form->add('faculty', 'text');
+            $form->add('faculty', 'text', array('max_length' => 50));
         }
         
-        $form->add('dept', 'text');
+        $form->add('dept', 'text', array('max_length' => 50));
         
         if (count($subjectCode) > 1) {
             $form->add('subject_code', 'choice', array('empty_value' => '- Choose subject -', 'choices' => $subjectCode))
-                 ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false));  //extra field to
+                 ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
         } else {
-            $form->add('subject_code', 'text');
+            $form->add('subject_code', 'text', array('max_length' => 10));
         }
         
         $form->add('comments', 'textarea', array('required' => false))
             ->add('year')
             ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
-            ->add('cross_listed', 'text', array('required' => false))
+            ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
             ->add('access_level', 'choice', array('empty_value' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
             ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
-            ->add('legal_content_owner', 'text')
-            ->add('legal_uploader', 'text', array('data' => $first.' '.$last))
+            ->add('legal_content_owner', 'text', array('max_length' => 100))
+            ->add('legal_uploader', 'text', array('data' => $first.$last, 'max_length' => 100))
             ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
             ->add('file', 'file')
             ->add('upload', 'submit');
@@ -284,17 +284,17 @@ class DefaultController extends Controller
 
         //ok, create update form!
         $form = $this->createFormBuilder($exam)
-        ->add('faculty', 'text')
-        ->add('dept', 'text')
-        ->add('subject_code', 'text')
+        ->add('faculty', 'text', array('max_length' => 50))
+        ->add('dept', 'text', array('max_length' => 50))
+        ->add('subject_code', 'text', array('max_length' => 10))
         ->add('comments', 'textarea', array('required' => false))
         ->add('year')
         ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
-        ->add('cross_listed', 'text', array('required' => false))
+        ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
         ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
         ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
-        ->add('legal_content_owner', 'text')
-        ->add('legal_uploader', 'text', array('read_only' => true))
+        ->add('legal_content_owner', 'text', array('max_length' => 100))
+        ->add('legal_uploader', 'text', array('read_only' => true, 'max_length' => 100))
         /*->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'disabled' => true))*/
         /*->add('file', 'file', array('required' => false))*/
         ->add('upload', 'submit')

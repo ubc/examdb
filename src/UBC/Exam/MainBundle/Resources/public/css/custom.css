@@ -66,6 +66,13 @@
         width: 92.5%;
     }
     
+    /* need to help Safari show required fields with invalid class (applied via JavaScript) */
+    .content .invalid input:required:invalid,
+    .content .invalid select:required:invalid,
+    .content .invalid .checkbox input:required:invalid + label {
+	border: 1px solid #ab1f2e;
+    }
+    
     /* license class used on div wrapping legal agreement */
     .content .license {
         margin-bottom: 2em;
@@ -81,12 +88,12 @@
         box-shadow:         0 0 3px rgba(0, 0, 0, 0.075) inset;
     }
     
-    /* try to force scrollbar, at least for webkit */    
-    ::-webkit-scrollbar {
+    /* try to force scrollbar for legal agreement box, at least for webkit */    
+    form ::-webkit-scrollbar {
 	-webkit-appearance: none;
 	width: 7px;
     }
-    ::-webkit-scrollbar-thumb {
+    form ::-webkit-scrollbar-thumb {
        border-radius: 4px;
        background-color: rgba(0,0,0,.5);
        -webkit-box-shadow: 0 0 1px rgba(255,255,255,.5);
