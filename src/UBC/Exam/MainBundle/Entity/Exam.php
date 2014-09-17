@@ -4,6 +4,7 @@ namespace UBC\Exam\MainBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * This class holds the concept of exam (aka file associated with course)
@@ -25,27 +26,32 @@ class Exam
     
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Please choose a faculty")
      */
     protected $faculty;
     
     /**
      * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Please include a department")
      */
     protected $dept;
     
     
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\NotBlank(message="Please provide a subject code")
      */
     protected $subject_code;
     
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Please provide a year")
      */
     protected $year;
     
     /**
      * @ORM\Column(type="string", length=10)
+     * @Assert\NotBlank(message="Please provide a term")
      */
     protected $term;
     
@@ -61,21 +67,25 @@ class Exam
     
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Please attribute an owner")
      */
     protected $legal_content_owner;
     
     /**
      * @ORM\Column(type="string", length=100)
+     * @Assert\NotBlank(message="Please designate an uploader")
      */
     protected $legal_uploader;
     
     /**
      * @ORM\Column(type="date")
+     * @Assert\NotBlank(message="Please provide the date")
      */
     protected $legal_date;
     
     /**
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank(message="Please agree to the terms")
      */
     protected $legal_agreed;
 
@@ -88,6 +98,7 @@ class Exam
     
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Please choose an access level")
      */
     protected $access_level;
 
@@ -99,6 +110,7 @@ class Exam
     /**
      * file
      * @var unknown
+     * @Assert\NotBlank(message="Please upload a file")
      */
     private $file;
     

@@ -32,11 +32,12 @@
 	    {% if form.subject_code.vars.form.vars.block_prefixes.1 is same as("choice") %}
 		<div class="span3">
 		    {{ form_label(form.subject_code, null, {'label': 'Subject', 'label_attr': {'class': 'required-star'}}) }}
-		    {{ form_errors(form.subject_code_number) }}
+		    {{ form_errors(form.subject_code) }}
 		    {{ form_widget(form.subject_code) }}
 		</div>
 		<div class="span3">
 		    {{ form_label(form.subject_code_number, null, {'label': 'Code', 'label_attr': {'class': 'required-star'}}) }}
+		    {{ form_errors(form.subject_code) }}
 		    {{ form_widget(form.subject_code_number, {'attr': {'placeholder': 'e.g. 281'}}) }}
 		</div>
 	    {% else %}
@@ -156,9 +157,9 @@
 		    
 		    <div class="checkbox">
 			{{ form_label(form.legal_agreed, null, {'label': 'Consent', 'label_attr': {'class': 'required-star agreement-label'}}) }}
+			{{ form_errors(form.legal_agreed) }}
 			{{ form_widget(form.legal_agreed) }}
 			{{ form_label(form.legal_agreed, null, {'label': 'I agree to this License', 'label_attr': {'class': 'agreement-text'}}) }}
-			{{ form_errors(form.legal_agreed) }}
 		    </div>
 		    
 		    {{ form_row(form.file, {'label': 'Exam file', 'label_attr': {'class': 'required-star'}, 'attr': {'class': 'btn-small'}}) }}

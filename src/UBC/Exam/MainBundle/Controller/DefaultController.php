@@ -104,17 +104,20 @@ class DefaultController extends Controller
 
         if ($this->getRequest()->getMethod() == "POST") {
             $form->handleRequest($request);
-            $exam->setSubjectcode($exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData()));
+            $combinedCode = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
+            if (strlen($combinedCode) > 5) {
+                $exam->setSubjectcode($combinedCode);
+            }
             
             if ($form->isValid()) {
                 //setup who did it!
                 $user = $this->get('security.context')->getToken()->getUser();
                 $exam->setUploadedBy($user);
-
+                
                 //save to DB
                 $em->persist($exam);
                 $em->flush();
-
+                
                 return $this->redirect($this->generateUrl('list'));
             }
         }

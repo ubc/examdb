@@ -80,7 +80,7 @@
         height: 120px;
         font-size: .85em;
         line-height: 130%;
-        overflow: scroll;
+        overflow-x: scroll;
         border: 1px solid #e5e5e5;
         background: #f9f9f9;
         -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.075) inset;
