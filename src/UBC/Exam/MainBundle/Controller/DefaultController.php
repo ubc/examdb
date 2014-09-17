@@ -104,7 +104,14 @@ class DefaultController extends Controller
 
         if ($this->getRequest()->getMethod() == "POST") {
             $form->handleRequest($request);
-            $exam->setSubjectcode($exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData()));
+            $form_subject_code_number = $exam->getSubjectcode();
+            
+            //need try/catch so that it doesn't puke if subject_code_number doesn't exist
+            if ($form->has('subject_code_number')) {
+                $form_subject_code_number = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
+            }
+
+            $exam->setSubjectcode($form_subject_code_number);
             
             if ($form->isValid()) {
                 //setup who did it!
