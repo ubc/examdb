@@ -1,4 +1,4 @@
-qimports:
+imports:
     - { resource: config.yml }
 
 #framework:
