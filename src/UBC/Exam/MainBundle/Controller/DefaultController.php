@@ -34,7 +34,11 @@ class DefaultController extends Controller
         ->getQuery();
         
         $exams = $query->getResult();
-
+// $env = $this->container->get('kernel')->getEnvironment();
+// print_r($env);
+// echo '<br><hr><br>';
+// var_dump($isLoggedIn);
+// exit();
         return $this->render('UBCExamMainBundle:Default:index.html.twig', array('caption' => 'List of Exams', 'isLoggedIn' => $isLoggedIn, 'exams' => $exams));
     }
 
@@ -212,7 +216,13 @@ class DefaultController extends Controller
      */
     public function loggedinAction()
     {
-            return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
+        //we delete layout cache so that the menu can reset to whatever it's supposed to me (login button or logout buton)
+        $fileCache = $this->container->get('twig')->getCacheFilename('UBCExamMainBundle:layout.html.twig');
+        if (is_file($fileCache)) {
+            @unlink($fileCache);
+        }
+
+        return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
 
     /**
