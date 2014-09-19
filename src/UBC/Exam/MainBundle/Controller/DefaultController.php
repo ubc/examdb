@@ -217,7 +217,7 @@ class DefaultController extends Controller
     public function loggedinAction()
     {
         //we delete layout cache so that the menu can reset to whatever it's supposed to me (login button or logout buton)
-        $fileCache = $this->container->get('twig')->getCacheFilename('UBCExamMainBundle:layout.html.twig');
+        $fileCache = $this->container->get('twig')->getCacheFilename('UBCExamMainBundle::layout.html.twig');
         if (is_file($fileCache)) {
             @unlink($fileCache);
         }

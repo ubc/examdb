@@ -2,3 +2,9 @@
 ubc_exam_main:
     resource: "@UBCExamMainBundle/Resources/config/routing.yml"
     prefix:   /
+root:
+    path: /
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /exam
+        permanent: true
