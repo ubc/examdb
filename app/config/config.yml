@@ -24,6 +24,7 @@ framework:
 
 # Twig Configuration
 twig:
+# twig might need to be set for debug=true manually until i can figure out how to handle {% if %} in templates.  since production compiles only once.
     debug:            "%kernel.debug%"
     strict_variables: "%kernel.debug%"
 
@@ -31,7 +32,7 @@ twig:
 assetic:
     debug:          "%kernel.debug%"
     use_controller: false
-    bundles:        [ ]
+    bundles:        [ UBCExamMainBundle ]
     #java: /usr/bin/java
     filters:
         cssrewrite: ~
@@ -83,3 +84,9 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
+    
+# allows use or dump() in production twig
+services:
+  twig.extension.debug:
+      class:        Twig_Extension_Debug
+      tags: [{ name: 'twig.extension' }]
