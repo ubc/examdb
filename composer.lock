@@ -4,76 +4,8 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "33b759c8a8eef40c9a80982e0f0cdd93",
+    "hash": "3abe922f9310ccc1ebbe6d69c8f541f2",
     "packages": [
-        {
-            "name": "besimple/sso-auth-bundle",
-            "version": "dev-master",
-            "target-dir": "BeSimple/SsoAuthBundle",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/BeSimple/BeSimpleSsoAuthBundle.git",
-                "reference": "92b663b45f99437892de0d13e243a3aa79312d33"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/BeSimple/BeSimpleSsoAuthBundle/zipball/92b663b45f99437892de0d13e243a3aa79312d33",
-                "reference": "92b663b45f99437892de0d13e243a3aa79312d33",
-                "shasum": ""
-            },
-            "require": {
-                "kriswallsmith/buzz": ">=0.7,<1.0-dev",
-                "php": ">=5.3.3",
-                "symfony/framework-bundle": "~2.1",
-                "symfony/security-bundle": "~2.1",
-                "symfony/twig-bundle": "~2.1"
-            },
-            "require-dev": {
-                "symfony/browser-kit": "~2.1",
-                "symfony/css-selector": "~2.1",
-                "symfony/expression-language": "~2.4",
-                "symfony/filesystem": "~2.1",
-                "symfony/form": "~2.1",
-                "symfony/validator": "~2.1",
-                "symfony/web-profiler-bundle": "~2.1",
-                "symfony/yaml": "~2.1"
-            },
-            "type": "symfony-bundle",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-0": {
-                    "BeSimple\\SsoAuthBundle": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Jean-François Simon",
-                    "email": "contact@jfsimon.fr",
-                    "homepage": "http://www.jfsimon.fr"
-                },
-                {
-                    "name": "BeSimple Community",
-                    "homepage": "https://github.com/BeSimple/BeSimpleSsoAuthBundle/contributors"
-                }
-            ],
-            "description": "SSO authentication your Symfony2 project ",
-            "homepage": "https://github.com/BeSimple/BeSimpleSsoAuthBundle",
-            "keywords": [
-                "Authentication",
-                "SSO",
-                "Symfony2",
-                "cas"
-            ],
-            "time": "2014-07-09 15:47:52"
-        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.0",
@@ -771,6 +703,92 @@
             "time": "2014-01-12 16:34:06"
         },
         {
+            "name": "gorg/cas-bundle",
+            "version": "dev-master",
+            "target-dir": "Gorg/Bundle/CasBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matgou/GorgCasBundle.git",
+                "reference": "fc8bc2c03c397f9436b99b1d5245a30b14793bb2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matgou/GorgCasBundle/zipball/fc8bc2c03c397f9436b99b1d5245a30b14793bb2",
+                "reference": "fc8bc2c03c397f9436b99b1d5245a30b14793bb2",
+                "shasum": ""
+            },
+            "require": {
+                "gorg/phpcas": "dev-master",
+                "php": ">=5.3.2"
+            },
+            "type": "symfony-bundle",
+            "autoload": {
+                "psr-0": {
+                    "Gorg\\Bundle\\CasBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu GOULIN",
+                    "email": "mathieu.goulin@gadz.org"
+                }
+            ],
+            "description": "Implements CAS Authentication on your website",
+            "homepage": "http://opensource.gadz.org/x/FABO",
+            "keywords": [
+                "Authentication",
+                "cas",
+                "gorg",
+                "jasig"
+            ],
+            "time": "2013-04-26 13:45:45"
+        },
+        {
+            "name": "gorg/phpcas",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/matgou/phpCAS.git",
+                "reference": "95532757ee656eecd6f5f767bdfbd7910798da37"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/matgou/phpCAS/zipball/95532757ee656eecd6f5f767bdfbd7910798da37",
+                "reference": "95532757ee656eecd6f5f767bdfbd7910798da37",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "type": "php-lib",
+            "autoload": {
+                "classmap": [
+                    "source/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL"
+            ],
+            "authors": [
+                {
+                    "name": "Mathieu GOULIN",
+                    "email": "mathieu.goulin@gadz.org"
+                }
+            ],
+            "description": "An library for use CAS Authentication",
+            "keywords": [
+                "cas",
+                "gorg",
+                "jasig"
+            ],
+            "time": "2014-01-29 13:59:48"
+        },
+        {
             "name": "incenteev/composer-parameter-handler",
             "version": "v2.1.0",
             "target-dir": "Incenteev/ParameterHandler",
@@ -942,54 +960,6 @@
                 "minification"
             ],
             "time": "2013-07-19 00:03:27"
-        },
-        {
-            "name": "kriswallsmith/buzz",
-            "version": "v0.12",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/kriswallsmith/Buzz.git",
-                "reference": "9d56d36a58c47e2f612f4b856ff9baa0e3375ff6"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/9d56d36a58c47e2f612f4b856ff9baa0e3375ff6",
-                "reference": "9d56d36a58c47e2f612f4b856ff9baa0e3375ff6",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "suggest": {
-                "ext-curl": "*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Buzz": "lib/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Kris Wallsmith",
-                    "email": "kris.wallsmith@gmail.com",
-                    "homepage": "http://kriswallsmith.net/"
-                }
-            ],
-            "description": "Lightweight HTTP client",
-            "homepage": "https://github.com/kriswallsmith/Buzz",
-            "keywords": [
-                "curl",
-                "http client"
-            ],
-            "time": "2014-07-29 23:52:21"
         },
         {
             "name": "monolog/monolog",
@@ -1806,6 +1776,74 @@
     ],
     "packages-dev": [
         {
+            "name": "besimple/sso-auth-bundle",
+            "version": "dev-master",
+            "target-dir": "BeSimple/SsoAuthBundle",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/BeSimple/BeSimpleSsoAuthBundle.git",
+                "reference": "92b663b45f99437892de0d13e243a3aa79312d33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/BeSimple/BeSimpleSsoAuthBundle/zipball/92b663b45f99437892de0d13e243a3aa79312d33",
+                "reference": "92b663b45f99437892de0d13e243a3aa79312d33",
+                "shasum": ""
+            },
+            "require": {
+                "kriswallsmith/buzz": ">=0.7,<1.0-dev",
+                "php": ">=5.3.3",
+                "symfony/framework-bundle": "~2.1",
+                "symfony/security-bundle": "~2.1",
+                "symfony/twig-bundle": "~2.1"
+            },
+            "require-dev": {
+                "symfony/browser-kit": "~2.1",
+                "symfony/css-selector": "~2.1",
+                "symfony/expression-language": "~2.4",
+                "symfony/filesystem": "~2.1",
+                "symfony/form": "~2.1",
+                "symfony/validator": "~2.1",
+                "symfony/web-profiler-bundle": "~2.1",
+                "symfony/yaml": "~2.1"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "BeSimple\\SsoAuthBundle": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jean-Fran\u00e7ois Simon",
+                    "email": "contact@jfsimon.fr",
+                    "homepage": "http://www.jfsimon.fr"
+                },
+                {
+                    "name": "BeSimple Community",
+                    "homepage": "https://github.com/BeSimple/BeSimpleSsoAuthBundle/contributors"
+                }
+            ],
+            "description": "SSO authentication your Symfony2 project ",
+            "homepage": "https://github.com/BeSimple/BeSimpleSsoAuthBundle",
+            "keywords": [
+                "Authentication",
+                "SSO",
+                "Symfony2",
+                "cas"
+            ],
+            "time": "2014-07-09 15:47:52"
+        },
+        {
             "name": "cilex/cilex",
             "version": "1.1.0",
             "source": {
@@ -1952,7 +1990,7 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Ménager",
+                    "name": "Fabien M\u00e9nager",
                     "email": "fabien.menager@gmail.com"
                 },
                 {
@@ -2225,6 +2263,54 @@
             "time": "2012-06-10 16:20:40"
         },
         {
+            "name": "kriswallsmith/buzz",
+            "version": "v0.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/Buzz.git",
+                "reference": "9d56d36a58c47e2f612f4b856ff9baa0e3375ff6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kriswallsmith/Buzz/zipball/9d56d36a58c47e2f612f4b856ff9baa0e3375ff6",
+                "reference": "9d56d36a58c47e2f612f4b856ff9baa0e3375ff6",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "suggest": {
+                "ext-curl": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Buzz": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kris Wallsmith",
+                    "email": "kris.wallsmith@gmail.com",
+                    "homepage": "http://kriswallsmith.net/"
+                }
+            ],
+            "description": "Lightweight HTTP client",
+            "homepage": "https://github.com/kriswallsmith/Buzz",
+            "keywords": [
+                "curl",
+                "http client"
+            ],
+            "time": "2014-07-29 23:52:21"
+        },
+        {
             "name": "m6web/symfony2-coding-standard",
             "version": "v1.1.0",
             "source": {
@@ -2368,7 +2454,7 @@
             ],
             "authors": [
                 {
-                    "name": "Fabien Ménager",
+                    "name": "Fabien M\u00e9nager",
                     "email": "fabien.menager@gmail.com"
                 }
             ],
@@ -4464,14 +4550,18 @@
             "time": "2013-12-19 11:40:00"
         }
     ],
-    "aliases": [],
-    "minimum-stability": "stable",
-    "stability-flags": {
-        "besimple/sso-auth-bundle": 20
-    },
+    "aliases": [
+
+    ],
+    "minimum-stability": "dev",
+    "stability-flags": [
+
+    ],
     "prefer-stable": false,
     "platform": {
         "php": ">=5.3.3"
     },
-    "platform-dev": []
+    "platform-dev": [
+
+    ]
 }

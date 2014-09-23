@@ -21,48 +21,50 @@ security:
             security: false
 
 # /** this section is used for "gorg/cas-bundle" bundle.  also need to comment out ubc_secured_area and secured_area **/
-#        secured_area:
-#            pattern:    ^/exam
-#            anonymous: true
-#            logout:     
-#                success_handler: security.logout.success_handler
-#            cas:
-#                cas_server: "%cas_server%"
-#                cas_port: "%cas_port%"
-#                cas_path: "%cas_path%"
-#                ca_cert_path: ~
-#                cas_protocol: S1
-#                cas_mapping_attribute: false
-#                check_path: /exam/loggedin
-#                login_path: /exam/login
-
-# this section used for besimple/sso-auth-bundle
-        ubc_secured_area:
-            pattern: ^/exam
-            anonymous: ~
-            trusted_sso:
-                manager: admin_sso
-                login_action: false         # BeSimpleSsoAuthBundle:TrustedSso:login
-                logout_action: false        # BeSimpleSsoAuthBundle:TrustedSso:logout
-                create_users: false
-                created_users_roles: [ ROLE_USER ]
-                login_path: /exam/login
-                check_path: /exam/loggedin  # created a loggedinAction in DefaultController, but no sure what to do there.
-            logout:
+        secured_area:
+            pattern:    ^/exam
+            anonymous: true
+            logout:     
                 path: /exam/logout
                 target: /exam
+                success_handler: security.logout.success_handler
+            cas:
+                cas_server: "%cas_server%"
+                cas_port: "%cas_port%"
+                cas_path: "%cas_path%"
+                ca_cert_path: ~
+                cas_protocol: S1
+                cas_mapping_attribute: cwlLoginName 
+                check_path: /exam/loggedin
+                login_path: /exam/login
 
-        secured_area:
-            pattern:    ^/demo/secured/
-            form_login:
-                check_path: _security_check
-                login_path: _demo_login
-            logout:
-                path:   _demo_logout
-                target: _demo
+# this section used for besimple/sso-auth-bundle
+#        ubc_secured_area:
+#            pattern: ^/exam
+#            anonymous: ~
+#            trusted_sso:
+#                manager: admin_sso
+#                login_action: false         # BeSimpleSsoAuthBundle:TrustedSso:login
+#                logout_action: false        # BeSimpleSsoAuthBundle:TrustedSso:logout
+#                create_users: false
+#                created_users_roles: [ ROLE_USER ]
+#                login_path: /exam/login
+#                check_path: /exam/loggedin  # created a loggedinAction in DefaultController, but no sure what to do there.
+#            logout:
+#                path: /exam/logout
+#                target: /exam
+#
+#        secured_area:
+#            pattern:    ^/demo/secured/
+#            form_login:
+#                check_path: _security_check
+#                login_path: _demo_login
+#            logout:
+#                path:   _demo_logout
+#                target: _demo
 
     access_control:
-        - { path: ^/exam/loggedin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/exam/loggedin$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/, roles: ROLE_USER }
         - { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }

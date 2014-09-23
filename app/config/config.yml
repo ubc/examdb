@@ -66,16 +66,16 @@ stof_doctrine_extensions:
             timestampable: true
 
 # related to besimple/sso-auth-bundle
-be_simple_sso_auth:
-    admin_sso:
-        protocol:
-            id: cas
-            version: 2
-        server:
-            id: cas
-            login_url: https://cas.stg.id.ubc.ca/ubc-cas/login
-            logout_url: https://cas.stg.id.ubc.ca/ubc-cas/logout
-            validation_url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate
+#be_simple_sso_auth:
+#    admin_sso:
+#        protocol:
+#            id: cas
+#            version: 2
+#        server:
+#            id: cas
+#            login_url: https://cas.stg.id.ubc.ca/ubc-cas/login
+#            logout_url: https://cas.stg.id.ubc.ca/ubc-cas/logout
+#            validation_url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate
  
 # Swiftmailer Configuration
 swiftmailer:

@@ -20,8 +20,8 @@
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "stof/doctrine-extensions-bundle": "1.1.*",
-        "besimple/sso-auth-bundle": "1.0.*@dev",
-        "symfony/dom-crawler": "2.3.*",
+        "gorg/cas-bundle": "master",
+	"symfony/dom-crawler": "2.3.*",
         "symfony/css-selector": "2.3.*"
     },
     "require-dev": {
