@@ -32,7 +32,7 @@ class Exam
     
     /**
      * @ORM\Column(type="string", length=50)
-     * @Assert\NotBlank(message="Please include a department")
+     * @Assert\NotBlank(message="Please include a department or 'n/a'")
      */
     protected $dept;
     
@@ -110,7 +110,6 @@ class Exam
     /**
      * file
      * @var unknown
-     * @Assert\NotBlank(message="Please upload a file")
      */
     private $file;
     
