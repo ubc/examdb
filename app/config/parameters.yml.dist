@@ -13,3 +13,7 @@ parameters:
 
     locale:            en
     secret:            ThisTokenIsNotSoSecretChangeIt
+
+    cas_server: cas.stg.id.ubc.ca
+    cas_port: 443
+    cas_path: /ubc-cas/
