@@ -27,18 +27,16 @@ class DefaultController extends Controller
     {
         $sc = $this->get('security.context');
         $isLoggedIn = $sc->isGranted('IS_AUTHENTICATED_FULLY');
-        
+
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
         $query = $repo->createQueryBuilder('e')
         ->orderBy('e.created', 'DESC')
         ->getQuery();
-        
+
         $exams = $query->getResult();
-// $env = $this->container->get('kernel')->getEnvironment();
-// print_r($env);
-// echo '<br><hr><br>';
-// var_dump($isLoggedIn);
-// exit();
+        
+        $this->updateuser();
+        
         return $this->render('UBCExamMainBundle:Default:index.html.twig', array('caption' => 'List of Exams', 'isLoggedIn' => $isLoggedIn, 'exams' => $exams));
     }
 
@@ -97,6 +95,7 @@ class DefaultController extends Controller
             ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
             ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
             ->add('access_level', 'choice', array('empty_value' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
+            ->add('type', 'choice', array('empty_value' => '- Choose type of material -', 'choices' => Exam::$TYPES))
             ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
             ->add('legal_content_owner', 'text', array('max_length' => 100))
             ->add('legal_uploader', 'text', array('data' => $first.$last, 'max_length' => 100))
@@ -132,7 +131,9 @@ class DefaultController extends Controller
                 return $this->redirect($this->generateUrl('list'));
             }
         }
-
+        
+        $this->updateuser();
+        
         return $this->render('UBCExamMainBundle:Default:upload.html.twig', array('form' => $form->createView()));
     }
     
@@ -155,6 +156,8 @@ class DefaultController extends Controller
                 ->orderBy('e.created', 'DESC')
                 ->getQuery();
         $exams = $query->getResult();
+        
+        $this->updateuser();
         
         return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams, 'username' => $user->getUsername()));
     }
@@ -338,5 +341,33 @@ class DefaultController extends Controller
             }
         }
             return $this->render('UBCExamMainBundle:Default:update.html.twig', array('form' => $form->createView()));
+    }
+    
+    /**
+     * checks and updates user profile if puid not set
+     * 
+     * @return void
+     */
+    private function updateuser() {
+        $securityContext = $this->get('security.context');
+        
+        if ($sc->isGranted('IS_AUTHENTICATED_FULLY')) {
+            $securityToken = $securityContext->getToken();
+            $user = $securityToken->getUser();
+            $securityAttributes = $securityToken->getAttributes();
+            $userPuid = $user->getPuid();
+            
+            //check if we need to update user to put in puid/first/lastname
+            if (!empty($securityTokenAttributes) && isset($securityAttributes['puid']) && empty($userPuid)) {
+                $user->setPuid($securityAttributes['puid']);
+                $user->setLastname($securityAttributes['sn']);
+                $user->setFirstname($securityAttributes['givenName']);
+                
+                //save updated user info
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($user);
+                $em->flush();
+            }
+        }
     }
 }

@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class Exam
 {
     static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'UBC Community', '3' => 'Students In This Faculty', '4' => 'Course Participants');
-    
+    static public $TYPES = array('Actual Assessment' => 'Actual Assessment', 'Practice Assessment' => 'Practice Assessment', 'Other Material' => 'Other Material');
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
@@ -54,6 +54,12 @@ class Exam
      * @Assert\NotBlank(message="Please provide a term")
      */
     protected $term;
+    
+    /**
+     * @ORM\Column(type="string", length=50)
+     * @Assert\NotBlank(message="Please provide a document type")
+     */
+    protected $type;
     
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -366,6 +372,30 @@ class Exam
     public function getYear()
     {
         return $this->year;
+    }
+
+    /**
+     * Set type
+     *
+     * @param string $type
+     *
+     * @return Exam
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    
+        return $this;
+    }
+    
+    /**
+     * Get type
+     *
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 
     /**

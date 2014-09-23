@@ -47,6 +47,11 @@ class User implements UserInterface, \Serializable
     private $email;
     
     /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $puid;
+    
+    /**
      * @ORM\Column(name="is_active", type="boolean")
      */
     private $isActive;
@@ -165,7 +170,10 @@ class User implements UserInterface, \Serializable
         return serialize( array(
                 $this->id,
                 $this->username,
-                $this->password 
+                $this->firstname,
+                $this->lastname,
+                $this->password,
+                $this->puid
         // see section on salt below
         // $this->salt,
                 ));
@@ -181,7 +189,10 @@ class User implements UserInterface, \Serializable
         list(
             $this->id,
             $this->username,
+            $this->firstname,
+            $this->lastname,
             $this->password,
+            $this->puid
             // see section on salt below
             // $this->salt
         ) = unserialize($serialized);
@@ -258,7 +269,31 @@ class User implements UserInterface, \Serializable
     {
         return $this->email;
     }
+
+    /**
+     * Set puid
+     *
+     * @param String $puid
+     *
+     * @return Exam
+     */
+    public function setPuid($puid)
+    {
+        $this->puid = $puid;
     
+        return $this;
+    }
+    
+    /**
+     * Get puid
+     *
+     * @return string
+     */
+    public function getPuid()
+    {
+        return $this->puid;
+    }
+
     /**
      * Get created
      *
