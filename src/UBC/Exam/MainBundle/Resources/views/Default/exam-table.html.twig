@@ -14,7 +14,7 @@
                 <th class="hidden-phone">Uploaded</th>
                 <th>Course</th>
                 {% if list is defined %}
-                    <th>Exam</th>
+                    <th>File</th>
                 {% endif %}
                 <th>Access Level</th>
                 <th class="hidden-phone">Notes</th>
@@ -34,7 +34,13 @@
                     <td class="hidden-phone">{{ exam.created|date('M j, Y') }}</td>
                     <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
                     {% if list is defined %}
-                        <td><a href="{{ exam.getWebPath }}">View Exam</a></td>         
+                        <td>
+                            {% if exam.getWebPath %}
+                                <a href="{{ exam.getWebPath }}">View File</a>         
+                            {% else %}
+                                No file uploaded yet
+                            {% endif %}
+                        </td>
                     {% endif %}
                     <td>{{ exam.getAccessLevelString }}</td>
                     <td class="hidden-phone">{{ exam.comments }}</td>

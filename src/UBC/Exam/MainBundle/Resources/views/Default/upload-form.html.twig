@@ -56,7 +56,7 @@
     
     <fieldset>
 	
-	<legend>Exam Details</legend>
+	<legend>Assessment Material Details</legend>
 	
 	<div class="row-fluid">
 	    
@@ -65,11 +65,23 @@
 	    </div>
 	    
 	    <div class="span3">
-		{{ form_row(form.access_level, {'label': 'Who can access this exam', 'label_attr': {'class': 'required-star'}}) }}
+		<!-- need back end support -->
+		<!-- form_row(form.TBD, {'label': 'What is being uploaded', 'label_attr': {'class': 'required-star'}}) -->
+		<label class="required-star">What is being uploaded</label>
+		<select>
+		    <option>- Choose type of material -</option>
+		    <option>Actual Assessment</option>
+		    <option>Practice Assessment</option>
+		    <option>Other Material</option>
+		</select>
 	    </div>
 	    
-	    <div class="span6">
-		{{ form_row(form.comments, {'label': 'Notes about this exam'}) }}
+	    <div class="span3">
+		{{ form_row(form.access_level, {'label': 'Who can access this file', 'label_attr': {'class': 'required-star'}}) }}
+	    </div>
+	    
+	    <div class="span3">
+		{{ form_row(form.comments, {'label': 'Notes about the material'}) }}
 	    </div>
 	    
 	</div>
@@ -162,7 +174,7 @@
 			{{ form_label(form.legal_agreed, null, {'label': 'I agree to this License', 'label_attr': {'class': 'agreement-text'}}) }}
 		    </div>
 		    
-		    {{ form_row(form.file, {'label': 'Exam file', 'label_attr': {'class': 'required-star'}, 'attr': {'class': 'btn-small'}}) }}
+		    {{ form_row(form.file, {'label': 'File', 'label_attr': {'class': 'required-star'}, 'attr': {'class': 'btn-small'}}) }}
 		    
 		</div>
 	    {% endif %}

@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Exam
 {
-    static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'UBC Community', '3' => 'Faculty', '4' => 'Course Participants');
+    static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'UBC Community', '3' => 'Students In This Faculty', '4' => 'Course Participants');
     
     /**
      * @ORM\Column(type="integer")

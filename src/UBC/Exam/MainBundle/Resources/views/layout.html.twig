@@ -14,9 +14,9 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>{% block title 'UBC Exams Archive' %}</title>
+  <title>{% block title 'UBC Assessment Material Archive' %}</title>
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="">
+  <meta name="description" content="The UBC exams archive of assessment material used in current and past UBC courses">
   <meta name="author" content="">
   <!-- Stylesheets -->
   <link href="//cdn.ubc.ca/clf/7.0.4/css/ubc-clf-full.min.css" rel="stylesheet">
@@ -102,7 +102,7 @@
 	  <!-- Read more about Unit Name Treatment on http://brand.ubc.ca/clf -->
 	  <!-- No Faculty Treatment -->
 	  <div id="ubc7-unit-name" class="ubc7-single-element">
-	    <span id="ubc7-unit-identifier"><a href="{{ url('ubc_exam_main_homepage') }}">Exams Archive</a></span>
+	    <span id="ubc7-unit-identifier"><a href="{{ url('ubc_exam_main_homepage') }}">Assessment Material Archive</a></span>
 	  </div>
 	</div>
       </div>
@@ -116,7 +116,7 @@
 	    <ul class="nav">
 	      <!-- **changes here need to be replicated in the footer mobile navigation below!** -->
 	      <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-		<a href="{{ url('ubc_exam_main_homepage') }}">Search Exams</a>
+		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
 	      </li>
 	      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 		<li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
@@ -169,7 +169,7 @@
 	    <ul class="nav">
 	      <!-- **changes here need to be replicated in the main navigation above!** -->
 	      <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-		<a href="{{ url('ubc_exam_main_homepage') }}">Search Exams</a>
+		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
 	      </li>
 	      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
 		<li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">

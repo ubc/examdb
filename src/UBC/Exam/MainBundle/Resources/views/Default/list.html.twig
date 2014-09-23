@@ -1,12 +1,12 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
-{% set caption = "Exams uploaded by " ~ username %}
+{% set caption = "Materials uploaded by " ~ username %}
 
 {% block body %}
     
-    <h1>Manage Existing Exams</h1>
+    <h1>Manage Existing Materials</h1>
     
-    <p>You can edit details or delete all the content for any exam you've uploaded. If you need to edit or delete an exam that was uploaded by someone else, please contact that individual to make the change.</p>
+    <p>You can edit details or delete all the content for anything you've personally uploaded. If you need to edit or delete material that was uploaded by someone else, please contact that individual to make the change.</p>
     
     {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams, 'caption': caption, 'list': true }) }}
 
