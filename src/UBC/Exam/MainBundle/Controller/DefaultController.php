@@ -109,17 +109,17 @@ class DefaultController extends Controller
 
         if ($this->getRequest()->getMethod() == "POST") {
             $form->handleRequest($request);
-            $form_subject_code_number = $exam->getSubjectcode();
+            $formSubjectCodeNumber = $exam->getSubjectcode();
             
             //need try/catch so that it doesn't puke if subject_code_number doesn't exist
             if ($form->has('subject_code_number')) {
                 $combinedCode = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
                 if (strlen($combinedCode) > 5) {
-                    $form_subject_code_number = $combinedCode;
+                    $formSubjectCodeNumber = $combinedCode;
                 }
             }
             
-            $exam->setSubjectcode($form_subject_code_number);
+            $exam->setSubjectcode($formSubjectCodeNumber);
             
             if ($form->isValid()) {
                 //setup who did it!
@@ -146,7 +146,7 @@ class DefaultController extends Controller
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listAction(Request $request)
+    public function listAction()
     {
         $user = $this->get('security.context')->getToken()->getUser();
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
@@ -172,7 +172,7 @@ class DefaultController extends Controller
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function refreshAction(Request $request)
+    public function refreshAction()
     {
         //get page content
         $ch = curl_init('https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0');
@@ -350,7 +350,8 @@ class DefaultController extends Controller
      * 
      * @return void
      */
-    private function updateuser() {
+    private function updateuser()
+    {
         $securityContext = $this->get('security.context');
         
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
