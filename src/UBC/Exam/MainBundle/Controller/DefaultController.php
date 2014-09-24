@@ -70,8 +70,10 @@ class DefaultController extends Controller
         
         //get user
         $user = $this->get('security.context')->getToken()->getUser();
-        $first = $user->getFirstname() != ' ' ? null : $user->getFirstname().' ';
-        $last = $user->getLastname() != ' ' ? null : $user->getLastname();
+        $fname = $user->getFirstname();
+        $lname = $user->getLastname();
+        $first = empty($fname) ? null : $user->getFirstname().' ';
+        $last = empty($lname) ? null : $user->getLastname();
         
         $form = $this->createFormBuilder($exam);
         
@@ -351,14 +353,14 @@ class DefaultController extends Controller
     private function updateuser() {
         $securityContext = $this->get('security.context');
         
-        if ($sc->isGranted('IS_AUTHENTICATED_FULLY')) {
+        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             $securityToken = $securityContext->getToken();
             $user = $securityToken->getUser();
             $securityAttributes = $securityToken->getAttributes();
             $userPuid = $user->getPuid();
             
             //check if we need to update user to put in puid/first/lastname
-            if (!empty($securityTokenAttributes) && isset($securityAttributes['puid']) && empty($userPuid)) {
+            if (!empty($securityAttributes) && isset($securityAttributes['puid']) && empty($userPuid)) {
                 $user->setPuid($securityAttributes['puid']);
                 $user->setLastname($securityAttributes['sn']);
                 $user->setFirstname($securityAttributes['givenName']);
