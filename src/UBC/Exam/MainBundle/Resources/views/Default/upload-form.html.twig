@@ -65,15 +65,7 @@
 	    </div>
 	    
 	    <div class="span3">
-		<!-- need back end support -->
-		<!-- form_row(form.TBD, {'label': 'What is being uploaded', 'label_attr': {'class': 'required-star'}}) -->
-		<label class="required-star">What is being uploaded</label>
-		<select>
-		    <option>- Choose type of material -</option>
-		    <option>Actual Assessment</option>
-		    <option>Practice Assessment</option>
-		    <option>Other Material</option>
-		</select>
+		{{ form_row(form.type, {'label': 'What is being uploaded', 'label_attr': {'class': 'required-star'}}) }}
 	    </div>
 	    
 	    <div class="span3">
