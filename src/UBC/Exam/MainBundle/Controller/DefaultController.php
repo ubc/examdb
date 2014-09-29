@@ -365,7 +365,8 @@ class DefaultController extends Controller
         //get what user permissions are for various departments/etc and depends on
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             //User is logged in, so need to check permissions to download
-
+            //but for now, we can just let them have it.
+            $return_val = $this->downloadPDF($exam);    //need to remove and add logic to check permissions!
         } else {
             //user should ONLY be able to see public exams since he is NOT logged in and can't check more stuff
             if (empty($exam) || $exam->getAccessLevelString() != 'Everyone') {
@@ -376,31 +377,45 @@ class DefaultController extends Controller
                 );
                 $return_val = $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
             } else {
-
-                //get exam file path
-                $filename = realpath($exam->getAbsolutePath());
-
-                // Generate response
-                $response = new Response();
-
-                // Set headers
-                $response->headers->set('Content-Transfer-Encoding', 'binary');
-                $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', filemtime($filename)) . 'GMT');
-                $response->headers->set('Accept-Ranges', 'byte');
-                $response->headers->set('Content-Encoding', 'none');
-                $response->headers->set('Content-type', mime_content_type($filename));
-                $response->headers->set('Content-Disposition', 'attachment;filename="' . basename($filename) . '";');
-                
-                // Send headers before outputting anything
-                $response->sendHeaders();
-                
-                $response->setContent(file_get_contents($filename));
-                
-                $return_val = $response;
+                $return_val = $this->downloadPDF($exam);
             }
         }
 
         return $return_val;
+    }
+    
+    /**
+     * private function to just encapsulate downloading pdf so that we don't repeat code
+     * 
+     * @param unknown $exam
+     * @return boolean|\Symfony\Component\HttpFoundation\Response
+     */
+    private function downloadPDF($exam)
+    {
+        if (!($exam instanceof \UBC\Exam\MainBundle\Entity\Exam)) {
+            return false;
+        } 
+        
+        //get exam file path
+        $filename = realpath($exam->getAbsolutePath());
+        
+        // Generate response
+        $response = new Response();
+        
+        // Set headers
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', filemtime($filename)) . 'GMT');
+        $response->headers->set('Accept-Ranges', 'byte');
+        $response->headers->set('Content-Encoding', 'none');
+        $response->headers->set('Content-type', mime_content_type($filename));
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . basename($filename) . '";');
+        
+        // Send headers before outputting anything
+        $response->sendHeaders();
+        
+        $response->setContent(file_get_contents($filename));
+        
+        return $response;
     }
 
     /**
