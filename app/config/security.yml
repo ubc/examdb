@@ -23,7 +23,7 @@ security:
 # /** this section is used for "gorg/cas-bundle" bundle.  also need to comment out ubc_secured_area and secured_area **/
         secured_area:
             pattern:    ^/exam
-            anonymous: true
+            anonymous: true 
             logout:     
                 path: /exam/logout
                 target: /exam
@@ -64,7 +64,8 @@ security:
 #                target: _demo
 
     access_control:
-        - { path: ^/exam/loggedin$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/exam/download, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/exam/loggedin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/, roles: ROLE_USER }
         - { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }

@@ -344,7 +344,65 @@ class DefaultController extends Controller
         }
             return $this->render('UBCExamMainBundle:Default:update.html.twig', array('form' => $form->createView()));
     }
+
+    /**
+     * 
+     * 
+     * @param unknown $filename
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function downloadAction($filename)
+    {
+        $return_val = new Response('still work in progress');
+
+        //try to get exam based on filename
+        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
+        $exam = $repo->findOneByPath($filename);
+
+        $securityContext = $this->get('security.context');
+        $user = $securityContext->getToken()->getUser();
     
+        //get what user permissions are for various departments/etc and depends on
+        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
+            //User is logged in, so need to check permissions to download
+
+        } else {
+            //user should ONLY be able to see public exams since he is NOT logged in and can't check more stuff
+            if (empty($exam) || $exam->getAccessLevelString() != 'Everyone') {
+                //flash message to show lack of permission
+                $this->get('session')->getFlashBag()->add(
+                    'notice',
+                    'Either the exam does not exist or you do not have access to the exam'
+                );
+                $return_val = $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
+            } else {
+
+                //get exam file path
+                $filename = realpath($exam->getAbsolutePath());
+
+                // Generate response
+                $response = new Response();
+
+                // Set headers
+                $response->headers->set('Content-Transfer-Encoding', 'binary');
+                $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', filemtime($filename)) . 'GMT');
+                $response->headers->set('Accept-Ranges', 'byte');
+                $response->headers->set('Content-Encoding', 'none');
+                $response->headers->set('Content-type', mime_content_type($filename));
+                $response->headers->set('Content-Disposition', 'attachment;filename="' . basename($filename) . '";');
+                
+                // Send headers before outputting anything
+                $response->sendHeaders();
+                
+                $response->setContent(file_get_contents($filename));
+                
+                $return_val = $response;
+            }
+        }
+
+        return $return_val;
+    }
+
     /**
      * checks and updates user profile if puid not set
      * 

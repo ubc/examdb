@@ -29,3 +29,6 @@ update_exam:
 ubc_exam_logout:
     path: /exam/logout
     defaults: { _controller: "UBCExamMainBundle:Default:login" }
+download:
+    path: /exam/download/{filename}
+    defaults: { _controller: "UBCExamMainBundle:Default:download" }

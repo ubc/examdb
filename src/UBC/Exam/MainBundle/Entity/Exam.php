@@ -231,7 +231,8 @@ class Exam
      */
     public function getWebPath()
     {
-        return null === $this->path ? null : '/'.$this->getUploadDir().'/'.$this->path;
+        return null === $this->path ? null : '/exam/download/'.$this->path;
+        //return null === $this->path ? null : '/'.$this->getUploadDir().'/'.$this->path;
     }
 
     /**
@@ -243,7 +244,7 @@ class Exam
     {
         // the absolute directory path where uploaded
         // documents should be saved
-        return __DIR__.'/../../../../../web/'.$this->getUploadDir();
+        return __DIR__.'/../../../../../data/'.$this->getUploadDir();
     }
 
     /**
