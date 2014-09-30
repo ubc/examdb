@@ -21,23 +21,105 @@ class DefaultController extends Controller
     /**
      * just shows empty page. need to determine what to show on default page.
      * 
+     * @param Request $request
+     *
      * @return \Symfony\Component\HttpFoundation\Response 
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        $sc = $this->get('security.context');
-        $isLoggedIn = $sc->isGranted('IS_AUTHENTICATED_FULLY');
-
+        $securityContext = $this->get('security.context');
+        $isLoggedIn = $securityContext->isGranted('IS_AUTHENTICATED_FULLY');
+        
+        //ok, create a form to get user selection of exams
+        $em = $this->getDoctrine()->getManager();
+        list($faculties, $subjectCode) = $this->getFacultySubjectCode($em);
+        
+        $exam = new Exam();
+        
+        $form = $this->createFormBuilder($exam)
+            ->add('year', 'text', array('required' => false))
+            ->add('term', 'choice', array('required' => false, 'empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
+            ->add('legal_content_owner', 'text', array('required' => false, 'max_length' => 100));
+        
+        if (count($subjectCode) > 1) {
+            $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
+                ->add('subject_code_number', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
+        } else {
+            $form->add('subject_code', 'text', array('required' => false, 'max_length' => 10));
+        }
+        
+        if (count($faculties) > 1) {
+            $form->add('faculty', 'choice', array('required' => false, 'empty_value' => '- Choose faculty -','choices' => $faculties));
+        } else {
+            $form->add('faculty', 'text', array('required' => false, 'max_length' => 50));
+        }
+        $form->add('search', 'submit');
+        $form->add('reset', 'reset');
+        
+        $form = $form->getForm();
+        
+        //setup so we can get a list of exams to show
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-        $query = $repo->createQueryBuilder('e')
-        ->orderBy('e.created', 'DESC')
-        ->getQuery();
-
+        $query = $repo->createQueryBuilder('e');
+        
+        if ($this->getRequest()->getMethod() == "POST") {
+            $form->handleRequest($request);
+            $formSubjectCodeNumber = $exam->getSubjectcode();
+        
+            //need try/catch so that it doesn't puke if subject_code_number doesn't exist
+            if ($form->has('subject_code_number')) {
+                $combinedCode = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
+                if (strlen($combinedCode) > 3) {
+                    $formSubjectCodeNumber = trim($combinedCode);
+                }
+            }
+            
+            $exam->setSubjectcode($formSubjectCodeNumber);
+            
+            //setup query based on exam return stuff
+            $query = $query->where('1=1');  //just a place holder so that we can use "or" conditions on the rest
+            
+            $yearParameter = trim($exam->getYear());
+            if (!empty($yearParameter)) {
+                $query = $query->orWhere('e.year = :year')
+                    ->setParameter('year', $yearParameter);
+            }
+            
+            $termParameter = trim($exam->getTerm());
+            if (!empty($termParameter)) {
+                $query = $query->orWhere('e.term = :term')
+                    ->setParameter('term', $termParameter);
+            }
+            
+            $legalContentOwnerParameter = trim($exam->getLegalContentOwner());
+            if (!empty($legalContentOwnerParameter)) {
+                //want to say thanks to http://stackoverflow.com/questions/2843009/how-to-escape-like-var-with-doctrine
+                $legalContentOwnerParameter = addcslashes($lcoParam, "%_");
+                $query = $query->orWhere($query->expr()->like('e.legal_content_owner', ':legalContentOwner'))
+                    ->setParameter('legalContentOwner', '%'.$legalContentOwnerParameter.'%');
+            }
+            
+            $subjectCodeParameter = trim($exam->getSubjectcode());
+            if (!empty($subjectCodeParameter)) {
+                $subjectCodeParameter = addcslashes($subjectCodeParameter, "%_");
+                $query = $query->orWhere($query->expr()->like('e.subject_code', ':subjectCodeParameter'))
+                    ->setParameter('subjectCodeParameter', '%'.$subjectCodeParameter.'%');
+            }
+            
+            $facultyParameter = trim($exam->getFaculty());
+            if (!empty($facultyParameter)) {
+                $query = $query->orWhere('e.faculty = :faculty')
+                    ->setParameter('faculty', $facultyParameter);
+            }
+        } else {
+            $query = $query->orderBy('e.created', 'DESC');
+        }
+        $query = $query->getQuery();
         $exams = $query->getResult();
         
         $this->updateuser();
         
-        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('caption' => 'List of Exams', 'isLoggedIn' => $isLoggedIn, 'exams' => $exams));
+        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams));
     }
 
     /**
@@ -53,20 +135,9 @@ class DefaultController extends Controller
         $exam->setYear(date('Y'));
         $exam->setLegalDate(new \DateTime(date('Y-m-d')));
         
-        //get faculties
+        //get faculties and subject code
         $em = $this->getDoctrine()->getManager();
-        $subjectFacultyQuery = $em->createQueryBuilder()
-                    ->select(array('s.code', 's.faculty'))
-                    ->from('UBCExamMainBundle:SubjectFaculty', 's');
-        $results = $subjectFacultyQuery->getQuery()->getResult();
-        $faculties = array_map(create_function('$o', 'return $o["faculty"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
-        $subjectCode = array_map(create_function('$o', 'return $o["code"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
-        $facultiesValue = array_unique(array_values($faculties));
-        $subjectCodeValue = array_unique(array_values($subjectCode));
-        asort($facultiesValue);
-        asort($subjectCodeValue);
-        $faculties = array_combine($facultiesValue, $facultiesValue);
-        $subjectCode = array_combine($subjectCodeValue, $subjectCodeValue);
+        list($faculties, $subjectCode) = $this->getFacultySubjectCode($em);
         
         //get user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -94,7 +165,7 @@ class DefaultController extends Controller
         
         $form->add('comments', 'textarea', array('required' => false))
             ->add('year')
-            ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
+            ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
             ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
             ->add('access_level', 'choice', array('empty_value' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
             ->add('type', 'choice', array('empty_value' => '- Choose type of material -', 'choices' => Exam::$TYPES))
@@ -198,7 +269,7 @@ class DefaultController extends Controller
             }
             
             //dump old subjectfaculty table
-            $em = $this->getDoctrine()->getEntityManager();
+            $em = $this->getDoctrine()->getManager();
             $cmd = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\SubjectFaculty');
             $dbPlatform = $em->getConnection()->getDatabasePlatform();
             $dbPlatform->getTruncateTableSql($cmd->getTableName());
@@ -272,7 +343,7 @@ class DefaultController extends Controller
         }
         
         //remove entity
-        $em = $this->getDoctrine()->getEntityManager();
+        $em = $this->getDoctrine()->getManager();
         $em->remove($exam);
         $em->flush();
         
@@ -445,5 +516,28 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
+    }
+    
+    /**
+     * function to pull list of faculties and subject codes (aka AANB, ENSC, etc) if available
+     * 
+     * @return array
+     */
+    private function getFacultySubjectCode($em)
+    {
+        $subjectFacultyQuery = $em->createQueryBuilder('s')
+            ->select(array('s.code', 's.faculty'))
+            ->from('UBCExamMainBundle:SubjectFaculty', 's');
+        $results = $subjectFacultyQuery->getQuery()->getResult();
+        $faculties = array_map(create_function('$o', 'return $o["faculty"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
+        $subjectCode = array_map(create_function('$o', 'return $o["code"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
+        $facultiesValue = array_unique(array_values($faculties));
+        $subjectCodeValue = array_unique(array_values($subjectCode));
+        asort($facultiesValue);
+        asort($subjectCodeValue);
+        $faculties = array_combine($facultiesValue, $facultiesValue);
+        $subjectCode = array_combine($subjectCodeValue, $subjectCodeValue);
+        
+        return array($faculties, $subjectCode);
     }
 }

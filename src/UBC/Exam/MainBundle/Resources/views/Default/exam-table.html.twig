@@ -60,7 +60,11 @@
         </thead>
         <tbody>
             <tr>
-                <td>Would you like to <a href="/exam/upload">upload an exam</a>?</td>
+                {% if list is defined %}
+                    <td>Would you like to <a href="/exam/upload">upload an exam</a>?</td>
+                {% else %}
+                    <td>Please widen your search criteria</td>
+                {% endif %}
             </tr>
         </tbody>
     {% endif %}

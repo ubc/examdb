@@ -6,6 +6,64 @@
 
     <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials.</p>
 
-    <p>Public-facing interface to go here.</p>
+    {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
+
+    <fieldset>
+    
+    <legend>Search Fields</legend>
+    
+    <div class="row-fluid">
+        
+        <div class="span4">
+            {{ form_label(form.year, null, {'attr': {'placeholder': 'YYYY'} }) }}
+            {{ form_widget(form.year) }}
+        </div>
+        
+        <div class="span4">
+            {{ form_label(form.term) }}
+            {{ form_widget(form.term) }}
+        </div>
+        
+        <div class="span4">
+            {{ form_label(form.faculty) }}
+            {{ form_widget(form.faculty) }}
+        </div>
+        
+    </div>
+    </fieldset>
+    <fieldset>
+    <div class="row-fluid">
+    
+        {# upload has select box + text box, while edit only has textbox #}
+        {% if form.subject_code.vars.form.vars.block_prefixes.1 is same as("choice") %}
+        <div class="span4">
+            {{ form_label(form.subject_code, null, {'label': 'Subject'}) }}
+            {{ form_widget(form.subject_code) }}
+        </div>
+        <div class="span4">
+            {{ form_label(form.subject_code_number, null, {'label': 'Code'}) }}
+            {{ form_widget(form.subject_code_number, {'attr': {'placeholder': 'e.g. 281'}}) }}
+        </div>
+        {% else %}
+        <div class="span4">
+            {{ form_row(form.subject_code, {'attr': {'placeholder': 'e.g. GEOG 281'}, 'label': 'Subject code'}) }}
+        </div>
+        {% endif %}
+        <div class="span4">
+            {{ form_label(form.legal_content_owner, null, {'label': 'Content Owner', }) }}
+            {{ form_widget(form.legal_content_owner) }}
+        </div>
+    </div>
+    
+    </fieldset>
+    
+    <div class="row-fluid text-center">
+    {{ form_row(form.search, { 'attr': {'class': 'btn-large btn-primary btn-save'}}) }}
+    {{ form_row(form.reset, { 'attr': {'class': 'btn-large btn-primary btn-save'}}) }}
+    </div>
+    
+{{ form_end(form) }}
+
+    {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams}) }}
 
 {% endblock %}
