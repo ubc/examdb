@@ -94,7 +94,7 @@ class DefaultController extends Controller
             $legalContentOwnerParameter = trim($exam->getLegalContentOwner());
             if (!empty($legalContentOwnerParameter)) {
                 //want to say thanks to http://stackoverflow.com/questions/2843009/how-to-escape-like-var-with-doctrine
-                $legalContentOwnerParameter = addcslashes($lcoParam, "%_");
+                $legalContentOwnerParameter = addcslashes($legalContentOwnerParameter, "%_");
                 $query = $query->orWhere($query->expr()->like('e.legal_content_owner', ':legalContentOwner'))
                     ->setParameter('legalContentOwner', '%'.$legalContentOwnerParameter.'%');
             }
@@ -213,8 +213,6 @@ class DefaultController extends Controller
     /**
      * page for listing exams the person has uploaded
      * 
-     * @param Request $request
-     * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listAction()
@@ -238,8 +236,6 @@ class DefaultController extends Controller
     /**
      * special call to refresh info from https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0
      * I stil need to think about the best way to do this.
-     * 
-     * @param Request $request
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -354,6 +350,7 @@ class DefaultController extends Controller
      * allows uploader to update exam
      * 
      * @param unknown $examID
+     * @param Request $request
      * 
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -417,27 +414,28 @@ class DefaultController extends Controller
     }
 
     /**
+     * Function that provides download functionality based on filename and user permissions
      * 
+     * @param String $filename
      * 
-     * @param unknown $filename
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function downloadAction($filename)
     {
-        $return_val = new Response('still work in progress');
+        $returnVal = new Response('still work in progress');
 
         //try to get exam based on filename
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
         $exam = $repo->findOneByPath($filename);
 
         $securityContext = $this->get('security.context');
-        $user = $securityContext->getToken()->getUser();
+//         $user = $securityContext->getToken()->getUser();
     
         //get what user permissions are for various departments/etc and depends on
         if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
             //User is logged in, so need to check permissions to download
             //but for now, we can just let them have it.
-            $return_val = $this->downloadPDF($exam);    //need to remove and add logic to check permissions!
+            $returnVal = $this->downloadPDF($exam);    //need to remove and add logic to check permissions!
         } else {
             //user should ONLY be able to see public exams since he is NOT logged in and can't check more stuff
             if (empty($exam) || $exam->getAccessLevelString() != 'Everyone') {
@@ -446,19 +444,20 @@ class DefaultController extends Controller
                     'notice',
                     'Either the exam does not exist or you do not have access to the exam'
                 );
-                $return_val = $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
+                $returnVal = $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
             } else {
-                $return_val = $this->downloadPDF($exam);
+                $returnVal = $this->downloadPDF($exam);
             }
         }
 
-        return $return_val;
+        return $returnVal;
     }
     
     /**
      * private function to just encapsulate downloading pdf so that we don't repeat code
      * 
-     * @param unknown $exam
+     * @param Exam $exam
+     * 
      * @return boolean|\Symfony\Component\HttpFoundation\Response
      */
     private function downloadPDF($exam)
@@ -520,6 +519,8 @@ class DefaultController extends Controller
     
     /**
      * function to pull list of faculties and subject codes (aka AANB, ENSC, etc) if available
+     * 
+     * @param EntityManager $em
      * 
      * @return array
      */
