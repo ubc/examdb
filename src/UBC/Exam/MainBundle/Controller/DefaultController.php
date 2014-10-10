@@ -53,7 +53,7 @@ class DefaultController extends Controller
         } else {
             $form->add('faculty', 'text', array('required' => false, 'max_length' => 50));
         }
-        $form->add('search', 'submit');
+        $form->add('go', 'submit');
         $form->add('reset', 'reset');
         
         $form = $form->getForm();

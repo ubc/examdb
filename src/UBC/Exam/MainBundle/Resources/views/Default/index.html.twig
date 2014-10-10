@@ -2,68 +2,135 @@
 
 {% block body %}
 
-    <h1>Search Assessment Materials</h1>
+    <h1>Search Assessment Material</h1>
 
-    <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials.</p>
+    <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials. This material is provided voluntarily by UBC instructors to help students prepare for upcoming tests.</p>
 
-    {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
-
-    <fieldset>
+    <!-- need users to log in before they can search (for now) -->
+    {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
     
-    <legend>Search Fields</legend>
+        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('login') }}">log in with your UBC CWL</a></strong> to search the archive.</p>
     
-    <div class="row-fluid">
+    {% else %}
+
+        {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
         
-        <div class="span4">
-            {{ form_label(form.year, null, {'attr': {'placeholder': 'YYYY'} }) }}
-            {{ form_widget(form.year, {'attr': {'placeholder': 'YYYY'}}) }}
-        </div>
+            <fieldset>
+            
+                <legend>Find Materials by Course</legend>
+                
+                <div class="row-fluid">
+                    
+                    <div class="span8">
+                        <!-- only field needed here is a drop-down of all courses that *currently* have exams in the database
+                             OR a text field that brings up an auto-fill list of all courses that *currently* have exams in the database
+                             in either case, user should *only* be able to search for courses by course number -->
+                        <select>
+                            <option>- Choose course number -</option>
+                            <option>BIOL 112</option>
+                            <option>ENGL 200</option>
+                        </select>
+                        <!-- if using text field, replace above with something like:
+                        <label class="required-star">Course Number</label>
+                        <input type="text" placeholder="Start typing course number e.g. BIOL 112" />
+                        -->
+                    </div>
+                    
+                    <div class="span4">
+                        <!-- if using text field above, need empty label here for alignment:
+                        <label class="hidden-phone">&nbsp;</label>
+                        OR just do away with submit button altogether and have onchange trigger results
+                        -->
+                        {{ form_row(form.go, { 'attr': {'class': 'btn btn-primary'}}) }}
+                    </div>
+                    
+                </div>
+            
+            </fieldset>
         
-        <div class="span4">
-            {{ form_label(form.term) }}
-            {{ form_widget(form.term) }}
-        </div>
+        {{ form_end(form) }}
         
-        <div class="span4">
-            {{ form_label(form.faculty) }}
-            {{ form_widget(form.faculty) }}
-        </div>
+        <!-- example of where table goes/looks like
+             show *only* when results are available, i.e, a search has been done
+             can results be ordered by year, with most recent year first? -->
+        <table class="table table-striped">
+            
+            <!-- can we populate this caption with course number selected and number of results after each search? -->
+            <caption>BIOL 112 - 4 Results</caption>
+            
+            <thead>
+                <tr>
+                    <th>Term</th>
+                    <th>File</th>
+                    <th class="hidden-phone">Type</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            
+            <tbody>
+                <!-- begin loop for results (iterate over tr) -->
+                <tr>
+                    <td>
+                        2013 S
+                    </td>
+                    <td>
+                        <!-- show *only* if user can download this file -->
+                        <a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a>
+                        <!-- show *only* if user can't download this file, where xxxx = access level, e.g., "students in this faculty":
+                        <em class="muted">File available for xxxx only</em>
+                        -->
+                    </td>
+                    <td class="hidden-phone">
+                        Actual Exam
+                    </td>
+                    <td>
+                        Here is a note about this exam. You may want to study for this exam. You may want to study really hard. Here is another note about this exam. You really do want to study for this exam. You want to study really really hard.
+                    </td>
+                </tr>
+                <!-- end loop for results -->
+                <!-- start example code (can be removed) -->
+                <tr>
+                    <td>2012 W</td>
+                    <td><em class="muted">File available for course participants only</em></td>
+                    <td class="hidden-phone">Actual Exam</td>
+                    <td>This exam was super hard.</td>
+                </tr>
+                <tr>
+                    <td>2011 W</td>
+                    <td><a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a></td>
+                    <td class="hidden-phone">Practice Exam</td>
+                    <td>This practice exam was intended to help some students actually pass.</td>
+                </tr>
+                <tr>
+                    <td>2010 W</td>
+                    <td><a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a></td>
+                    <td class="hidden-phone">Other Material</td>
+                    <td>This practice material did not help. No one passed the exam this year. I blame the Olympics.</td>
+                </tr>
+                <!-- end example code -->
+            </tbody>
+            
+        </table>
         
-    </div>
-    </fieldset>
-    <fieldset>
-    <div class="row-fluid">
-    
-        {# upload has select box + text box, while edit only has textbox #}
-        {% if form.subject_code.vars.form.vars.block_prefixes.1 is same as("choice") %}
-        <div class="span4">
-            {{ form_label(form.subject_code, null, {'label': 'Subject'}) }}
-            {{ form_widget(form.subject_code) }}
-        </div>
-        <div class="span4">
-            {{ form_label(form.subject_code_number, null, {'label': 'Code'}) }}
-            {{ form_widget(form.subject_code_number, {'attr': {'placeholder': 'e.g. 281'}}) }}
-        </div>
-        {% else %}
-        <div class="span4">
-            {{ form_row(form.subject_code, {'attr': {'placeholder': 'e.g. GEOG 281'}, 'label': 'Subject code'}) }}
-        </div>
-        {% endif %}
-        <div class="span4">
-            {{ form_label(form.legal_content_owner, null, {'label': 'Content Owner', }) }}
-            {{ form_widget(form.legal_content_owner) }}
-        </div>
-    </div>
-    
-    </fieldset>
-    
-    <div class="row-fluid text-center">
-    {{ form_row(form.search, { 'attr': {'class': 'btn-large btn-primary btn-save'}}) }}
-    {{ form_row(form.reset, { 'attr': {'class': 'btn-large btn-primary btn-save'}}) }}
-    </div>
-    
-{{ form_end(form) }}
+        <h3>How to use this material</h3>
+        
+        <p>Please use these materials freely for private study, but do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content. Good luck!</p>
+        
+        <h3>If you can't find material for a course</h3>
+        
+        <p>Materials are provided voluntarily, so not all instructors choose to participate. Students are encouraged to ask instructors about adding new material for missing courses. Instructors can easily upload files on this site after logging in with their CWL.</p>
 
-    {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams}) }}
+    {% endif %}
 
+    <h3>For additional study tools</h3>
+    
+    <ul class="link-list">
+        <li><a href="http://learningcommons.ubc.ca/">Chapman Learning Commons</a></li>
+        <li><a href="http://learningcommons.sauder.ubc.ca/">Canaccord Learning Commons</a></li>
+        <li><a href="http://www.ubc.ca/okanagan/learningcommons/welcome.html">Okanagan Learning Commons</a></li>
+        <li><a href="http://www.math.ubc.ca/Ugrad/pastExams/">UBC Mathematics Department Past Exams</a></li>
+        <li><a href="http://science.ubc.ca/students/resources/exams">UBC Faculty of Science Old Exams</a></li>
+        <li><a href="http://law.library.ubc.ca/exams/">UBC Faculty of Law Exams</a></li>
+    </ul>
+    
 {% endblock %}

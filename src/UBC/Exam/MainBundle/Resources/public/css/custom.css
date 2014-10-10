@@ -33,6 +33,11 @@
 	    padding: 7px 10px;  
 	}
 
+/* add more room at the bottom of main content */
+.content {
+    padding-bottom: 2em;
+}
+
 /* more spacing between form groups */
 .content fieldset {
     margin: 1.5em 0;
@@ -73,7 +78,7 @@
 	border: 1px solid #ab1f2e;
     }
     
-    /* license class used on div wrapping legal agreement */
+    /* license class used on the div wrapping legal agreement */
     .content .license {
         margin-bottom: 2em;
         padding: 2em;
@@ -109,7 +114,7 @@
         padding-left: 0;
     }
     
-	/* label has more spacing */
+	/* label has more spacing here */
 	.content .checkbox label {
 	    margin-bottom: .9em;
 	}
@@ -144,12 +149,12 @@
         margin: .5em 0 2em 0;
     }   
 
-/* table used on manage screen */    
+/* table used on manage screen, search results view */    
 .content table {
     margin: 2em 0 3em 0;
 }
 
-    /* caption = "Exams uploaded by" */
+    /* caption = "Exams uploaded by" / Course - # results */
     .content caption {
 	padding-bottom: .5em;
 	font-size: 1.7em;
@@ -167,7 +172,12 @@
 	font-size: 1.15em;
     }
     
-    /* td-icon used for cells with icons (edit, delete) */
+    /* btn-download used for download button in search results table */
+    .content .btn-download {
+	white-space: nowrap;
+    }
+    
+    /* td-icon used for cells with icons only (edit, delete) */
     .content .td-icon {
 	font-size: 1.4em;
 	text-align: center;
@@ -190,6 +200,11 @@
     .content .license {
 	max-width: 84%;
     }
+
+    /* list of study links needs better spacing */
+    .link-list li {
+	margin-top: 1em;    
+    }
     
 }
 
@@ -201,7 +216,7 @@
 	width: auto;
     }
     
-    /* reset overwrites */
+    /* reset earlier overwrites */
     .navbar .nav > .pull-right {
 	float: none;
     }
