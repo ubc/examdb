@@ -22,18 +22,7 @@
                 <div class="row-fluid">
                     
                     <div class="span8">
-                        <!-- only field needed here is a drop-down of all courses that *currently* have exams in the database
-                             OR a text field that brings up an auto-fill list of all courses that *currently* have exams in the database
-                             in either case, user should *only* be able to search for courses by course number -->
-                        <select>
-                            <option>- Choose course number -</option>
-                            <option>BIOL 112</option>
-                            <option>ENGL 200</option>
-                        </select>
-                        <!-- if using text field, replace above with something like:
-                        <label class="required-star">Course Number</label>
-                        <input type="text" placeholder="Start typing course number e.g. BIOL 112" />
-                        -->
+                        {{ form_row(form.subject_code) }}
                     </div>
                     
                     <div class="span4">

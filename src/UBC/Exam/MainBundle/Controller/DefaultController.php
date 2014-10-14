@@ -34,6 +34,15 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         list($faculties, $subjectCode) = $this->getFacultySubjectCode($em);
         
+        $subjectCodeQuery = $em->createQueryBuilder('s')
+        ->select(array('e.subject_code'))
+        ->from('UBCExamMainBundle:Exam', 'e')
+        ->groupBy('e.subject_code');
+        
+        $subjectCodeResult = $subjectCodeQuery->getQuery()->getResult();
+        $uniqueSubjectCodes = array_map(create_function('$o', 'return $o["subject_code"];'), $subjectCodeResult);
+        $subjectCodeForTwig = array_combine(array_values($uniqueSubjectCodes), array_values($uniqueSubjectCodes));
+
         $exam = new Exam();
         
         $form = $this->createFormBuilder($exam)
@@ -41,20 +50,22 @@ class DefaultController extends Controller
             ->add('term', 'choice', array('required' => false, 'empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
             ->add('legal_content_owner', 'text', array('required' => false, 'max_length' => 100));
         
+        $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCodeForTwig));
+        /*
         if (count($subjectCode) > 1) {
             $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
                 ->add('subject_code_number', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
         } else {
             $form->add('subject_code', 'text', array('required' => false, 'max_length' => 10));
         }
-        
+        */
         if (count($faculties) > 1) {
             $form->add('faculty', 'choice', array('required' => false, 'empty_value' => '- Choose faculty -','choices' => $faculties));
         } else {
             $form->add('faculty', 'text', array('required' => false, 'max_length' => 50));
         }
         $form->add('go', 'submit');
-        $form->add('reset', 'reset');
+        //$form->add('reset', 'reset');
         
         $form = $form->getForm();
         
