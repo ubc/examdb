@@ -68,7 +68,7 @@
                     <td>
                         <!-- for now just use public as the identifier till we have SIS done -->
                         {% if exam.getAccessLevelString == "Everyone" %}
-                            <a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a>
+                            <a class="btn-download btn btn-primary" href="{{ exam.getWebPath }}"><i class="icon-download-alt"></i> Download</a>
                         {% else %}
                             <em class="muted">File available for {{ exam.getAccessLevelString }} only</em>
                         {% endif %}
