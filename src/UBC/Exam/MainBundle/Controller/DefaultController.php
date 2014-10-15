@@ -45,25 +45,29 @@ class DefaultController extends Controller
 
         $exam = new Exam();
         
-        $form = $this->createFormBuilder($exam)
-            ->add('year', 'text', array('required' => false))
+        $form = $this->createFormBuilder($exam);
+        
+        $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCodeForTwig));
+        
+        $subjectCodeLabel = '';
+/*  removed to make the interface simpler!
+        $form->add('year', 'text', array('required' => false))
             ->add('term', 'choice', array('required' => false, 'empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
             ->add('legal_content_owner', 'text', array('required' => false, 'max_length' => 100));
         
-        $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCodeForTwig));
-        /*
         if (count($subjectCode) > 1) {
             $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
                 ->add('subject_code_number', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
         } else {
             $form->add('subject_code', 'text', array('required' => false, 'max_length' => 10));
         }
-        */
+        
         if (count($faculties) > 1) {
             $form->add('faculty', 'choice', array('required' => false, 'empty_value' => '- Choose faculty -','choices' => $faculties));
         } else {
             $form->add('faculty', 'text', array('required' => false, 'max_length' => 50));
         }
+*/
         $form->add('go', 'submit');
         //$form->add('reset', 'reset');
         
@@ -72,7 +76,7 @@ class DefaultController extends Controller
         //setup so we can get a list of exams to show
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
         $query = $repo->createQueryBuilder('e');
-        
+
         if ($this->getRequest()->getMethod() == "POST") {
             $form->handleRequest($request);
             $formSubjectCodeNumber = $exam->getSubjectcode();
@@ -88,8 +92,8 @@ class DefaultController extends Controller
             $exam->setSubjectcode($formSubjectCodeNumber);
             
             //setup query based on exam return stuff
-            $query = $query->where('1=1');  //just a place holder so that we can use "or" conditions on the rest
-            
+            $query = $query->where('1=1');  //just a place holder so that we can use "or" or "and" conditions on the rest
+/*
             $yearParameter = trim($exam->getYear());
             if (!empty($yearParameter)) {
                 $query = $query->orWhere('e.year = :year')
@@ -110,27 +114,34 @@ class DefaultController extends Controller
                     ->setParameter('legalContentOwner', '%'.$legalContentOwnerParameter.'%');
             }
             
-            $subjectCodeParameter = trim($exam->getSubjectcode());
-            if (!empty($subjectCodeParameter)) {
-                $subjectCodeParameter = addcslashes($subjectCodeParameter, "%_");
-                $query = $query->orWhere($query->expr()->like('e.subject_code', ':subjectCodeParameter'))
-                    ->setParameter('subjectCodeParameter', '%'.$subjectCodeParameter.'%');
-            }
-            
             $facultyParameter = trim($exam->getFaculty());
             if (!empty($facultyParameter)) {
                 $query = $query->orWhere('e.faculty = :faculty')
                     ->setParameter('faculty', $facultyParameter);
             }
+*/
+             $subjectCodeParameter = trim($exam->getSubjectcode());
+             $subjectCodeLabel = $subjectCodeParameter;
+            if (!empty($subjectCodeParameter)) {
+                $subjectCodeParameter = addcslashes($subjectCodeParameter, "%_");   //sanitizing
+                $query = $query->andWhere($query->expr()->like('e.subject_code', ':subjectCodeParameter'))
+                    ->setParameter('subjectCodeParameter', '%'.$subjectCodeParameter.'%');
+            }
         } else {
+            /**
+             * need to stick in some more logic to determine:
+             * - if logged in, what courses the user can see
+             * - if not logged in, then don't worry about doing query even!
+             */
+            
             $query = $query->orderBy('e.created', 'DESC');
         }
         $query = $query->getQuery();
         $exams = $query->getResult();
-        
+
         $this->updateuser();
         
-        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams));
+        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams, 'subjectCodeLabel' => $subjectCodeLabel));
     }
 
     /**

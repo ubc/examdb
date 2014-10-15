@@ -22,7 +22,8 @@
                 <div class="row-fluid">
                     
                     <div class="span8">
-                        {{ form_row(form.subject_code) }}
+                        {{ form_label(form.subject_code) }}
+                        {{ form_widget(form.subject_code) }}
                     </div>
                     
                     <div class="span4">
@@ -30,6 +31,7 @@
                         <label class="hidden-phone">&nbsp;</label>
                         OR just do away with submit button altogether and have onchange trigger results
                         -->
+                        <label class="hidden-phone">&nbsp;</label>
                         {{ form_row(form.go, { 'attr': {'class': 'btn btn-primary'}}) }}
                     </div>
                     
@@ -45,7 +47,7 @@
         <table class="table table-striped">
             
             <!-- can we populate this caption with course number selected and number of results after each search? -->
-            <caption>BIOL 112 - 4 Results</caption>
+            <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ subjectCodeLabel }} - {{ exams|length }} {% endif %}</caption>
             
             <thead>
                 <tr>
@@ -57,27 +59,35 @@
             </thead>
             
             <tbody>
+            {% for exam in exams %}
                 <!-- begin loop for results (iterate over tr) -->
                 <tr>
                     <td>
-                        2013 S
+                        {{ exam.year }} {{ exam.term }}
                     </td>
                     <td>
-                        <!-- show *only* if user can download this file -->
+                        <!-- for now just use public as the identifier till we have SIS done -->
+                        {% if exam.getAccessLevelString == "Everyone" %}
+                            <a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a>
+                        {% else %}
+                            <em class="muted">File available for {{ exam.getAccessLevelString }} only</em>
+                        {% endif %}
+                        <!-- show *only* if user can download this file
                         <a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a>
-                        <!-- show *only* if user can't download this file, where xxxx = access level, e.g., "students in this faculty":
+                        show *only* if user can't download this file, where xxxx = access level, e.g., "students in this faculty":
                         <em class="muted">File available for xxxx only</em>
                         -->
                     </td>
                     <td class="hidden-phone">
-                        Actual Exam
+                        {{ exam.type }}
                     </td>
                     <td>
-                        Here is a note about this exam. You may want to study for this exam. You may want to study really hard. Here is another note about this exam. You really do want to study for this exam. You want to study really really hard.
+                        {{ exam.comments }}
                     </td>
                 </tr>
+                {% endfor %}
                 <!-- end loop for results -->
-                <!-- start example code (can be removed) -->
+                <!-- start example code (can be removed)
                 <tr>
                     <td>2012 W</td>
                     <td><em class="muted">File available for course participants only</em></td>
@@ -96,7 +106,7 @@
                     <td class="hidden-phone">Other Material</td>
                     <td>This practice material did not help. No one passed the exam this year. I blame the Olympics.</td>
                 </tr>
-                <!-- end example code -->
+                //end example code -->
             </tbody>
             
         </table>
