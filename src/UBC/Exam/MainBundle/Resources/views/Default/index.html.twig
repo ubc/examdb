@@ -52,6 +52,7 @@
             <thead>
                 <tr>
                     <th>Term</th>
+                    <th>Course</th>
                     <th>File</th>
                     <th class="hidden-phone">Type</th>
                     <th>Notes</th>
@@ -65,6 +66,7 @@
                     <td>
                         {{ exam.year }} {{ exam.term }}
                     </td>
+                    <td>{{ exam.subjectcode }}</td>
                     <td>
                         <!-- for now just use public as the identifier till we have SIS done -->
                         {% if exam.getAccessLevelString == "Everyone" %}

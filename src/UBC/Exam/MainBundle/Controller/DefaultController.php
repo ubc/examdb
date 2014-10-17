@@ -49,6 +49,16 @@ class DefaultController extends Controller
         
         $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCodeForTwig));
         
+        /**
+         * TEMPORARILY ADDING IN: subject code so that folks can type in stuff if they want to instead of dropdown only
+         */
+        if (count($subjectCode) > 1) {
+            $form->add('subject_code_letters', 'choice', array('mapped' => false, 'required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
+            ->add('subject_code_numbers', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
+        } else {
+            $form->add('subject_code_letters', 'text', array('label' => 'Subject Code Text Entry', 'mapped' => false, 'required' => false, 'max_length' => 10));
+        }
+        
         $subjectCodeLabel = '';
 /*  removed to make the interface simpler!
         $form->add('year', 'text', array('required' => false))
@@ -80,7 +90,22 @@ class DefaultController extends Controller
         if ($this->getRequest()->getMethod() == "POST") {
             $form->handleRequest($request);
             $formSubjectCodeNumber = $exam->getSubjectcode();
-        
+            
+            //TEMPORARILY ADDING IN: catch for the case when dropdown for just letters and numbers are used
+            $letters = trim($form->get('subject_code_letters')->getData());
+            $numbers = trim($form->get('subject_code_numbers')->getData());
+            if ($form->has('subject_code_letters') && !empty($letters)) {
+                $formSubjectCodeNumber = $letters;
+            }
+            if ($form->has('subject_code_numbers') && !empty($numbers)) {
+                if ($form->has('subject_code_letters') && !empty($letters)) {
+                    $formSubjectCodeNumber = $letters.' '.$numbers;
+                } else {
+                    $formSubjectCodeNumber = $numbers;
+                }
+            }
+            
+            /*
             //need try/catch so that it doesn't puke if subject_code_number doesn't exist
             if ($form->has('subject_code_number')) {
                 $combinedCode = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
@@ -88,9 +113,8 @@ class DefaultController extends Controller
                     $formSubjectCodeNumber = trim($combinedCode);
                 }
             }
-            
+            */
             $exam->setSubjectcode($formSubjectCodeNumber);
-            
             //setup query based on exam return stuff
             $query = $query->where('1=1');  //just a place holder so that we can use "or" or "and" conditions on the rest
 /*
