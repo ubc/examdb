@@ -95,6 +95,9 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
     cd /vagrant
     composer install
     ```
+5. Setup Exam Database system
+  1. Create the DB tables: ```php app/console doctrine:schema:update --force```
+  2. Copy over CSS and JavaScript from src to web folder: ```php app/console assetic:dump --env=prod```
 
 5. Open a browser from host
     
@@ -108,3 +111,28 @@ Running Tests
 -------------
 
     bin/phing test
+
+NOTES
+-----
+* the system is currently set up on a "Production" setup.  On a production environment, twig templates are compiled only once, etc, which makes it harder to develope on
+** to move back to a "dev" environment, just update web/.htaccess line 41:
+  * From
+    ```
+     RewriteRule .? %{ENV:BASE}/app.php [L]
+    ```
+To
+```
+     RewriteRule .? %{ENV:BASE}/app_dev.php [L]
+    ```
+* to see changes if on production enviornment, then you'll need to run a few commands in console to see the changes (aka move from src folder to web folder)
+    ```
+    php app/console cache:clear --env=prod
+    sudo rm -rf app/cache/*
+    ```
+* to make the system work standalone (aka skipping out using CAS), you'll need to make a few changes:
+  * modify app/config/security.yml
+      * security:encoders:UBC\Exam\MainBundle\Entity\User: plaintext
+      * firewalls:secured_area:http_basic:realm: 'Demo Area'
+      * providers:administrators:entity:property: username
+  * insert a user into DB manually
+      * insert into user (username, password) values ('blah', 'blah');
