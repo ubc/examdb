@@ -52,12 +52,12 @@ class DefaultController extends Controller
         /**
          * TEMPORARILY ADDING IN: subject code so that folks can type in stuff if they want to instead of dropdown only
          */
-        if (count($subjectCode) > 1) {
+        /* if (count($subjectCode) > 1) {
             $form->add('subject_code_letters', 'choice', array('mapped' => false, 'required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
             ->add('subject_code_numbers', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
         } else {
             $form->add('subject_code_letters', 'text', array('label' => 'Subject Code Text Entry', 'mapped' => false, 'required' => false, 'max_length' => 10));
-        }
+        } */
         
         $subjectCodeLabel = '';
 /*  removed to make the interface simpler!
@@ -431,6 +431,7 @@ class DefaultController extends Controller
         ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
         ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
         ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
+        ->add('type', 'choice', array('empty_value' => '- Choose type of material -', 'choices' => Exam::$TYPES))
         ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
         ->add('legal_content_owner', 'text', array('max_length' => 100))
         ->add('legal_uploader', 'text', array('read_only' => true, 'max_length' => 100))

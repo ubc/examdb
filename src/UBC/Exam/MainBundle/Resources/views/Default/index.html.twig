@@ -2,11 +2,12 @@
 
 {% block body %}
 
-    <h1>Search Assessment Material</h1>
+    <h1>Search UBC's Assessment Material</h1>
 
     <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials. This material is provided voluntarily by UBC instructors to help students prepare for upcoming tests.</p>
 
-    <!-- need users to log in before they can search (for now) -->
+    <!-- need users to log in before they can search (for now)
+         FUTURE TO DO: provide general public search for publically-available exams -->
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
     
         <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('login') }}">log in with your UBC CWL</a></strong> to search the archive.</p>
@@ -27,12 +28,10 @@
                     </div>
                     
                     <div class="span4">
-                        <!-- if using text field above, need empty label here for alignment:
+                        <!-- need empty label here for alignment
+                             FUTURE TO DO: change results to on click and remove submit button and label? -->
                         <label class="hidden-phone">&nbsp;</label>
-                        OR just do away with submit button altogether and have onchange trigger results
-                        -->
-                        <label class="hidden-phone">&nbsp;</label>
-                        {{ form_row(form.go, { 'attr': {'class': 'btn btn-primary'}}) }}
+                        {{ form_widget(form.go, { 'attr': {'class': 'btn btn-primary'}}) }}
                     </div>
                     
                 </div>
@@ -41,18 +40,21 @@
         
         {{ form_end(form) }}
         
-        <!-- example of where table goes/looks like
-             show *only* when results are available, i.e, a search has been done
-             can results be ordered by year, with most recent year first? -->
+        <!-- show *only* when results are available, i.e, a search has been done
+             FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
+        {% if exams|length > 0 %}
+        
         <table class="table table-striped">
             
-            <!-- can we populate this caption with course number selected and number of results after each search? -->
-            <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ subjectCodeLabel }} - {{ exams|length }} {% endif %}</caption>
+            <!-- populate caption with course number selected and number of results after each search -->
+            <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ subjectCodeLabel }} - {{ exams|length }} Found {% endif %}</caption>
             
             <thead>
                 <tr>
                     <th>Term</th>
-                    <th>Course</th>
+                    {% if subjectCodeLabel is empty %}
+                        <th>Course</th>
+                    {% endif %}
                     <th>File</th>
                     <th class="hidden-phone">Type</th>
                     <th>Notes</th>
@@ -61,24 +63,23 @@
             
             <tbody>
             {% for exam in exams %}
-                <!-- begin loop for results (iterate over tr) -->
                 <tr>
                     <td>
                         {{ exam.year }} {{ exam.term }}
                     </td>
-                    <td>{{ exam.subjectcode }}</td>
+                    {% if subjectCodeLabel is empty %}
+                        <td>
+                            {{ exam.subjectcode }}
+                        </td>
+                    {% endif %}
                     <td>
-                        <!-- for now just use public as the identifier till we have SIS done -->
+                        <!-- show button *only* if user can download this file
+                             FUTURE TO DO: for now just use public as the identifier till we have SIS done -->
                         {% if exam.getAccessLevelString == "Everyone" %}
                             <a class="btn-download btn btn-primary" href="{{ exam.getWebPath }}"><i class="icon-download-alt"></i> Download</a>
                         {% else %}
-                            <em class="muted">File available for {{ exam.getAccessLevelString }} only</em>
+                            <em class="muted">File access limited to {{ exam.getAccessLevelString }}</em>
                         {% endif %}
-                        <!-- show *only* if user can download this file
-                        <a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a>
-                        show *only* if user can't download this file, where xxxx = access level, e.g., "students in this faculty":
-                        <em class="muted">File available for xxxx only</em>
-                        -->
                     </td>
                     <td class="hidden-phone">
                         {{ exam.type }}
@@ -88,9 +89,8 @@
                     </td>
                 </tr>
                 {% endfor %}
-                <!-- end loop for results -->
-                <!-- start example code (can be removed)
-                <tr>
+                <!-- start example code (can be removed) -->
+                <!-- <tr>
                     <td>2012 W</td>
                     <td><em class="muted">File available for course participants only</em></td>
                     <td class="hidden-phone">Actual Exam</td>
@@ -107,11 +107,13 @@
                     <td><a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a></td>
                     <td class="hidden-phone">Other Material</td>
                     <td>This practice material did not help. No one passed the exam this year. I blame the Olympics.</td>
-                </tr>
-                //end example code -->
+                </tr> -->
+                <!-- end example code -->
             </tbody>
             
         </table>
+        
+        {% endif %}
         
         <h3>How to use this material</h3>
         

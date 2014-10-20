@@ -30,6 +30,7 @@
                 <tr>
                     {% if list is defined %}
                         <td class="td-icon"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-pencil"></i></a></td>       
+                        <td class="td-icon"><a href="{{ url('delete_exam', {'examID': exam.id}) }}" onclick="return confirm('Are you sure you want to delete this exam for {{exam.subjectcode}}?');"><i class="icon-trash"></i></a></td>
                     {% endif %}
                     <td class="hidden-phone">{{ exam.created|date('M j, Y') }}</td>
                     <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
@@ -46,9 +47,6 @@
                     <td class="hidden-phone">{{ exam.comments }}</td>
                     <td>{{ exam.legalcontentowner }}</td>
                     <td class="hidden-phone">{{ exam.faculty }} - {{ exam.dept }}</td>
-                    {% if list is defined %}
-                        <td class="td-icon"><a href="{{ url('delete_exam', {'examID': exam.id}) }}" onclick="return confirm('Are you sure you want to delete this exam for {{exam.subjectcode}}?');"><i class="icon-trash"></i></a></td>
-                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>
