@@ -10,6 +10,7 @@
             <tr>
                 {% if list is defined %}
                     <th>Edit</th>
+                    <th>Delete</th>
                 {% endif %}
                 <th class="hidden-phone">Uploaded</th>
                 <th>Course</th>
@@ -20,9 +21,6 @@
                 <th class="hidden-phone">Notes</th>
                 <th>Content Owner</th>
                 <th class="hidden-phone">Faculty &amp; Department</th>
-                {% if list is defined %}
-                    <th>Delete</th>
-                {% endif %}
             </tr>
         </thead>
         <tbody>
