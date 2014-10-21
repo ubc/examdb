@@ -37,6 +37,7 @@ class DefaultController extends Controller
         $subjectCodeQuery = $em->createQueryBuilder('s')
         ->select(array('e.subject_code'))
         ->from('UBCExamMainBundle:Exam', 'e')
+        ->where('e.access_level != 5')  // access_level 5 is "Only me". so the subject codes that have that shouldn't show up
         ->groupBy('e.subject_code');
         
         $subjectCodeResult = $subjectCodeQuery->getQuery()->getResult();
@@ -52,12 +53,12 @@ class DefaultController extends Controller
         /**
          * TEMPORARILY ADDING IN: subject code so that folks can type in stuff if they want to instead of dropdown only
          */
-        /* if (count($subjectCode) > 1) {
+        /*if (count($subjectCode) > 1) {
             $form->add('subject_code_letters', 'choice', array('mapped' => false, 'required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
             ->add('subject_code_numbers', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
         } else {
             $form->add('subject_code_letters', 'text', array('label' => 'Subject Code Text Entry', 'mapped' => false, 'required' => false, 'max_length' => 10));
-        } */
+        }*/
         
         $subjectCodeLabel = '';
 /*  removed to make the interface simpler!
@@ -92,8 +93,13 @@ class DefaultController extends Controller
             $formSubjectCodeNumber = $exam->getSubjectcode();
             
             //TEMPORARILY ADDING IN: catch for the case when dropdown for just letters and numbers are used
-            $letters = trim($form->get('subject_code_letters')->getData());
-            $numbers = trim($form->get('subject_code_numbers')->getData());
+            $letters = $numbers = '';
+            if ($form->has('subject_code_letters')) {
+                $letters = trim($form->get('subject_code_letters')->getData());
+            }
+            if ($form->has('subject_code_numbers')) {
+                $numbers = trim($form->get('subject_code_numbers')->getData());
+            }
             if ($form->has('subject_code_letters') && !empty($letters)) {
                 $formSubjectCodeNumber = $letters;
             }
@@ -116,7 +122,7 @@ class DefaultController extends Controller
             */
             $exam->setSubjectcode($formSubjectCodeNumber);
             //setup query based on exam return stuff
-            $query = $query->where('1=1');  //just a place holder so that we can use "or" or "and" conditions on the rest
+            $query = $query->where('e.access_level != 5');  //5 is "Only me" level.  It's new.  index should NOT show this EVER!
 /*
             $yearParameter = trim($exam->getYear());
             if (!empty($yearParameter)) {
