@@ -28,7 +28,7 @@
                 <tr>
                     {% if list is defined %}
                         <td class="td-icon"><a href="{{ url('update_exam', {'examID': exam.id}) }}"><i class="icon-pencil"></i></a></td>       
-                        <td class="td-icon"><a href="{{ url('delete_exam', {'examID': exam.id}) }}" onclick="return confirm('Are you sure you want to delete this exam for {{exam.subjectcode}}?');"><i class="icon-trash"></i></a></td>
+                        <td class="td-icon"><a href="{{ url('delete_exam', {'examID': exam.id}) }}" onclick="return confirm('Are you sure you want to delete this material for {{exam.subjectcode}}?');"><i class="icon-trash"></i></a></td>
                     {% endif %}
                     <td class="hidden-phone">{{ exam.created|date('M j, Y') }}</td>
                     <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
@@ -51,15 +51,15 @@
     {% else %}
         <thead>
             <tr>
-                <th>No exams currently in the database</th>
+                <th>No material currently in the database</th>
             </tr>
         </thead>
         <tbody>
             <tr>
                 {% if list is defined %}
-                    <td>Would you like to <a href="/exam/upload">upload an exam</a>?</td>
+                    <td>Would you like to <a href="/exam/upload">upload material</a>?</td>
                 {% else %}
-                    <td>Please widen your search criteria</td>
+                    <td>Please widen your search criteria.</td>
                 {% endif %}
             </tr>
         </tbody>

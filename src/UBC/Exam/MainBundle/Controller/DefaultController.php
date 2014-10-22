@@ -93,7 +93,7 @@ class DefaultController extends Controller
             $formSubjectCodeNumber = $exam->getSubjectcode();
             
             //TEMPORARILY ADDING IN: catch for the case when dropdown for just letters and numbers are used
-            $letters = $numbers = '';
+            /*$letters = $numbers = '';
             if ($form->has('subject_code_letters')) {
                 $letters = trim($form->get('subject_code_letters')->getData());
             }
@@ -109,7 +109,7 @@ class DefaultController extends Controller
                 } else {
                     $formSubjectCodeNumber = $numbers;
                 }
-            }
+            }*/
             
             /*
             //need try/catch so that it doesn't puke if subject_code_number doesn't exist
