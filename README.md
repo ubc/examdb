@@ -121,7 +121,7 @@ NOTES
      RewriteRule .? %{ENV:BASE}/app.php [L]
     ```
 To
-```
+    ```
      RewriteRule .? %{ENV:BASE}/app_dev.php [L]
     ```
 * to see changes if on production enviornment, then you'll need to run a few commands in console to see the changes (aka move from src folder to web folder)
@@ -133,6 +133,9 @@ To
   * modify app/config/security.yml
       * security:encoders:UBC\Exam\MainBundle\Entity\User: plaintext
       * firewalls:secured_area:http_basic:realm: 'Demo Area'
+      * comment out lines below and including:
+          * firewalls:secured_area:logout
+          * firewalls:secured_area:cas
       * providers:administrators:entity:property: username
   * insert a user into DB manually
       * insert into user (username, password) values ('blah', 'blah');
