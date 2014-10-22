@@ -125,8 +125,12 @@ To
      RewriteRule .? %{ENV:BASE}/app_dev.php [L]
     ```
 * to see changes if on production enviornment, then you'll need to run a few commands in console to see the changes (aka move from src folder to web folder)
+    
     ```
     php app/console cache:clear --env=prod
+    ```
+    
+    ```
     sudo rm -rf app/cache/*
     ```
 * to make the system work standalone (aka skipping out using CAS), you'll need to make a few changes:
@@ -137,5 +141,5 @@ To
           * firewalls:secured_area:logout
           * firewalls:secured_area:cas
       * providers:administrators:entity:property: username
-  * insert a user into DB manually
+  * insert a user into DB manually (make sure you're in the vagrant instance! eg. cd <path_to_examdb_folder>;vagrant ssh;mysql -uroot -p examdb)
       * insert into user (username, password) values ('blah', 'blah');
