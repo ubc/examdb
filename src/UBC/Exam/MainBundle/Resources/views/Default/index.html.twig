@@ -2,54 +2,54 @@
 
 {% block body %}
 
-    
+
     <h1>Search UBC's Assessment Material</h1>
 
     <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials. This material is provided voluntarily by UBC instructors to help students prepare for upcoming tests.</p>
-    
+
     <!-- need users to log in before they can search (for now)
          FUTURE TO DO: provide general public search for publically-available exams -->
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-    
-        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('login') }}">log in with your UBC CWL</a></strong> to search the archive.</p>
-    
+
+        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong> to search the archive.</p>
+
     {% else %}
 
         {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
-        
+
             <fieldset>
-            
+
                 <legend>Find Materials by Course</legend>
-                
+
                 <div class="row-fluid">
-                    
+
                     <div class="span8">
                         {{ form_label(form.subject_code) }}
                         {{ form_widget(form.subject_code) }}
                     </div>
-                    
+
                     <div class="span4">
                         <!-- need empty label here for alignment
                              FUTURE TO DO: change results to on click and remove submit button and label? -->
                         <label class="hidden-phone">&nbsp;</label>
                         {{ form_widget(form.go, { 'attr': {'class': 'btn btn-primary'}}) }}
                     </div>
-                    
+
                 </div>
-            
+
             </fieldset>
-        
+
         {{ form_end(form) }}
-        
+
         <!-- show *only* when results are available, i.e, a search has been done
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
         {% if exams|length > 0 %}
-        
+
             <table class="table table-striped">
-                
+
                 <!-- populate caption with course number selected and number of results after each search -->
                 <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ exams|length }} found for {{ subjectCodeLabel }}{% endif %}</caption>
-                
+
                 <thead>
                     <tr>
                         <th>Term</th>
@@ -62,7 +62,7 @@
                         <th>Notes</th>
                     </tr>
                 </thead>
-                
+
                 <tbody>
                     {% for exam in exams %}
                         <tr>
@@ -115,23 +115,23 @@
                     </tr> -->
                     <!-- end example code -->
                 </tbody>
-                
+
             </table>
-            
+
         {% endif %}
-        
+
         <h3>How to use this material</h3>
-        
+
         <p>Please use these materials freely for private study, but do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content. Good luck!</p>
-        
+
         <h3>If you can't find material for a course</h3>
-        
+
         <p>Materials are provided voluntarily, so not all instructors choose to participate. Students are encouraged to ask instructors about adding new material for missing courses. Instructors can easily upload files on this site after logging in with their CWL.</p>
 
     {% endif %}
 
     <h3>For additional study tools</h3>
-    
+
     <ul class="link-list">
         <li><a href="http://learningcommons.ubc.ca/">Chapman Learning Commons</a></li>
         <li><a href="http://learningcommons.sauder.ubc.ca/">Canaccord Learning Commons</a></li>
@@ -140,5 +140,5 @@
         <li><a href="http://science.ubc.ca/students/resources/exams">UBC Faculty of Science Old Exams</a></li>
         <li><a href="http://law.library.ubc.ca/exams/">UBC Faculty of Law Exams</a></li>
     </ul>
-    
+
 {% endblock %}
