@@ -3,9 +3,11 @@
 {% block body %}
 
     
-    <h1>Search UBC's Assessment Material</h1>
+    <h1>Search the Assessment Material Archive</h1>
 
-    <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials. This material is provided voluntarily by UBC instructors to help students prepare for upcoming tests.</p>
+    <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials. All materials in this database have been uploaded by instructors for private study purposes. Please do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content.</p>
+    
+    <p>In addition to the uploaded materials and additional resources below, please see the <a href="{{ url('exam_guide') }}">User Guide</a> for tips on how you can get the most out of this database.</p>
     
     <!-- need users to log in before they can search (for now)
          FUTURE TO DO: provide general public search for publically-available exams -->
@@ -17,23 +19,23 @@
 
         {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
         
-            <fieldset>
+            <h2>Find Materials by Course</h2>
             
-                <legend>Find Materials by Course</legend>
+            <fieldset>
                 
-                <div class="row-fluid">
+                <div class="row-fluid search-box-row">
                     
                     <div class="span8">
                         {{ form_label(form.subject_code) }}
-                        {{ form_widget(form.subject_code) }}
+                        {{ form_widget(form.subject_code, { 'attr': {'class': 'main-search'} }) }}
                     </div>
                     
                     <div class="span4">
                         <!-- need empty label here for alignment
                              FUTURE TO DO: change results to on click and remove submit button and label? -->
                         <label class="hidden-phone">&nbsp;</label>
-                        {{ form_widget(form.go, { 'attr': {'class': 'btn btn-primary'}}) }}
-                    </div>
+                        {{ form_widget(form.search, { 'attr': {'class': 'btn btn-primary'}}) }}
+                    </div>                              
                     
                 </div>
             
@@ -41,9 +43,9 @@
         
         {{ form_end(form) }}
         
-        <!-- show *only* when results are available, i.e, a search has been done
+        <!-- show *only* when results are available AND a subject code has been selected, i.e, a search has been done
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
-        {% if exams|length > 0 %}
+        {% if exams|length > 0 and subjectCodeLabel is not empty %}
         
             <table class="table table-striped">
                 
@@ -57,7 +59,15 @@
                             <th>Course</th>
                         {% endif %}
                         <th>File</th>
-                        <th class="hidden-phone">Type</th>
+                        <th class="hidden-phone">Type
+                            <a class="exam-tooltip">
+                                <i class="icon-question-sign"></i>
+                                <span>
+                                    <em><i class="icon-info-sign"></i> Information on Types</em>
+                                    A <strong>past exam</strong> has been used to assess students in a past section of the course. A <strong>practice exam</strong> is a set of questions that have not been used previously but do parallel the types of questions students can expect from the instructor and course. Other <strong>exam prep material</strong> is general study material to help students prepare for an exam in the instructor's course.
+                                </span>
+                            </a>
+                        </th>
                         <th class="hidden-phone">Instructor</th>
                         <th>Notes</th>
                     </tr>
@@ -84,7 +94,7 @@
                                 {% endif %}
                             </td>
                             <td class="hidden-phone">
-                                {{ exam.type }}
+                                {{ exam.getTypeString }}
                             </td>
                             <td class="hidden-phone">
                                 {{ exam.legalcontentowner }}
@@ -94,51 +104,37 @@
                             </td>
                         </tr>
                     {% endfor %}
-                    <!-- start example code (can be removed) -->
-                    <!-- <tr>
-                        <td>2012 W</td>
-                        <td><em class="muted">File available for course participants only</em></td>
-                        <td class="hidden-phone">Actual Exam</td>
-                        <td>This exam was super hard.</td>
-                    </tr>
-                    <tr>
-                        <td>2011 W</td>
-                        <td><a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a></td>
-                        <td class="hidden-phone">Practice Exam</td>
-                        <td>This practice exam was intended to help some students actually pass.</td>
-                    </tr>
-                    <tr>
-                        <td>2010 W</td>
-                        <td><a class="btn-download btn btn-primary" href=""><i class="icon-download-alt"></i> Download</a></td>
-                        <td class="hidden-phone">Other Material</td>
-                        <td>This practice material did not help. No one passed the exam this year. I blame the Olympics.</td>
-                    </tr> -->
-                    <!-- end example code -->
                 </tbody>
                 
             </table>
             
         {% endif %}
-        
-        <h3>How to use this material</h3>
-        
-        <p>Please use these materials freely for private study, but do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content. Good luck!</p>
-        
-        <h3>If you can't find material for a course</h3>
-        
-        <p>Materials are provided voluntarily, so not all instructors choose to participate. Students are encouraged to ask instructors about adding new material for missing courses. Instructors can easily upload files on this site after logging in with their CWL.</p>
 
     {% endif %}
 
-    <h3>For additional study tools</h3>
+    <hr />
+
+    <h3 class="resource-header">Additional resources for exam preparation</h3>
     
-    <ul class="link-list">
-        <li><a href="http://learningcommons.ubc.ca/">Chapman Learning Commons</a></li>
-        <li><a href="http://learningcommons.sauder.ubc.ca/">Canaccord Learning Commons</a></li>
-        <li><a href="http://www.ubc.ca/okanagan/learningcommons/welcome.html">Okanagan Learning Commons</a></li>
-        <li><a href="http://www.math.ubc.ca/Ugrad/pastExams/">UBC Mathematics Department Past Exams</a></li>
-        <li><a href="http://science.ubc.ca/students/resources/exams">UBC Faculty of Science Old Exams</a></li>
-        <li><a href="http://law.library.ubc.ca/exams/">UBC Faculty of Law Exams</a></li>
-    </ul>
+    <div class="row-fluid resource-links">
+        
+        <div class="span1 hidden-phone"></div>
+        <div class="span2">
+            <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/preparing-for-exams/" title="Follow steps to help you prepare for exams"><i class="icon-archive"></i> Exam Prep<br/> Toolkit</a>
+        </div>
+        <div class="span2">
+            <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/thinking-critically/" title="Understand what critical thinking means and how to think critically"><i class="icon-comments-alt"></i> Critical Thinking<br/> Toolkit</a>
+        </div>
+        <div class="span2">
+            <a class="btn btn-info" href="http://learningcommons.ubc.ca/tutoring-studying/learning-and-memory/" title="Learn to work your brain and expand your mind""><i class="icon-lightbulb"></i> Learning &amp;<br /> Memory Tips</a>
+        </div>
+        <div class="span2">
+            <a class="btn btn-info" href="http://www.lib.sfu.ca/sites/default/files/12333/multi-exam.pdf" title="How to reduce exam anxiety"><i class="icon-meh"></i> Overcoming Exam<br/> Anxiety (PDF)</a>
+        </div>
+        <div class="span2">
+            <a class="btn btn-info" href="http://www.lib.sfu.ca/sites/default/files/12333/multi-examPrep.pdf" title="How to prepare for different types of exams, including essay exams"><i class="icon-pencil"></i> Exam Preparation<br /> &amp; Writing (PDF)</a>
+        </div>
+        
+    </div>
     
 {% endblock %}

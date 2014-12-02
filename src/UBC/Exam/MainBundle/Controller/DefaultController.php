@@ -37,7 +37,7 @@ class DefaultController extends Controller
         $subjectCodeQuery = $em->createQueryBuilder('s')
         ->select(array('e.subject_code'))
         ->from('UBCExamMainBundle:Exam', 'e')
-        ->where('e.access_level != 5')  // access_level 5 is "Only me". so the subject codes that have that shouldn't show up
+        ->where('e.access_level != 5')  // access_level 5 is "Only me" so the subject codes that have that shouldn't show up
         ->groupBy('e.subject_code');
         
         $subjectCodeResult = $subjectCodeQuery->getQuery()->getResult();
@@ -48,7 +48,7 @@ class DefaultController extends Controller
         
         $form = $this->createFormBuilder($exam);
         
-        $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCodeForTwig));
+        $form->add('subject_code', 'choice', array('required' => false, 'label' => 'Type a course code to see matching courses', 'empty_value' => '- Choose course code -', 'choices' => $subjectCodeForTwig));
         
         /**
          * TEMPORARILY ADDING IN: subject code so that folks can type in stuff if they want to instead of dropdown only
@@ -61,7 +61,8 @@ class DefaultController extends Controller
         }*/
         
         $subjectCodeLabel = '';
-/*  removed to make the interface simpler!
+        
+        /*  removed to make the interface simpler!
         $form->add('year', 'text', array('required' => false))
             ->add('term', 'choice', array('required' => false, 'empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
             ->add('legal_content_owner', 'text', array('required' => false, 'max_length' => 100));
@@ -77,10 +78,9 @@ class DefaultController extends Controller
             $form->add('faculty', 'choice', array('required' => false, 'empty_value' => '- Choose faculty -','choices' => $faculties));
         } else {
             $form->add('faculty', 'text', array('required' => false, 'max_length' => 50));
-        }
-*/
-        $form->add('go', 'submit');
-        //$form->add('reset', 'reset');
+        }*/
+        
+        $form->add('search', 'submit');
         
         $form = $form->getForm();
         
@@ -89,6 +89,7 @@ class DefaultController extends Controller
         $query = $repo->createQueryBuilder('e');
 
         if ($this->getRequest()->getMethod() == "POST") {
+            
             $form->handleRequest($request);
             $formSubjectCodeNumber = $exam->getSubjectcode();
             
@@ -111,20 +112,20 @@ class DefaultController extends Controller
                 }
             }*/
             
-            /*
             //need try/catch so that it doesn't puke if subject_code_number doesn't exist
-            if ($form->has('subject_code_number')) {
+            /* if ($form->has('subject_code_number')) {
                 $combinedCode = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
                 if (strlen($combinedCode) > 3) {
                     $formSubjectCodeNumber = trim($combinedCode);
                 }
-            }
-            */
+            } */
+            
             $exam->setSubjectcode($formSubjectCodeNumber);
+            
             //setup query based on exam return stuff
             $query = $query->where('e.access_level != 5');  //5 is "Only me" level.  It's new.  index should NOT show this EVER!
-/*
-            $yearParameter = trim($exam->getYear());
+            
+            /* $yearParameter = trim($exam->getYear());
             if (!empty($yearParameter)) {
                 $query = $query->orWhere('e.year = :year')
                     ->setParameter('year', $yearParameter);
@@ -148,30 +149,35 @@ class DefaultController extends Controller
             if (!empty($facultyParameter)) {
                 $query = $query->orWhere('e.faculty = :faculty')
                     ->setParameter('faculty', $facultyParameter);
-            }
-*/
-             $subjectCodeParameter = trim($exam->getSubjectcode());
-             $subjectCodeLabel = $subjectCodeParameter;
+            }*/
+            
+            $subjectCodeParameter = trim($exam->getSubjectcode());
+            $subjectCodeLabel = $subjectCodeParameter;
+            
             if (!empty($subjectCodeParameter)) {
                 $subjectCodeParameter = addcslashes($subjectCodeParameter, "%_");   //sanitizing
                 $query = $query->andWhere($query->expr()->like('e.subject_code', ':subjectCodeParameter'))
                     ->setParameter('subjectCodeParameter', '%'.$subjectCodeParameter.'%');
             }
+            
         } else {
+            
             /**
              * need to stick in some more logic to determine:
              * - if logged in, what courses the user can see
              * - if not logged in, then don't worry about doing query even!
              */
             
-            $query = $query->orderBy('e.created', 'DESC');
+            /* $query = $query->orderBy('e.created', 'DESC'); */
         }
+        
         $query = $query->getQuery();
         $exams = $query->getResult();
-
+        
         $this->updateuser();
         
         return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams, 'subjectCodeLabel' => $subjectCodeLabel));
+    
     }
 
     /**

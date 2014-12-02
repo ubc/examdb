@@ -4,7 +4,16 @@
     
     <h1>Upload New Material</h1>
 
-    <p>Thank you for contributing to this valuable resource! <span class="hidden-phone">Simply fill in the required fields, read and consent to the license, and upload your material below.</span></p>
+    <p>Thank you for contributing to this valuable resource! To share your material, follow these four steps:</p>
+    
+    <ol>
+        <li><strong>Fill in the required fields</strong> (marked with a <span class="required-star"></span>) in the form below.</li>
+        <li><strong>Read the license and check off your consent</strong> at the bottom.</li>
+        <li><strong>Click the "Browse" button</strong> and choose the file you wish to upload.</li>
+        <li><strong>Click the "Save" button</strong> to add the information and file to the database.</li>
+    </ol>
+
+    <p>You can edit or delete any material you upload on the <a href="{{ url('list') }}">Manage Existing</a> page.</p>
     
     {{ include('UBCExamMainBundle:Default:upload-form.html.twig', {'form': form}) }}
 

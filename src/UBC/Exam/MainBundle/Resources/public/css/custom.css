@@ -38,6 +38,115 @@
     padding-bottom: 2em;
 }
 
+/* .search-box-row used on div surrounding search fields on home page */
+.content .search-box-row {
+    padding: .8em 0 .5em 0;
+    background: #D7E0E7;
+    border: 1px solid #98B2C3;
+}
+
+    /* need margin for all elements to account for movement when screen shrinks */
+    .content .search-box-row select,
+    .content .search-box-row label,
+    .content .search-box-row button {
+	margin-left: 1em;
+    }
+    
+	/* span around auto-fill search field */
+       .custom-combobox {
+	  margin: 0 0 1em 1em;
+	  display: inline-block;
+	  width: 96%;
+	}
+	
+	    /* input in span */
+	    .custom-combobox-input {
+	      padding: .4em;
+	      width: 88%;
+	      background: #fff !important;
+	    }
+	    
+	    /* a tag that is down arrow for input */
+	    .custom-combobox-toggle {
+	      padding: .5em;
+	      display: inline-block;
+	    }
+	    
+	    /* options in the select */
+	    .ui-menu-item {
+	      color: #222;
+	    }
+		.ui-menu-item.ui-state-focus {
+		  background: #eee !important;
+		}
+
+/* .resource-header used on h3 before resource links */
+.content .resource-header {
+    margin-top: 1.5em;
+}
+    
+/* .resource-links used on div surrounding links at bottom of home page */
+.content .resource-links a {
+    margin-top: .5em;
+    display: inline-block;
+    font-size: 1.1em;
+    width: 92%;
+}
+
+    /* icons for resource link buttons */
+    .resource-links a i {
+	display: block;
+	color: #333;
+	font-size: 3em;
+    }
+	.resource-links a i:before {
+	    cursor: pointer; /*override default*/
+	}
+
+/* .exam-tooltip class applies to a tags used as tooltips, attached to question mark icons */
+.exam-tooltip {
+    position: relative;
+    color: #222;
+    font-weight: normal;
+    outline: none;
+    text-decoration: none;
+}
+
+    /* tooltips initially hidden */
+    .exam-tooltip span {
+	margin-left: -999em;
+	position: absolute;
+    }
+
+    /* span displayed as box on hover */
+    .exam-tooltip:hover span {
+	margin-left: 0;
+	padding: 0.8em 1em;
+	position: absolute;
+	right: -125px; /*centered*/
+	top: 2em;
+	width: 250px;
+	color: #222;
+	line-height: 130%;
+	background: #FFFFAA;
+	border: 1px solid #FFAD33;
+	border-radius: 5px 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.1);
+	-webkit-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+	-moz-box-shadow: 5px 5px rgba(0, 0, 0, 0.1);
+	z-index: 99;
+    }
+
+    /* em tags surround tooltop headings for span boxes */
+    .exam-tooltip:hover em {
+	font-size: 1.4em;
+	font-style: normal;
+	display: block;
+	padding: 0.2em 0 0.6em 0;
+    }
+
 /* more spacing between form groups */
 .content fieldset {
     margin: 1.5em 0;
@@ -52,6 +161,11 @@
     .content label {
         color: #555;
         font-size: .95em;
+    }
+    
+    /* icon to right of labels/table headings that need explanation */
+    .content .icon-question-sign {
+	margin-left: .5em;
     }
     
     /* required-star class added to each label of a required field */
@@ -82,8 +196,8 @@
     .content .license {
         margin-bottom: 2em;
         padding: 2em;
-        height: 120px;
-        font-size: .85em;
+        height: 150px;
+        font-size: .9em;
         line-height: 130%;
         overflow-x: scroll;
         border: 1px solid #e5e5e5;

@@ -2,6 +2,10 @@ ubc_exam_main_homepage:
     path:     /exam
     defaults: { _controller: "UBCExamMainBundle:Default:index" }
 
+exam_guide:
+    path:     /exam/guide
+    defaults:  { _controller: FrameworkBundle:Template:template, template: "UBCExamMainBundle:Default:guide.html.twig" }
+
 exam_upload:
     path:     /exam/upload
     defaults: { _controller: "UBCExamMainBundle:Default:upload" }

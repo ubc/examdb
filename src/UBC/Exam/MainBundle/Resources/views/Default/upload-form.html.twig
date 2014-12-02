@@ -56,24 +56,53 @@
     
     <fieldset>
 	
-	<legend>Assessment Material Details</legend>
+	<legend>Assessment Material Information</legend>
 	
 	<div class="row-fluid">
 	    
 	    <div class="span3">
-		{{ form_row(form.legal_content_owner, {'label': 'Content legally owned by', 'label_attr': {'class': 'required-star'}}) }}
+		<a class="exam-tooltip">
+		    <i class="icon-question-sign"></i>
+		    <span>
+			<em><i class="icon-info-sign"></i> Information on Types</em>
+			A <strong>past exam</strong> has been used to assess students in a past section of the course. A <strong>practice exam</strong> is a set of questions that have not been used previously but do parallel the types of questions students can expect from the instructor and course. Other <strong>exam prep material</strong> is general study material to help students prepare for an exam in the instructor's course.
+		    </span>
+		</a>
+		{{ form_label(form.type, null, {'label': 'What is being uploaded', 'label_attr': {'class': 'required-star pull-left'}}) }}
+		{{ form_errors(form.type) }}
+		{{ form_widget(form.type) }}
 	    </div>
 	    
 	    <div class="span3">
-		{{ form_row(form.type, {'label': 'What is being uploaded', 'label_attr': {'class': 'required-star'}}) }}
+		<a class="exam-tooltip">
+		    <i class="icon-question-sign"></i>
+		    <span>
+			<em><i class="icon-info-sign"></i> Information on Access</em>
+			Access for <strong>Everyone</strong> means the public may download the material. Access for <strong>People with UBC CWLs</strong> means anyone with a campus-wide login may download the material. Access for <strong>Students with Courses in This Faculty</strong> means any student taking courses in the faculty the material is listed in may download the material. Access for <strong>Current Course Participants</strong> means any student currently enrolled in the course may download the material.
+		    </span>
+		</a>
+		{{ form_label(form.access_level, null, {'label': 'Who may access the material', 'label_attr': {'class': 'required-star pull-left'}}) }}
+		{{ form_errors(form.access_level) }}
+		{{ form_widget(form.access_level) }}
 	    </div>
 	    
 	    <div class="span3">
-		{{ form_row(form.access_level, {'label': 'Who can access this file', 'label_attr': {'class': 'required-star'}}) }}
+	    <a class="exam-tooltip">
+		<i class="icon-question-sign"></i>
+		<span>
+		    <em><i class="icon-info-sign"></i> Information on Notes</em>
+		    A <strong>note</strong> can be any comments about the material that would be helpful for students to know, including links to other useful study resources.
+		</span>
+	    </a>
+		{{ form_label(form.comments, null, {'label': 'Notes about the material', 'label_attr': {'class': 'required-star pull-left'}}) }}
+		{{ form_errors(form.comments) }}
+		{{ form_widget(form.comments) }}
 	    </div>
 	    
 	    <div class="span3">
-		{{ form_row(form.comments, {'label': 'Notes about the material'}) }}
+		{{ form_label(form.legal_content_owner, null, {'label': 'Content legally owned by', 'label_attr': {'class': 'required-star'}}) }}
+		{{ form_errors(form.legal_content_owner) }}
+		{{ form_widget(form.legal_content_owner) }}
 	    </div>
 	    
 	</div>
@@ -88,7 +117,7 @@
 	    
 	    {% if app.request.attributes.get('_route') == 'exam_upload' %}
 		<div class="span6">
-		    <label>Scroll to read full legal terms <i class="icon-chevron-sign-down"></i></label>
+		    <label>Scroll in the box to read full legal terms <i class="icon-chevron-sign-down"></i></label>
 		    <div class="license">
 			
 			<p class="text-center">
@@ -101,7 +130,7 @@
 			<p>WHEREAS:</p>
 			
 			<ol type="A">
-			    <li>You have created the work described in the Schedule to this License (the "Work"); and</li>
+			    <li>You have created the work (the "Work") described in the Schedule to this License; and</li>
 			    <li>UBC wishes to obtain your consent to use your Work as set out below.</li>
 			</ol>
 			
@@ -111,39 +140,39 @@
 			    <li>
 				You hereby grant to UBC a worldwide, royalty-free, non-exclusive, perpetual license to:
 				<ol type="a">
-				    <li>use, copy, distribute, display, broadcast, and otherwise make your Work available in a way that allows an UBC affiliate (Student, Faculty, Staff) or a member of the public to have restricted access to the Work from a place and at a time individually chosen by that affiliate or member of the public, without charge in any manner at all, for any research, academic, educational or other purposes in connection with the promotion of UBC and its activities (the "Purposes").</li>
+				    <li>use, copy, distribute, display, broadcast, and otherwise make your Work available in a way that allows a UBC affiliate (Student, Faculty, Staff) or a member of the public to have restricted access to the Work from a place and at a time individually chosen by that affiliate or member of the public, without charge in any manner at all, for any research, academic, educational, or other purposes in connection with the promotion of UBC and its activities (the "Purposes").</li>
 				</ol>
 			    </li>
 			    <li>
 				You represent and warrant to UBC that:
-				<ol type="a" start="2">
+				<ol type="a">
 				    <li>the Work nor use of the Work as contemplated herein does not and will not infringe any copyright or other intellectual property rights of any other person; and</li>
 				    <li>the Work does not contain any confidential or proprietary information belonging to any other person unless contained in the Work with such person's express consent.</li>
 				</ol>
 			    </li>
 			    <li>
-				You acknowledge and agree that personal information, including your name, Images, and any other personal information provided by you to UBC in connection with the Work, is being collected pursuant to Section 26 of the Freedom of Information &amp; Protection of Privacy Act, R.S.B.C. 1996, c.165. You consent to use of such information by UBC for the Purposes and in accordance with this License.
+				You acknowledge and agree that personal information, including your name, images, and any other personal information provided by you to UBC in connection with the Work, is being collected pursuant to Section 26 of the Freedom of Information &amp; Protection of Privacy Act, R.S.B.C. 1996, c.165. You consent to use of such information by UBC for the Purposes and in accordance with this License.
 			    </li>
 			    <li>
-				You hereby covenant and agree to indemnify and save harmless UBC, its Board of Governors, faculty, staff, students, officers, employees and agents, from any and all claims, demands, damages and proceedings arising from or relating to any use by UBC or any other person (including third parties) of the Work. This Section 4 shall survive any termination or expiry of this Consent.
+				You hereby covenant and agree to indemnify and save harmless UBC, its Board of Governors, faculty, staff, students, officers, employees, and agents from any and all claims, demands, damages, and proceedings arising from or relating to any use by UBC or any other person (including third parties) of the Work. This Section 4 shall survive any termination or expiry of this Consent.
 			    </li>
 			    <li>
 				This Consent shall be governed by and construed in accordance with the laws of the Province of British Columbia. The parties hereby attorn to the exclusive jurisdiction of the Supreme Court of British Columbia.
 			    </li>
 			    <li>
-				You hereby acknowledge and agree that you have read and understood this License before signing below.
+				You hereby acknowledge and agree that you have read and understood this License before signing.
 			    </li>
 			</ol>
 			
-			<p><strong>Schedule: </strong> Description of the Work</p>
+			<p><strong>Schedule:</strong><br /> Description of the Work</p>
 			
 			<p>The "work" described in this license may refer to:</p>
 			
 			<ol type="1">
 			    <li>Examination samples (midterm or final) in its original format as presented to students</li>
-			    <li>Examination samples (midterm or final) that contain mock or practice questions or modified format</li>
+			    <li>Examination samples (midterm or final) that contain mock or practice questions or a modified format</li>
 			    <li>Practice question sets</li>
-			    <li>Any evaluation material that deemed useful for students by the instructor</li>
+			    <li>Any evaluation material deemed useful for students by the instructor</li>
 			</ol>
 			
 		    </div>
@@ -152,12 +181,7 @@
 		
 		<div class="span3 inner-rows">
 		    
-		    {{ form_row(form.legal_date, {'label': 'Date of consent', 'label_attr': {'class': 'required-star'}}) }}
-		    {{ form_row(form.legal_uploader, {'label': 'File uploaded by', 'label_attr': {'class': 'required-star'}}) }}
-		    
-		</div>
-		
-		<div class="span3 inner-rows">
+		    {{ form_row(form.legal_date, {'label': 'Date of consent (today)', 'label_attr': {'class': 'required-star'}}) }}
 		    
 		    <div class="checkbox">
 			{{ form_label(form.legal_agreed, null, {'label': 'Consent', 'label_attr': {'class': 'required-star agreement-label'}}) }}
@@ -166,7 +190,13 @@
 			{{ form_label(form.legal_agreed, null, {'label': 'I agree to this License', 'label_attr': {'class': 'agreement-text'}}) }}
 		    </div>
 		    
-		    {{ form_row(form.file, {'label': 'File', 'label_attr': {'class': 'required-star'}, 'attr': {'class': 'btn-small'}}) }}
+		</div>
+		
+		<div class="span3 inner-rows">
+		 
+		    {{ form_row(form.legal_uploader, {'label': 'File uploaded by', 'label_attr': {'class': 'required-star'}, 'attr': {'placeholder': 'your name'}}) }}
+		    
+		    {{ form_row(form.file, {'label': 'File to upload', 'label_attr': {'class': 'required-star'}, 'attr': {'class': 'btn-small'}}) }}
 		    
 		</div>
 	    {% endif %}

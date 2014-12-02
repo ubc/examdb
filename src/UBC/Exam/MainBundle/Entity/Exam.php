@@ -15,8 +15,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Exam
 {
-    static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'UBC Community', '3' => 'Students In This Faculty', '4' => 'Course Participants', '5' => 'Only Me');
-    static public $TYPES = array('Actual Assessment' => 'Actual Assessment', 'Practice Assessment' => 'Practice Assessment', 'Other Material' => 'Other Material');
+    static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'People with UBC CWLs', '3' => 'Students with Courses in This Faculty', '4' => 'Current Course Participants', '5' => 'Only Me');
+    static public $TYPES = array('Actual Assessment' => 'Past Exam', 'Practice Assessment' => 'Practice Exam', 'Other Material' => 'Other Exam Prep Material');
     static public $TERMS = array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD');
     
     /**
@@ -400,6 +400,18 @@ class Exam
     {
         return $this->type;
     }
+    
+    
+    /**
+     * gets user-friendly version of type
+     * 
+     * @return String
+     */
+    public function getTypeString()
+    {
+        return self::$TYPES[$this->type];
+    }
+    
 
     /**
      * Set term

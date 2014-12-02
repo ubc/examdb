@@ -127,6 +127,9 @@
 		  <a href="{{ url('list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
+	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
+		<a href="{{ url('exam_guide') }}">User Guide</a>
+	      </li>
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 		  <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
@@ -185,6 +188,9 @@
 		  <a href="{{ url('list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
+	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
+		<a href="{{ url('exam_guide') }}">User Guide</a>
+	      </li>
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 		  <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
@@ -248,25 +254,11 @@
     </footer>
     <!-- Placed javascript at the end for faster loading -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script src="//cdn.ubc.ca/clf/7.0.4/js/ubc-clf.min.js"></script>
-    <!-- need to help Safari show required fields (and not submit invalid form)
-         pulled from http://blueashes.com/2013/web-development/html5-form-validation-fallback/ -->
-    <script>
-      function hasHtml5Validation() {
-	return typeof document.createElement('input').checkValidity === 'function';
-      }//closes function
-      if (hasHtml5Validation()) {
-	$('.validate-form').submit(function(e) {
-	  if (!this.checkValidity()) {
-	    e.preventDefault();
-	    $(this).addClass('invalid');
-	    $('#status').html('invalid');
-	  } else {
-	    $(this).removeClass('invalid');
-	    $('#status').html('submitted');
-	  }//closes if-else
-	});//closes submit
-      }//closes if
-    </script>
+    {% javascripts 'bundles/ubcexammain/js/*' %}
+      <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 </body>
 </html>
