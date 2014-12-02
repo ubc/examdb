@@ -2195,16 +2195,16 @@
         },
         {
             "name": "ubc/sisapi",
-            "version": "0.0.2",
+            "version": "0.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubc/sisapi.git",
-                "reference": "5371938ccb8fb26820227203d9c218d59f8daf12"
+                "reference": "b6a46ced8db1ae971b8a75a54ccfbe5d5d5fe551"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubc/sisapi/zipball/5371938ccb8fb26820227203d9c218d59f8daf12",
-                "reference": "5371938ccb8fb26820227203d9c218d59f8daf12",
+                "url": "https://api.github.com/repos/ubc/sisapi/zipball/b6a46ced8db1ae971b8a75a54ccfbe5d5d5fe551",
+                "reference": "b6a46ced8db1ae971b8a75a54ccfbe5d5d5fe551",
                 "shasum": ""
             },
             "require": {
@@ -2244,7 +2244,7 @@
                 "sis",
                 "ubc"
             ],
-            "time": "2014-12-02 05:37:37"
+            "time": "2014-12-02 23:37:05"
         },
         {
             "name": "ubc/sisapi-bundle",

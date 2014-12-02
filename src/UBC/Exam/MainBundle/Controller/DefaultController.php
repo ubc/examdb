@@ -289,9 +289,12 @@ class DefaultController extends Controller
      * special call to refresh info from https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0
      * I stil need to think about the best way to do this.
      *
+     * !!This feature has been moved to console command line!!
+     * Run php app/console exam:subjectcode:refresh
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function refreshAction()
+/*    public function refreshAction()
     {
         //get page content
         $ch = curl_init('https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0');
@@ -334,7 +337,7 @@ class DefaultController extends Controller
         }
 
         return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
-    }
+    }*/
 
     /**
      * not sure what this is.  It's set in security.yaml check_path of the firewalls.ubc_secured_area.trusted_sso.checkpath.
