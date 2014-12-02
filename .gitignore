@@ -13,3 +13,4 @@
 .buildpath
 .settings/*
 .vagrant/*
+.idea/
