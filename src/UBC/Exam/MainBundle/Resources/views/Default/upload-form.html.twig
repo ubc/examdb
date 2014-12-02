@@ -1,33 +1,33 @@
 {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
 
     {{ form_errors(form) }}
-    
+
     <fieldset>
-	
+
 	<legend>Course Information</legend>
-	
+
 	<div class="row-fluid">
-	
+
 	    <div class="span3">
 		{{ form_row(form.faculty, {'label': 'Faculty', 'label_attr': {'class': 'required-star'}}) }}
 	    </div>
-	    
+
 	    <div class="span3">
 		{{ form_row(form.dept, {'label': 'Department', 'label_attr': {'class': 'required-star'}}) }}
 	    </div>
-	    
+
 	    <div class="span3">
 	        {{ form_row(form.year, {'attr': {'placeholder': 'YYYY'}, 'label': 'Year', 'label_attr': {'class': 'required-star'}}) }}
 	    </div>
-	    
+
 	    <div class="span3">
 		{{ form_row(form.term, {'label': 'Term', 'label_attr': {'class': 'required-star'}}) }}
 	    </div>
-	
+
 	</div>
-	
+
 	<div class="row-fluid">
-	
+
 	    {# upload has select box + text box, while edit only has textbox #}
 	    {% if form.subject_code.vars.form.vars.block_prefixes.1 is same as("choice") %}
 		<div class="span3">
@@ -45,21 +45,21 @@
 		    {{ form_row(form.subject_code, {'attr': {'placeholder': 'e.g. GEOG 281'}, 'label': 'Subject code', 'label_attr': {'class': 'required-star'}}) }}
 		</div>
 	    {% endif %}
-	    
+
 	    <div class="span3">
 		{{ form_row(form.cross_listed, {'attr': {'placeholder': 'e.g. ASTU 202'}, 'label': 'Cross-listed as (subject code)'}) }}
 	    </div>
-	    
+
 	</div>
-	
+
     </fieldset>
-    
+
     <fieldset>
-	
+
 	<legend>Assessment Material Information</legend>
-	
+
 	<div class="row-fluid">
-	    
+
 	    <div class="span3">
 		<a class="exam-tooltip">
 		    <i class="icon-question-sign"></i>
@@ -72,7 +72,7 @@
 		{{ form_errors(form.type) }}
 		{{ form_widget(form.type) }}
 	    </div>
-	    
+
 	    <div class="span3">
 		<a class="exam-tooltip">
 		    <i class="icon-question-sign"></i>
@@ -85,7 +85,7 @@
 		{{ form_errors(form.access_level) }}
 		{{ form_widget(form.access_level) }}
 	    </div>
-	    
+
 	    <div class="span3">
 	    <a class="exam-tooltip">
 		<i class="icon-question-sign"></i>
@@ -98,44 +98,44 @@
 		{{ form_errors(form.comments) }}
 		{{ form_widget(form.comments) }}
 	    </div>
-	    
+
 	    <div class="span3">
 		{{ form_label(form.legal_content_owner, null, {'label': 'Content legally owned by', 'label_attr': {'class': 'required-star'}}) }}
 		{{ form_errors(form.legal_content_owner) }}
 		{{ form_widget(form.legal_content_owner) }}
 	    </div>
-	    
+
 	</div>
-	
+
     </fieldset>
-    
+
     <fieldset>
-	
+
 	<legend>Legal Terms &amp; Upload</legend>
-	
+
 	<div class="row-fluid">
-	    
+
 	    {% if app.request.attributes.get('_route') == 'exam_upload' %}
 		<div class="span6">
 		    <label>Scroll in the box to read full legal terms <i class="icon-chevron-sign-down"></i></label>
 		    <div class="license">
-			
+
 			<p class="text-center">
 			    <strong>The University of British Columbia ("UBC")<br />
 			    License For Works</strong>
 			</p>
-			
+
 			<hr />
-			
+
 			<p>WHEREAS:</p>
-			
+
 			<ol type="A">
 			    <li>You have created the work (the "Work") described in the Schedule to this License; and</li>
 			    <li>UBC wishes to obtain your consent to use your Work as set out below.</li>
 			</ol>
-			
+
 			<p>You agree as follows:</p>
-			
+
 			<ol type="1">
 			    <li>
 				You hereby grant to UBC a worldwide, royalty-free, non-exclusive, perpetual license to:
@@ -163,60 +163,59 @@
 				You hereby acknowledge and agree that you have read and understood this License before signing.
 			    </li>
 			</ol>
-			
+
 			<p><strong>Schedule:</strong><br /> Description of the Work</p>
-			
+
 			<p>The "work" described in this license may refer to:</p>
-			
+
 			<ol type="1">
 			    <li>Examination samples (midterm or final) in its original format as presented to students</li>
 			    <li>Examination samples (midterm or final) that contain mock or practice questions or a modified format</li>
 			    <li>Practice question sets</li>
 			    <li>Any evaluation material deemed useful for students by the instructor</li>
 			</ol>
-			
+
 		    </div>
-		    
+
 		</div>
-		
+
 		<div class="span3 inner-rows">
-		    
+
 		    {{ form_row(form.legal_date, {'label': 'Date of consent (today)', 'label_attr': {'class': 'required-star'}}) }}
-		    
+
 		    <div class="checkbox">
 			{{ form_label(form.legal_agreed, null, {'label': 'Consent', 'label_attr': {'class': 'required-star agreement-label'}}) }}
 			{{ form_errors(form.legal_agreed) }}
 			{{ form_widget(form.legal_agreed) }}
 			{{ form_label(form.legal_agreed, null, {'label': 'I agree to this License', 'label_attr': {'class': 'agreement-text'}}) }}
 		    </div>
-		    
+
 		</div>
-		
+
 		<div class="span3 inner-rows">
-		 
+
 		    {{ form_row(form.legal_uploader, {'label': 'File uploaded by', 'label_attr': {'class': 'required-star'}, 'attr': {'placeholder': 'your name'}}) }}
-		    
+
 		    {{ form_row(form.file, {'label': 'File to upload', 'label_attr': {'class': 'required-star'}, 'attr': {'class': 'btn-small'}}) }}
-		    
+
 		</div>
 	    {% endif %}
-	    
-	    {% if app.request.attributes.get('_route') == 'update_exam' %}
+
+	    {% if app.request.attributes.get('_route') == 'exam_update' %}
 		<!-- need to output this on the page somewhere, but hide it with CSS -->
 		<div class="hide-this">
 		    {{ form_row(form.legal_date) }}
 		    {{ form_row(form.legal_uploader) }}
 		</div>
 		<p>{{ form.legal_uploader.vars.value }} agreed to the legal terms and uploaded this exam on <strong>{{ form.legal_date.vars.value|date('M j, Y') }}</strong>.</p>
-	    {% endif %}                         
-	
+	    {% endif %}
+
 	</div>
-        
+
     </fieldset>
-    
+
     <div class="row-fluid text-center">
 	{{ form_row(form.upload, {'label': 'Save', 'attr': {'class': 'btn-large btn-primary btn-save'}}) }}
     </div>
-    
-{{ form_end(form) }}
 
+{{ form_end(form) }}

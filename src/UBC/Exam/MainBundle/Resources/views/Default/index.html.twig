@@ -2,56 +2,56 @@
 
 {% block body %}
 
-    
+
     <h1>Search the Assessment Material Archive</h1>
 
     <p>Welcome to UBC's Assessment Material Archive, a searchable database of current and past course exams and other assessment materials. All materials in this database have been uploaded by instructors for private study purposes. Please do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content.</p>
-    
+
     <p>In addition to the uploaded materials and additional resources below, please see the <a href="{{ url('exam_guide') }}">User Guide</a> for tips on how you can get the most out of this database.</p>
-    
+
     <!-- need users to log in before they can search (for now)
          FUTURE TO DO: provide general public search for publically-available exams -->
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-    
-        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('login') }}">log in with your UBC CWL</a></strong> to search the archive.</p>
-    
+
+        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong> to search the archive.</p>
+
     {% else %}
 
         {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
-        
+
             <h2>Find Materials by Course</h2>
-            
+
             <fieldset>
-                
+
                 <div class="row-fluid search-box-row">
-                    
+
                     <div class="span8">
                         {{ form_label(form.subject_code) }}
                         {{ form_widget(form.subject_code, { 'attr': {'class': 'main-search'} }) }}
                     </div>
-                    
+
                     <div class="span4">
                         <!-- need empty label here for alignment
                              FUTURE TO DO: change results to on click and remove submit button and label? -->
                         <label class="hidden-phone">&nbsp;</label>
                         {{ form_widget(form.search, { 'attr': {'class': 'btn btn-primary'}}) }}
-                    </div>                              
-                    
+                    </div>
+
                 </div>
-            
+
             </fieldset>
-        
+
         {{ form_end(form) }}
-        
+
         <!-- show *only* when results are available AND a subject code has been selected, i.e, a search has been done
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
         {% if exams|length > 0 and subjectCodeLabel is not empty %}
-        
+
             <table class="table table-striped">
-                
+
                 <!-- populate caption with course number selected and number of results after each search -->
                 <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ exams|length }} found for {{ subjectCodeLabel }}{% endif %}</caption>
-                
+
                 <thead>
                     <tr>
                         <th>Term</th>
@@ -72,7 +72,7 @@
                         <th>Notes</th>
                     </tr>
                 </thead>
-                
+
                 <tbody>
                     {% for exam in exams %}
                         <tr>
@@ -105,9 +105,9 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-                
+
             </table>
-            
+
         {% endif %}
 
     {% endif %}
@@ -115,9 +115,9 @@
     <hr />
 
     <h3 class="resource-header">Additional resources for exam preparation</h3>
-    
+
     <div class="row-fluid resource-links">
-        
+
         <div class="span1 hidden-phone"></div>
         <div class="span2">
             <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/preparing-for-exams/" title="Follow steps to help you prepare for exams"><i class="icon-archive"></i> Exam Prep<br/> Toolkit</a>
@@ -134,7 +134,7 @@
         <div class="span2">
             <a class="btn btn-info" href="http://www.lib.sfu.ca/sites/default/files/12333/multi-examPrep.pdf" title="How to prepare for different types of exams, including essay exams"><i class="icon-pencil"></i> Exam Preparation<br /> &amp; Writing (PDF)</a>
         </div>
-        
+
     </div>
-    
+
 {% endblock %}

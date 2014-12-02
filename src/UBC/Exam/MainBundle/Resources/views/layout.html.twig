@@ -31,7 +31,7 @@
   <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  
+
   <!-- Fav and touch icons -->
   <link rel="shortcut icon" href="//cdn.ubc.ca/clf/7.0.4/img/favicon.ico">
   <link rel="apple-touch-icon-precomposed" sizes="144x144" href="//cdn.ubc.ca/clf/7.0.4/img/apple-touch-icon-144-precomposed.png">
@@ -71,7 +71,7 @@
 	</div>
 	<div class="span2">
 	  <div id="ubc7-apom">
-	      <a href="//cdn.ubc.ca/clf/ref/aplaceofmind">UBC - A Place of Mind</a>                        
+	      <a href="//cdn.ubc.ca/clf/ref/aplaceofmind">UBC - A Place of Mind</a>
 	  </div>
 	</div>
 	<div class="span9" id="ubc7-wordmark-block">
@@ -123,8 +123,8 @@
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'update_exam' %}active{% endif %}">
-		  <a href="{{ url('list') }}">Manage Existing</a>
+				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
+		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
@@ -132,9 +132,9 @@
 	      </li>
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-		  <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
+		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
 		{% else %}
-		  <a href="{{ url('ubc_exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
+		  <a href="{{ url('exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
 		{% endif %}
 	      </li>
 	    </ul>
@@ -163,7 +163,7 @@
             <div class="flash-notice">
                 {{ flashMessage }}
             </div>
-        {% endfor %} 
+        {% endfor %}
 	{% block body %}
 	{% endblock %}
       </div>
@@ -184,8 +184,8 @@
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'update_exam' %}active{% endif %}">
-		  <a href="{{ url('list') }}">Manage Existing</a>
+				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
+		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
@@ -193,9 +193,9 @@
 	      </li>
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-		  <a class="a-img-cwl" href="{{ url('login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
+		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
 		{% else %}
-		  <a href="{{ url('ubc_exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
+		  <a href="{{ url('exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
 		{% endif %}
 	      </li>
 	    </ul>

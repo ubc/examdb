@@ -9,30 +9,33 @@ exam_guide:
 exam_upload:
     path:     /exam/upload
     defaults: { _controller: "UBCExamMainBundle:Default:upload" }
-    
-loggged_in:
+
+exam_loggged_in:
     path: /exam/loggedin
     defaults: { _controller: "UBCExamMainBundle:Default:loggedin" }
-    
-list:
+
+exam_list:
     path: /exam/list
     defaults: { _controller: "UBCExamMainBundle:Default:list" }
-    
-refresh:
+
+exam_refresh:
     path: /exam/refresh
     defaults: { _controller: "UBCExamMainBundle:Default:refresh" }
-login:
+exam_login:
     path: /exam/login
     defaults: { _controller: "UBCExamMainBundle:Default:login" }
-delete_exam:
+login_check:
+    path: /exam/login_check
+    defaults: { _controller: "UBCExamMainBundle:Default:securityCheck" }
+exam_delete:
     path: /exam/delete_exam/{examID}
     defaults: { _controller: "UBCExamMainBundle:Default:deleteexam" }
-update_exam:
+exam_update:
     path: /exam/update_exam/{examID}
     defaults: { _controller: "UBCExamMainBundle:Default:updateexam" }
-ubc_exam_logout:
+exam_logout:
     path: /exam/logout
     defaults: { _controller: "UBCExamMainBundle:Default:login" }
-download:
+exam_download:
     path: /exam/download/{filename}
     defaults: { _controller: "UBCExamMainBundle:Default:download" }

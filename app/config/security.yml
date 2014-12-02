@@ -1,6 +1,7 @@
 security:
     encoders:
         Symfony\Component\Security\Core\User\User: plaintext
+        UBC\Exam\MainBundle\Entity\User: plaintext
 
     role_hierarchy:
         ROLE_ADMIN:       ROLE_USER
@@ -16,56 +17,47 @@ security:
             pattern:  ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        login:
-            pattern:  ^/demo/secured/login$
-            security: false
+        #login:
+        #    pattern:  ^/demo/secured/login$
+        #    security: false
 
-# /** this section is used for "gorg/cas-bundle" bundle.  also need to comment out ubc_secured_area and secured_area **/
-        secured_area:
+        exam_secured_area:
             pattern:    ^/exam
-            anonymous: true 
-            logout:     
-                path: /exam/logout
-                target: /exam
-                success_handler: security.logout.success_handler
-            cas:
-                cas_server: "%cas_server%"
-                cas_port: "%cas_port%"
-                cas_path: "%cas_path%"
-                ca_cert_path: ~
-                cas_protocol: S1
-                cas_mapping_attribute: cwlLoginName 
-                check_path: /exam/loggedin
-                login_path: /exam/login
-
-# this section used for besimple/sso-auth-bundle
-#        ubc_secured_area:
-#            pattern: ^/exam
-#            anonymous: ~
-#            trusted_sso:
-#                manager: admin_sso
-#                login_action: false         # BeSimpleSsoAuthBundle:TrustedSso:login
-#                logout_action: false        # BeSimpleSsoAuthBundle:TrustedSso:logout
-#                create_users: false
-#                created_users_roles: [ ROLE_USER ]
+            anonymous: true
+            form_login:
+                check_path: login_check
+                login_path: exam_login
+            logout:
+                path:   exam_logout
+                target: ubc_exam_main_homepage
+#                success_handler: security.logout.success_handler # uncomment this for cas
+            # uncomment below for cas
+#            cas:
+#                cas_server: "%cas_server%"
+#                cas_port: "%cas_port%"
+#                cas_path: "%cas_path%"
+#                ca_cert_path: ~
+#                cas_protocol: S1
+#                cas_mapping_attribute: cwlLoginName
+#                check_path: /exam/loggedin
 #                login_path: /exam/login
-#                check_path: /exam/loggedin  # created a loggedinAction in DefaultController, but no sure what to do there.
-#            logout:
-#                path: /exam/logout
-#                target: /exam
-#
-#        secured_area:
-#            pattern:    ^/demo/secured/
-#            form_login:
-#                check_path: _security_check
-#                login_path: _demo_login
-#            logout:
-#                path:   _demo_logout
-#                target: _demo
+        #secured_area:
+        #    pattern:    ^/demo/secured/
+        #    form_login:
+        #        check_path: _security_check
+        #        login_path: _demo_login
+        #    logout:
+        #        path:   _demo_logout
+        #        target: _demo
+            #anonymous: ~
+            #http_basic:
+            #    realm: "Secured Demo Area"
 
     access_control:
+        - { path: ^/exam/login, roles: IS_AUTHENTICATED_ANONYMOUSLY } #comment this for cas
         - { path: ^/exam/download, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/loggedin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/, roles: ROLE_USER }
-        - { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
+        #- { path: ^/demo/secured/hello/admin/, roles: ROLE_ADMIN }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

@@ -1,18 +1,18 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block body %}
-    
+
     <ul class="breadcrumb expand">
         <li>
-            <a href="{{ url('list') }}">Manage Existing</a> <span class="divider">/</span>
+            <a href="{{ url('exam_list') }}">Manage Existing</a> <span class="divider">/</span>
         </li>
         <li class="active">Update</li>
     </ul>
 
     <h1>Update Material</h1>
-    
-    <p>Edit any details below. If you need to replace a file, please <a href="{{ url('exam_upload') }}">upload a new file</a> instead, and delete this listing from your <a href="{{ url('list') }}">existing materials</a>.</p>
-    
+
+    <p>Edit any details below. If you need to replace a file, please <a href="{{ url('exam_upload') }}">upload a new file</a> instead, and delete this listing from your <a href="{{ url('exam_list') }}">existing materials</a>.</p>
+
     {{ include('UBCExamMainBundle:Default:upload-form.html.twig', {'form': form}) }}
 
 {% endblock %}
