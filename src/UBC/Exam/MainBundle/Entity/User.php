@@ -4,6 +4,7 @@ namespace UBC\Exam\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\UserRepository")
  * @ORM\Table(name="user")
  */
-class User implements UserInterface, \Serializable
+class User implements UserInterface, EquatableInterface, \Serializable
 {
     /**
      * @ORM\Column(type="integer")
@@ -312,5 +313,40 @@ class User implements UserInterface, \Serializable
     public function getModified()
     {
         return $this->modified;
+    }
+
+    /**
+     * The equality comparison should neither be done by referential equality
+     * nor by comparing identities (i.e. getId() === getId()).
+     *
+     * However, you do not need to compare every attribute, but only those that
+     * are relevant for assessing whether re-authentication is required.
+     *
+     * Also implementation should consider that $user instance may implement
+     * the extended user interface `AdvancedUserInterface`.
+     *
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->salt !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
     }
 }

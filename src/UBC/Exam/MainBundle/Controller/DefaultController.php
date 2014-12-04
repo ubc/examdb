@@ -2,6 +2,7 @@
 
 namespace UBC\Exam\MainBundle\Controller;
 
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use UBC\Exam\MainBundle\Entity\Exam;
@@ -24,6 +25,8 @@ class DefaultController extends Controller
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/", name="ubc_exam_main_homepage")
      */
     public function indexAction(Request $request)
     {
@@ -32,7 +35,7 @@ class DefaultController extends Controller
 
         //ok, create a form to get user selection of exams
         $em = $this->getDoctrine()->getManager();
-        list($faculties, $subjectCode) = $this->getFacultySubjectCode($em);
+//        list($faculties, $subjectCode) = $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultySubjectCode();
 
         $subjectCodeQuery = $em->createQueryBuilder('s')
         ->select(array('e.subject_code'))
@@ -180,6 +183,8 @@ class DefaultController extends Controller
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/upload", name="exam_upload")
      */
     public function uploadAction(Request $request)
     {
@@ -189,7 +194,7 @@ class DefaultController extends Controller
 
         //get faculties and subject code
         $em = $this->getDoctrine()->getManager();
-        list($faculties, $subjectCode) = $this->getFacultySubjectCode($em);
+        list($faculties, $subjectCode) = $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultySubjectCode();
 
         //get user
         $user = $this->get('security.context')->getToken()->getUser();
@@ -266,6 +271,8 @@ class DefaultController extends Controller
      * page for listing exams the person has uploaded
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/list", name="exam_list")
      */
     public function listAction()
     {
@@ -343,6 +350,8 @@ class DefaultController extends Controller
      * not sure what this is.  It's set in security.yaml check_path of the firewalls.ubc_secured_area.trusted_sso.checkpath.
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/loggedin", name="exam_loggged_in")
      */
     public function loggedinAction()
     {
@@ -359,6 +368,9 @@ class DefaultController extends Controller
      * if you type in login url, it will redirect to main exam page.
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/login", name="exam_login")
+     * @Route("/logout", name="exam_logout")
      */
     public function loginAction(Request $request)
     {
@@ -390,6 +402,9 @@ class DefaultController extends Controller
         #return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
 
+    /**
+     * @Route("/login_check", name="login_check")
+     */
     public function securityCheckAction()
     {
         // The security layer will intercept this request
@@ -401,6 +416,8 @@ class DefaultController extends Controller
      * @param integer $examID
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/delete_exam/{examID}", name="exam_delete", requirements={"examID": "\d+"})
      */
     public function deleteexamAction($examID)
     {
@@ -438,6 +455,8 @@ class DefaultController extends Controller
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/update_exam/{examID}", name="exam_update", requirements={"examID": "\d+"})
      */
     public function updateexamAction($examID, Request $request)
     {
@@ -505,6 +524,8 @@ class DefaultController extends Controller
      * @param String $filename
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/download/{filename}", name="exam_download")
      */
     public function downloadAction($filename)
     {
@@ -537,6 +558,40 @@ class DefaultController extends Controller
         }
 
         return $returnVal;
+    }
+
+    /**
+     * @param $subject string the course subject code
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/wikicontent/{subject}", name="exam_wiki", methods={"GET"})
+     */
+    public function getWikiContentAction($subject)
+    {
+        $logger = $this->get('logger');
+        $wikiBaseUrl = $this->container->getParameter('wiki_base_url');
+        $subjectCodes = $this->getDoctrine()
+            ->getRepository('UBCExamMainBundle:SubjectFaculty')
+            ->findBy(array('code' => $subject));
+
+        $browser = $this->get('buzz');
+        $content = array();
+        foreach($subjectCodes as $code) {
+            $title = sprintf('%s/%s/%s',
+                $code->getCampus(), $code->getFaculty(), $code->getDepartment());
+            $logger->debug('Getting wiki content from ' . $wikiBaseUrl.urlencode($title));
+            $response = $browser->get($wikiBaseUrl.urlencode($title));
+            // only take the content from HTTP 200, ignore others
+            if ($response->getStatusCode() == 200) {
+                $content[] = $response->getContent();
+            }
+        }
+
+//        if (empty($content)) {
+//            throw $this->createNotFoundException('No wiki content available for subject ' . $subject);
+//        }
+
+        return new Response(join('<hr>', $content));
     }
 
     /**
@@ -601,30 +656,5 @@ class DefaultController extends Controller
                 $em->flush();
             }
         }
-    }
-
-    /**
-     * function to pull list of faculties and subject codes (aka AANB, ENSC, etc) if available
-     *
-     * @param EntityManager $em
-     *
-     * @return array
-     */
-    private function getFacultySubjectCode($em)
-    {
-        $subjectFacultyQuery = $em->createQueryBuilder('s')
-            ->select(array('s.code', 's.faculty'))
-            ->from('UBCExamMainBundle:SubjectFaculty', 's');
-        $results = $subjectFacultyQuery->getQuery()->getResult();
-        $faculties = array_map(create_function('$o', 'return $o["faculty"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
-        $subjectCode = array_map(create_function('$o', 'return $o["code"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
-        $facultiesValue = array_unique(array_values($faculties));
-        $subjectCodeValue = array_unique(array_values($subjectCode));
-        asort($facultiesValue);
-        asort($subjectCodeValue);
-        $faculties = array_combine($facultiesValue, $facultiesValue);
-        $subjectCode = array_combine($subjectCodeValue, $subjectCodeValue);
-
-        return array($faculties, $subjectCode);
     }
 }
