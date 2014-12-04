@@ -5,12 +5,14 @@ namespace UBC\Exam\MainBundle\Command;
 
 
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 
-class SubjectCodeRefreshCommand extends ContainerAwareCommand {
+class SubjectCodeRefreshCommand extends ContainerAwareCommand
+{
     protected function configure()
     {
         $this
@@ -21,8 +23,7 @@ class SubjectCodeRefreshCommand extends ContainerAwareCommand {
                 null,
                 InputOption::VALUE_NONE,
                 'Load the local SQL instead fetching from SIS API'
-            )
-        ;
+            );
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
@@ -66,30 +67,38 @@ class SubjectCodeRefreshCommand extends ContainerAwareCommand {
         $em = $this->getContainer()->get('doctrine')->getManager();
         $em->getRepository('UBCExamMainBundle:SubjectFaculty')->refresh($entities);
 
-        $output->writeln('Done!');
+        $output->writeln('Done! Loaded ' . count($entities) . ' subject codes.');
     }
 
     protected function refreshFromLocal(OutputInterface $logger)
     {
         $serializer = $this->getContainer()->get('sisapi.serializer');
 
-        $path = realpath(dirname(__FILE__) . '/../Resources/data');
+        $locator = new FileLocator(array(__DIR__ . '/../Resources/fixtures'));
+        $subjectCodes = array();
+        $departmentCodes = array();
 
-        $logger->writeln('Loading XM from UBC/Exam/MainBundle/Resources/fixtures/subject_code.xml');
+        $xmlFiles = $locator->locate('subject_code.xml', null, false);
+        if (count($xmlFiles) == 1) {
+            $logger->writeln('Loading XM from ' . $xmlFiles[0]);
+            $subjectCodes =
+                $serializer->deserialize(
+                    file_get_contents($xmlFiles[0]),
+                    'UBC\SISAPI\Entity\SubjectCodes',
+                    'xml'
+                );
+        }
 
-        $subjectCodes = $serializer->deserialize(
-            file_get_contents($path . '/' . 'subject_code.xml'),
-            'UBC\SISAPI\Entity\SubjectCodes',
-            'xml'
-        );
-
-        $logger->writeln('Loading XM from UBC/Exam/MainBundle/Resources/fixtures/department_code.xml');
-
-        $departmentCodes = $serializer->deserialize(
-            file_get_contents($path . '/' . 'department_code.xml'),
-            'UBC\SISAPI\Entity\DepartmentCodes',
-            'xml'
-        );
+        $xmlFiles = $locator->locate('department_code.xml', null, false);
+        if (count($xmlFiles) == 1) {
+            $logger->writeln('Loading XM from ' . $xmlFiles[0]);
+            $departmentCodes =
+                $serializer->deserialize(
+                    file_get_contents($xmlFiles[0]),
+                    'UBC\SISAPI\Entity\DepartmentCodes',
+                    'xml'
+                );
+        }
 
         return array($subjectCodes, $departmentCodes);
     }
@@ -98,7 +107,8 @@ class SubjectCodeRefreshCommand extends ContainerAwareCommand {
      * @param OutputInterface $logger
      * @return array
      */
-    protected function refreshFromSIS(OutputInterface $logger)
+    protected
+    function refreshFromSIS(OutputInterface $logger)
     {
         $logger->writeln('Calling SIS API to get subject codes...');
 
