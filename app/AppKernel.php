@@ -22,6 +22,7 @@ class AppKernel extends Kernel
 //            new BeSimple\SsoAuthBundle\BeSimpleSsoAuthBundle(),
             new Gorg\Bundle\CasBundle\GorgCasBundle(),  //also need to add "gorg/cas-bundle": "master" to the required part of composer.json,
             new UBC\SISAPIBundle\UBCSISAPIBundle(),
+            new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
