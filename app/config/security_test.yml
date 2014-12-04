@@ -1,0 +1,10 @@
+security:
+    firewalls:
+        exam_secured_area:
+            http_basic: ~
+    providers:
+        in_memory:
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
