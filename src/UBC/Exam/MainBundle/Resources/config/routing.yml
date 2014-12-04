@@ -1,37 +1,4 @@
-ubc_exam_main_homepage:
-    path:     /exam
-    defaults: { _controller: "UBCExamMainBundle:Default:index" }
-
-exam_upload:
-    path:     /exam/upload
-    defaults: { _controller: "UBCExamMainBundle:Default:upload" }
-
-exam_loggged_in:
-    path: /exam/loggedin
-    defaults: { _controller: "UBCExamMainBundle:Default:loggedin" }
-
-exam_list:
-    path: /exam/list
-    defaults: { _controller: "UBCExamMainBundle:Default:list" }
-
-exam_refresh:
-    path: /exam/refresh
-    defaults: { _controller: "UBCExamMainBundle:Default:refresh" }
-exam_login:
-    path: /exam/login
-    defaults: { _controller: "UBCExamMainBundle:Default:login" }
-login_check:
-    path: /exam/login_check
-    defaults: { _controller: "UBCExamMainBundle:Default:securityCheck" }
-exam_delete:
-    path: /exam/delete_exam/{examID}
-    defaults: { _controller: "UBCExamMainBundle:Default:deleteexam" }
-exam_update:
-    path: /exam/update_exam/{examID}
-    defaults: { _controller: "UBCExamMainBundle:Default:updateexam" }
-exam_logout:
-    path: /exam/logout
-    defaults: { _controller: "UBCExamMainBundle:Default:login" }
-exam_download:
-    path: /exam/download/{filename}
-    defaults: { _controller: "UBCExamMainBundle:Default:download" }
+examdb:
+    resource: "@UBCExamMainBundle/Controller/"
+    type:     annotation
+    prefix:   /exam

@@ -13,11 +13,6 @@ _configurator:
 _main:
     resource: routing.yml
     
-_ubc_exam_main:
-    resource: "@UBCExamMainBundle/Resources/config/routing.yml"
-    prefix:   /
-
-
 # AcmeDemoBundle routes (to be removed)
 _acme_demo:
     resource: "@AcmeDemoBundle/Resources/config/routing.yml"
