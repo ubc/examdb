@@ -1,0 +1,5 @@
+security:
+    providers:
+        administrators:
+            entity:
+                class: UBCExamMainBundle:User

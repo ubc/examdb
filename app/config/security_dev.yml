@@ -5,7 +5,7 @@ security:
                 providers: [in_memory, administrators]
         administrators:
             entity:
-                class: ubcexammainbundle:user
+                class: UBCExamMainBundle:User
         in_memory:
             memory:
                 users:

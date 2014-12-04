@@ -1,23 +1,2 @@
-security:
-    providers:
-        administrators:
-            entity:
-                class: ubcexammainbundle:user
-
-    firewalls:
-        exam_secured_area:
-            pattern:    ^/exam
-            anonymous: true
-            logout:
-                path:   exam_logout
-                target: ubc_exam_main_homepage
-                success_handler: security.logout.success_handler # uncomment this for cas
-            cas:
-                cas_server: "%cas_server%"
-                cas_port: "%cas_port%"
-                cas_path: "%cas_path%"
-                ca_cert_path: ~
-                cas_protocol: S1
-                cas_mapping_attribute: cwlLoginName
-                check_path: login_check
-                login_path: exam_login
+imports:
+    - { resource: security_cas.yml }
