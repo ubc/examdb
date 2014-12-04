@@ -2,6 +2,7 @@
 namespace UBC\Exam\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -9,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * This class holds the 4 letters representing course codes in UBC
  *
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\SubjectCodeRepository")
- * @ORM\Table(name="subjectfaculty")
+ * @ORM\Table(name="subjectfaculty", indexes={@Index(name="code_idx", columns={"code"})})
  */
 class SubjectFaculty
 {
