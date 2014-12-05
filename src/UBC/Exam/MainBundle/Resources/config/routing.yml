@@ -1,3 +1,7 @@
+exam_guide:
+    path:     /exam/guide
+    defaults:  { _controller: FrameworkBundle:Template:template, template: "UBCExamMainBundle:Default:guide.html.twig" }
+
 examdb:
     resource: "@UBCExamMainBundle/Controller/"
     type:     annotation
