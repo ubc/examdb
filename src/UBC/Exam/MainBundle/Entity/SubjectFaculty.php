@@ -2,14 +2,15 @@
 namespace UBC\Exam\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
  * This class holds the 4 letters representing course codes in UBC
  *
- * @ORM\Entity
- * @ORM\Table(name="subjectfaculty")
+ * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\SubjectCodeRepository")
+ * @ORM\Table(name="subjectfaculty", indexes={@Index(name="code_idx", columns={"code"})})
  */
 class SubjectFaculty
 {
@@ -19,7 +20,12 @@ class SubjectFaculty
      * @ORM\GeneratedValue(strategy="AUTO") 
      */
     protected $id;
-    
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
+    protected $urn;
+
     /**
      * @ORM\Column(type="string", length=100)
      */
@@ -29,9 +35,19 @@ class SubjectFaculty
      * @ORM\Column(type="string", length=100)
      */
     protected $title;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $campus;
+
+    /**
+     * @ORM\Column(type="string", length=20)
+     */
+    protected $department;
     
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=100, nullable=true)
      */
     protected $faculty;
     
@@ -151,5 +167,86 @@ class SubjectFaculty
     public function getModified()
     {
         return $this->modified;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCampus()
+    {
+        return $this->campus;
+    }
+
+    /**
+     * @param mixed $campus
+     */
+    public function setCampus($campus)
+    {
+        $this->campus = $campus;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDepartment()
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param mixed $department
+     */
+    public function setDepartment($department)
+    {
+        $this->department = $department;
+    }
+
+    /**
+     * Set created
+     *
+     * @param \DateTime $created
+     * @return SubjectFaculty
+     */
+    public function setCreated($created)
+    {
+        $this->created = $created;
+    
+        return $this;
+    }
+
+    /**
+     * Set modified
+     *
+     * @param \DateTime $modified
+     * @return SubjectFaculty
+     */
+    public function setModified($modified)
+    {
+        $this->modified = $modified;
+    
+        return $this;
+    }
+
+    /**
+     * Set urn
+     *
+     * @param string $urn
+     * @return SubjectFaculty
+     */
+    public function setUrn($urn)
+    {
+        $this->urn = $urn;
+    
+        return $this;
+    }
+
+    /**
+     * Get urn
+     *
+     * @return string 
+     */
+    public function getUrn()
+    {
+        return $this->urn;
     }
 }

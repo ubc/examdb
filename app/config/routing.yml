@@ -1,7 +1,6 @@
-#just place holders....doesn't do anything or at least shouldn't!
-ubc_exam_main:
+_ubc_exam_main:
     resource: "@UBCExamMainBundle/Resources/config/routing.yml"
-    prefix:   /
+
 root:
     path: /
     defaults:

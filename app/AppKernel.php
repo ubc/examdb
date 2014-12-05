@@ -20,7 +20,9 @@ class AppKernel extends Kernel
             new UBC\Exam\MainBundle\UBCExamMainBundle(),
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 //            new BeSimple\SsoAuthBundle\BeSimpleSsoAuthBundle(),
-             new Gorg\Bundle\CasBundle\GorgCasBundle(),  //also need to add "gorg/cas-bundle": "master" to the required part of composer.json
+            new Gorg\Bundle\CasBundle\GorgCasBundle(),  //also need to add "gorg/cas-bundle": "master" to the required part of composer.json,
+            new UBC\SISAPIBundle\UBCSISAPIBundle(),
+            new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

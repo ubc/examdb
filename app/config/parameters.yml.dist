@@ -17,3 +17,5 @@ parameters:
     cas_server: cas.stg.id.ubc.ca
     cas_port: 443
     cas_path: /ubc-cas/
+
+    wiki_base_url: http://wiki.ubc.ca/index.php?action=render&title=Sandbox:ExamDB/

@@ -1,0 +1,23 @@
+security:
+    providers:
+        chain_provider:
+            chain:
+                providers: [in_memory, administrators]
+        administrators:
+            entity:
+                class: UBCExamMainBundle:User
+        in_memory:
+            memory:
+                users:
+                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
+                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+    firewalls:
+        exam_secured_area:
+            pattern:    ^/exam
+            anonymous: true
+            form_login:
+                check_path: login_check
+                login_path: exam_login
+            logout:
+                path:   exam_logout
+                target: ubc_exam_main_homepage
