@@ -1,6 +1,6 @@
 imports:
     - { resource: config.yml }
-    - { resource: security_test.yml }
+    - { resource: security_in_mem.yml }
 
 framework:
     test: ~

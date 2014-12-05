@@ -339,10 +339,6 @@ class User implements UserInterface, EquatableInterface, \Serializable
             return false;
         }
 
-        if ($this->salt !== $user->getSalt()) {
-            return false;
-        }
-
         if ($this->username !== $user->getUsername()) {
             return false;
         }

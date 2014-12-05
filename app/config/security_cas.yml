@@ -3,7 +3,6 @@ security:
         administrators:
             entity:
                 class: UBCExamMainBundle:User
-
     firewalls:
         exam_secured_area:
             pattern:    ^/exam
