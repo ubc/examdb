@@ -2,7 +2,7 @@
 
 namespace UBC\Exam\MainBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use Liip\FunctionalTestBundle\Test\WebTestCase;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
@@ -12,6 +12,7 @@ use UBC\Exam\MainBundle\Entity\User;
  * tests default controller
  * 
  * @author Loong Chan <loong.chan@ubc.ca>
+ * @author Pan Luo <pan.luo@ubc.ca>
  *
  */
 class DefaultControllerTest extends WebTestCase
@@ -98,6 +99,96 @@ class DefaultControllerTest extends WebTestCase
             0,
             $crawler->filter('html:contains("test")')->count()
         );
+    }
+
+    public function testGetSubjectCodes()
+    {
+        $this->client->request('GET', '/exam/subjectcode/UBC');
+
+        $this->assertTrue(
+            $this->client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+
+        $response = $this->client->getResponse();
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertSame(array(
+            'data' => array(
+                array(
+                    'code' => 'CHIN',
+                    'department' => 'ASIA',
+                    'faculty' => 'ARTS',
+                    'campus' => 'UBC'
+                ),
+                array(
+                    'code' => 'JAPN',
+                    'department' => 'ASIA',
+                    'faculty' => 'ARTS',
+                    'campus' => 'UBC'
+                )
+            )
+        ), $data);
+
+
+        $this->client->request('GET', '/exam/subjectcode/UBCO');
+
+        $this->assertTrue(
+            $this->client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+
+        $response = $this->client->getResponse();
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertSame(array(
+            'data' => array()
+        ), $data);
+    }
+
+    public function testGetSubjectCode()
+    {
+        $this->client->request('GET', '/exam/subjectcode/UBC/CHIN');
+
+        $this->assertTrue(
+            $this->client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+
+        $response = $this->client->getResponse();
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertSame(array(
+            'code' => 'CHIN',
+            'department' => 'ASIA',
+            'faculty' => 'ARTS',
+            'campus' => 'UBC'
+        ), $data);
+
+        // test non-existing code
+        $this->client->request('GET', '/exam/subjectcode/UBC/NONE');
+
+        $this->assertTrue(
+            $this->client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+
+        $response = $this->client->getResponse();
+
+        $data = json_decode($response->getContent(), true);
+
+        $this->assertSame(array(), $data);
     }
 
     /**

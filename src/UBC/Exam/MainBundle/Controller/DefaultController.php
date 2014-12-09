@@ -4,6 +4,7 @@ namespace UBC\Exam\MainBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use UBC\Exam\MainBundle\Entity\Exam;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
@@ -598,6 +599,43 @@ class DefaultController extends Controller
 //        }
 
         return new Response(join('<hr>', $content));
+    }
+
+    /**
+     * Get a list of subject codes by campus
+     *
+     * @param $campus string campus code, UBC or UBCO
+     * @return JsonResponse list of subject codes in json format
+     *
+     * @Route("/subjectcode/{campus}", name="exam_campus", methods={"GET"})
+     */
+    public function getSubjectCodes($campus)
+    {
+        $subjectCodes = $this->getDoctrine()
+            ->getRepository('UBCExamMainBundle:SubjectFaculty')
+            ->getSubjectCodeArrayByCampus($campus);
+
+        return new JsonResponse(array(
+            'data' => $subjectCodes
+        ));
+    }
+
+    /**
+     * Get one subject code details by campus and code
+     *
+     * @param $campus string campus code, UBC or UBCO
+     * @param $subjectCode string the subject code, e.g. CHIN
+     * @return JsonResponse A json object contains subject code details
+     *
+     * @Route("/subjectcode/{campus}/{subjectCode}", name="exam_subjectcode", methods={"GET"})
+     */
+    public function getSubjectCode($campus, $subjectCode)
+    {
+        $subjectCode =  $this->getDoctrine()
+            ->getRepository('UBCExamMainBundle:SubjectFaculty')
+            ->getSubjectCodeByCampusAndCode($campus, $subjectCode);
+
+        return new JsonResponse($subjectCode);
     }
 
     /**

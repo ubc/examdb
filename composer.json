@@ -41,7 +41,9 @@
         "m6web/Symfony2-coding-standard": "~1.1",
         "ubc/ctlt-coding-standard": "1.0",
         "sebastian/phpcpd": "*",
-        "phpdocumentor/phpdocumentor": "2.*"
+        "phpdocumentor/phpdocumentor": "2.*",
+        "doctrine/data-fixtures": "~1.0@dev",
+        "liip/functional-test-bundle": "~1.0@dev"
     },
     "scripts": {
         "post-install-cmd": [

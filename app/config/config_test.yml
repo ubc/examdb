@@ -5,7 +5,8 @@ imports:
 framework:
     test: ~
     session:
-        storage_id: session.storage.mock_file
+        #storage_id: session.storage.mock_file
+        storage_id: session.storage.filesystem
     profiler:
         collect: false
         only_exceptions: false
@@ -37,3 +38,24 @@ assetic:
 swiftmailer:
     disable_delivery: true
 
+
+doctrine:
+    dbal:
+        default_connection: default
+
+        connections:
+            default:
+                driver:  pdo_sqlite
+                user:    test
+                path:    %kernel.root_dir%/cache/test.db
+                #memory: true
+                charset: utf8
+    orm:
+        entity_managers:
+            default:
+                metadata_cache_driver: apc
+                query_cache_driver:    apc
+                result_cache_driver:   apc
+
+liip_functional_test:
+    cache_sqlite_db: true

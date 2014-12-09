@@ -27,8 +27,6 @@ class SubjectCodeRepository extends EntityRepository
     /**
      * function to pull list of faculties and subject codes (aka AANB, ENSC, etc) if available
      *
-     * @param EntityManager $em
-     *
      * @return array
      */
     public function getFacultySubjectCode()
@@ -48,5 +46,44 @@ class SubjectCodeRepository extends EntityRepository
         $subjectCode = array_combine($subjectCodeValue, $subjectCodeValue);
 
         return array($faculties, $subjectCode);
+    }
+
+    /**
+     * Get all subject code offered by a campus
+     *
+     * @param $campus string campus, e.g. UBC or UBCO
+     * @return array list of the subject code
+     */
+    public function getSubjectCodeArrayByCampus($campus) {
+        return $this->getEntityManager()
+            ->createQueryBuilder('s')
+            ->select(array('s.code', 's.department', 's.faculty', 's.campus'))
+            ->from('UBCExamMainBundle:SubjectFaculty', 's')
+            ->where('s.campus = :campus')
+            ->setParameter('campus', $campus)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+    }
+
+    /**
+     * Search subject code by campus and code
+     *
+     * @param $campus string campus, e.g. UBC or UBCO
+     * @param $subjectCode string subject code, e.g. CHIN
+     * @return mixed the subject code as an array or null if not exist
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function getSubjectCodeByCampusAndCode($campus, $subjectCode)
+    {
+        return $this->getEntityManager()
+            ->createQueryBuilder()
+            ->select(array('s.code', 's.department', 's.faculty', 's.campus'))
+            ->from('UBCExamMainBundle:SubjectFaculty', 's')
+            ->where('s.campus = :campus')
+            ->Andwhere('s.code = :code')
+            ->setParameter('campus', $campus)
+            ->setParameter('code', $subjectCode)
+            ->getQuery()
+            ->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 }
