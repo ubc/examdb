@@ -25,7 +25,13 @@ class Exam
      * @ORM\GeneratedValue(strategy="AUTO") 
      */
     protected $id;
-    
+
+    /**
+     * @ORM\Column(type="string", length=5)
+     * @Assert\NotBlank(message="Please choose a campus")
+     */
+    protected $campus;
+
     /**
      * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Please choose a faculty")
@@ -269,6 +275,22 @@ class Exam
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCampus()
+    {
+        return $this->campus;
+    }
+
+    /**
+     * @param mixed $campus
+     */
+    public function setCampus($campus)
+    {
+        $this->campus = $campus;
     }
 
     /**

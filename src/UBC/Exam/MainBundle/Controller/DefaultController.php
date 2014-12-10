@@ -212,6 +212,8 @@ class DefaultController extends Controller
 
         $form = $this->createFormBuilder($exam);
 
+        $form->add('campus', 'choice', array('empty_value' => '- Choose campus -','choices' => array('UBC', 'UBCO')));
+
         if (count($faculties) > 1) {
             $form->add('faculty', 'choice', array('empty_value' => '- Choose faculty -','choices' => $faculties));
         } else {
@@ -488,6 +490,7 @@ class DefaultController extends Controller
 
         //ok, create update form!
         $form = $this->createFormBuilder($exam)
+        ->add('campus', 'text', array('max_length' => 5))
         ->add('faculty', 'text', array('max_length' => 50))
         ->add('dept', 'text', array('max_length' => 50))
         ->add('subject_code', 'text', array('max_length' => 10))
