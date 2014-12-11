@@ -5,29 +5,15 @@
     <fieldset>
 
 	<legend>Course Information</legend>
-
+	
 	<div class="row-fluid">
-
+	
 	    <div class="span3">
-		{{ form_row(form.faculty, {'label': 'Faculty', 'label_attr': {'class': 'required-star'}}) }}
+		{{ form_label(form.campus, null, {'label': 'Campus', 'label_attr': {'class': 'required-star'}}) }}
+		{{ form_errors(form.campus) }}
+		{{ form_widget(form.campus, {'attr': {'class': 'campus-select'}}) }}
 	    </div>
-
-	    <div class="span3">
-		{{ form_row(form.dept, {'label': 'Department', 'label_attr': {'class': 'required-star'}}) }}
-	    </div>
-
-	    <div class="span3">
-	        {{ form_row(form.year, {'attr': {'placeholder': 'YYYY'}, 'label': 'Year', 'label_attr': {'class': 'required-star'}}) }}
-	    </div>
-
-	    <div class="span3">
-		{{ form_row(form.term, {'label': 'Term', 'label_attr': {'class': 'required-star'}}) }}
-	    </div>
-
-	</div>
-
-	<div class="row-fluid">
-
+	    
 	    {# upload has select box + text box, while edit only has textbox #}
 	    {% if form.subject_code.vars.form.vars.block_prefixes.1 is same as("choice") %}
 		<div class="span3">
@@ -48,6 +34,30 @@
 
 	    <div class="span3">
 		{{ form_row(form.cross_listed, {'attr': {'placeholder': 'e.g. ASTU 202'}, 'label': 'Cross-listed as (subject code)'}) }}
+	    </div>
+
+	</div>
+
+	<div class="row-fluid">
+
+	    <div class="span3">
+		{{ form_label(form.faculty, null, {'label': 'Faculty', 'label_attr': {'class': 'required-star'}}) }}
+		{{ form_errors(form.faculty) }}
+		{{ form_widget(form.faculty) }}
+	    </div>
+
+	    <div class="span3">
+		{{ form_label(form.dept, null, {'label': 'Department', 'label_attr': {'class': 'required-star'}}) }}
+		{{ form_errors(form.dept) }}
+		{{ form_widget(form.dept) }}
+	    </div>
+
+	    <div class="span3">
+	        {{ form_row(form.year, {'attr': {'placeholder': 'YYYY'}, 'label': 'Year', 'label_attr': {'class': 'required-star'}}) }}
+	    </div>
+
+	    <div class="span3">
+		{{ form_row(form.term, {'label': 'Term', 'label_attr': {'class': 'required-star'}}) }}
 	    </div>
 
 	</div>

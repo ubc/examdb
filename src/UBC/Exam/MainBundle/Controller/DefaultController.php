@@ -91,11 +91,15 @@ class DefaultController extends Controller
         //setup so we can get a list of exams to show
         $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
         $query = $repo->createQueryBuilder('e');
+        $subjectCode = '';
 
         if ($this->getRequest()->getMethod() == "POST") {
 
             $form->handleRequest($request);
             $formSubjectCodeNumber = $exam->getSubjectcode();
+
+            $subjectCode = explode(' ', $formSubjectCodeNumber);
+            $subjectCode = $subjectCode[0];
 
             //TEMPORARILY ADDING IN: catch for the case when dropdown for just letters and numbers are used
             /*$letters = $numbers = '';
@@ -180,7 +184,7 @@ class DefaultController extends Controller
 
         $this->updateuser();
 
-        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams, 'subjectCodeLabel' => $subjectCodeLabel));
+        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams, 'subjectCodeLabel' => $subjectCodeLabel, 'subjectCode' => $subjectCode));
 
     }
 
@@ -212,18 +216,13 @@ class DefaultController extends Controller
 
         $form = $this->createFormBuilder($exam);
 
-        $form->add('campus', 'choice', array('empty_value' => '- Choose campus -','choices' => array('UBC', 'UBCO')));
+        $form->add('campus', 'choice', array('empty_value' => '- Choose campus -','choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')));
 
-        if (count($faculties) > 1) {
-            $form->add('faculty', 'choice', array('empty_value' => '- Choose faculty -','choices' => $faculties));
-        } else {
-            $form->add('faculty', 'text', array('max_length' => 50));
-        }
-
-        $form->add('dept', 'text', array('max_length' => 50));
+        $form->add('faculty', 'text', array('max_length' => 50));
+        $form->add('dept', 'text', array('max_length' => 10));
 
         if (count($subjectCode) > 1) {
-            $form->add('subject_code', 'choice', array('empty_value' => '- Choose subject -', 'choices' => $subjectCode))
+            $form->add('subject_code', 'choice', array('empty_value' => '- Choose campus first -', 'choices' => $subjectCode))
                  ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
         } else {
             $form->add('subject_code', 'text', array('max_length' => 10));
@@ -490,7 +489,7 @@ class DefaultController extends Controller
 
         //ok, create update form!
         $form = $this->createFormBuilder($exam)
-        ->add('campus', 'text', array('max_length' => 5))
+        ->add('campus', 'choice', array('choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')))
         ->add('faculty', 'text', array('max_length' => 50))
         ->add('dept', 'text', array('max_length' => 50))
         ->add('subject_code', 'text', array('max_length' => 10))

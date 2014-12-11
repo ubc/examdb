@@ -1,7 +1,7 @@
 <table class="table table-striped list-uploads">
     <caption>
         {% if caption is defined %}
-            {{ caption }}  <a href="/exam/upload" class="btn btn-primary btn-small pull-right"><i class="icon-plus"></i> Add New</a>
+            {{ caption }}  <a href="{{ url('exam_upload') }}" class="btn btn-primary btn-small pull-right"><i class="icon-plus"></i> Add New</a>
         {% endif %}
     </caption>
     {% if exams %}

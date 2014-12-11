@@ -14,9 +14,9 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta charset="utf-8">
-  <title>{% block title 'UBC Assessment Material Archive' %}</title>
+  <title>{% block title 'Exam Prep Database' %}</title>
   <meta name="viewport" content="width=device-width">
-  <meta name="description" content="The UBC exams archive of assessment material used in current and past UBC courses">
+  <meta name="description" content="The UBC exam preparation database contains exams and other assessment-related material used in current and past UBC courses.">
   <meta name="author" content="">
   <!-- Stylesheets -->
   <link href="//cdn.ubc.ca/clf/7.0.4/css/ubc-clf-full.min.css" rel="stylesheet">
@@ -102,7 +102,7 @@
 	  <!-- Read more about Unit Name Treatment on http://brand.ubc.ca/clf -->
 	  <!-- No Faculty Treatment -->
 	  <div id="ubc7-unit-name" class="ubc7-single-element">
-	    <span id="ubc7-unit-identifier"><a href="{{ url('ubc_exam_main_homepage') }}">Assessment Material Archive</a></span>
+	    <span id="ubc7-unit-identifier"><a href="{{ url('ubc_exam_main_homepage') }}">Exam Prep Database</a></span>
 	  </div>
 	</div>
       </div>
@@ -128,7 +128,7 @@
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
-		<a href="{{ url('exam_guide') }}">User Guide</a>
+		<a href="{{ url('exam_guide') }}">FAQ</a>
 	      </li>
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -189,7 +189,7 @@
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
-		<a href="{{ url('exam_guide') }}">User Guide</a>
+		<a href="{{ url('exam_guide') }}">FAQ</a>
 	      </li>
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -260,5 +260,74 @@
     {% javascripts 'bundles/ubcexammain/js/*' %}
       <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
+    {% if (app.request.attributes.get('_route') == 'ubc_exam_main_homepage' and subjectCode) %}
+      <script>
+	$.ajax({
+	  type: 'GET',
+	  url: '{{ path('exam_wiki', {'subject': subjectCode}) }}',
+	  async: false, 
+	  success: function (data) {
+	    if (data.length > 0) {
+	      $(".wiki-content").html(data);  // load Wiki HTML
+	      $(".wiki-toggle").show();       // show hidden Wiki div
+	    }
+	    //alert("success");  
+	  },
+	  error: function() {
+	    //alert("error");        
+	  }
+	});
+      </script>
+    {% endif %}
+    {% if app.request.attributes.get('_route') == 'exam_upload' %}
+      <script>
+	$('.campus-select').change(function() {
+	  var thisCampus = $(".campus-select").val();
+	  var urlToUse = '{{ path('exam_campus', {'campus': 'UBC'}) }}';
+	  urlToUse = urlToUse.replace("UBC", thisCampus);
+	  $.ajax({
+	    type: 'GET',
+	    url: urlToUse,
+	    success: function (sentBack) {
+	      var json = sentBack.data;
+	      $(".campus-select[value=' ']").remove();     // campus dropdown can only toggle once selected, no null
+	      json.sort( function( a, b ) {                // sort subject codes alphabetically
+		return a.code < b.code ? -1 : a.code > b.code ? 1 : 0;
+	      });
+	      var optionItems= '<option value="" selected="selected">- Choose subject -</option>';
+	      $.each(json, function(i, item) {             // grab all subject codes for the subject dropdown list
+		optionItems += '<option value="'+ item.code +'">'+ item.code +'</option>';
+	      });
+	      $("#form_subject_code").html(optionItems);   // add subject codes to the subject  dropdown list
+	      // alert("success");  
+	    },
+	    error: function() {
+	      //alert("error");        
+	    },
+	    dataType: 'json'
+	  });
+	});
+	$('#form_subject_code').change(function() {
+	  var thisCampus = $(".campus-select").val();
+	  var thisSubject = $("#form_subject_code").val();
+	  var urlToUse = '{{ path('exam_subjectcode', {'campus': 'UBC', 'subjectCode': 'CHIN'}) }}';
+	  urlToUse = urlToUse.replace("UBC", thisCampus);
+	  urlToUse = urlToUse.replace("CHIN", thisSubject);
+	  $.ajax({
+	    type: 'GET',
+	    url: urlToUse,
+	    success: function (data) {
+	      $("#form_faculty").val(data.faculty);  // set faculty value based on subject, if available
+	      $("#form_dept").val(data.department);  // set department value based on subject, if available
+	      //alert("success");  
+	    },
+	    error: function() {
+	      //alert("error");        
+	    },
+	    dataType: 'json'
+	  });
+	});
+      </script>
+    {% endif %}
 </body>
 </html>
