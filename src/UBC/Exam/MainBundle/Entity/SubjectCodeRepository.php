@@ -9,7 +9,8 @@ use Doctrine\ORM\EntityRepository;
  */
 class SubjectCodeRepository extends EntityRepository
 {
-    public function refresh(array $codes) {
+    public function refresh(array $codes)
+    {
         //dump old subjectfaculty table
         $em = $this->getEntityManager();
         $cmd = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\SubjectFaculty');
@@ -54,7 +55,8 @@ class SubjectCodeRepository extends EntityRepository
      * @param $campus string campus, e.g. UBC or UBCO
      * @return array list of the subject code
      */
-    public function getSubjectCodeArrayByCampus($campus) {
+    public function getSubjectCodeArrayByCampus($campus)
+    {
         return $this->getEntityManager()
             ->createQueryBuilder('s')
             ->select(array('s.code', 's.department', 's.faculty', 's.campus'))
@@ -85,5 +87,31 @@ class SubjectCodeRepository extends EntityRepository
             ->setParameter('code', $subjectCode)
             ->getQuery()
             ->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+    }
+
+    public function getFacultiesByCourses($courses)
+    {
+        $subjects = array_unique(
+            array_map(function ($course) {
+                    $c = explode(' ', $course);
+                    return $c[0];
+                }, $courses)
+        );
+
+        if (empty($subjects)) {
+            return array();
+        }
+
+        $faculties = $this->getEntityManager()
+            ->createQuery(
+                'SELECT DISTINCT s.faculty FROM UBCExamMainBundle:SubjectFaculty s WHERE s.code IN (:subjects)'
+            )
+            ->setParameter('subjects', $subjects)
+            ->getResult();
+
+        return array_map(
+            function($faculty) { return $faculty['faculty']; },
+            $faculties
+        );
     }
 }

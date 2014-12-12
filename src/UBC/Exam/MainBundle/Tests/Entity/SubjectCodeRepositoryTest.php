@@ -82,6 +82,34 @@ class SubjectCodeRepositoryTest extends WebTestCase {
         ), $codes);
     }
 
+    public function testGetFacultiesByCourses()
+    {
+        $faculties = $this->getRepository()
+            ->getFacultiesByCourses(array('CHIN 101'));
+
+        $this->assertEquals(array('ARTS'), $faculties);
+
+        $faculties = $this->getRepository()
+            ->getFacultiesByCourses(array('CHIN 101', 'JAPN 101'));
+
+        $this->assertEquals(array('ARTS'), $faculties);
+
+        $faculties = $this->getRepository()
+            ->getFacultiesByCourses(array('NONE 101'));
+
+        $this->assertEmpty($faculties);
+
+        $faculties = $this->getRepository()
+            ->getFacultiesByCourses(array('CHIN101'));
+
+        $this->assertEmpty($faculties);
+
+        $faculties = $this->getRepository()
+            ->getFacultiesByCourses(array());
+
+        $this->assertEmpty($faculties);
+    }
+
     public function getRepository()
     {
         return $this->getContainer()
