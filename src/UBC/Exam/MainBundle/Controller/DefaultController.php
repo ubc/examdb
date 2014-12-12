@@ -378,35 +378,21 @@ class DefaultController extends Controller
      */
     public function downloadAction($filename)
     {
-        $returnVal = new Response('still work in progress');
-
         //try to get exam based on filename
-        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-        $exam = $repo->findOneByPath($filename);
+        $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+            ->findExamByPath($filename);
 
-        $securityContext = $this->get('security.context');
-//         $user = $securityContext->getToken()->getUser();
+        if (empty($exam)) {
+            //flash message to show lack of permission
+            $this->get('session')->getFlashBag()->add(
+                'notice',
+                'Either the exam does not exist or you do not have access to the exam'
+            );
 
-        //get what user permissions are for various departments/etc and depends on
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            //User is logged in, so need to check permissions to download
-            //but for now, we can just let them have it.
-            $returnVal = $this->downloadPDF($exam);    //need to remove and add logic to check permissions!
-        } else {
-            //user should ONLY be able to see public exams since he is NOT logged in and can't check more stuff
-            if (empty($exam) || $exam->getAccessLevelString() != 'Everyone') {
-                //flash message to show lack of permission
-                $this->get('session')->getFlashBag()->add(
-                    'notice',
-                    'Either the exam does not exist or you do not have access to the exam'
-                );
-                $returnVal = $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
-            } else {
-                $returnVal = $this->downloadPDF($exam);
-            }
+            return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
         }
 
-        return $returnVal;
+        return $this->downloadPDF($exam);
     }
 
     /**
@@ -516,6 +502,7 @@ class DefaultController extends Controller
     }
 
     /**
+     * TODO move it into a listener
      * checks and updates user profile if puid not set
      *
      * @return void

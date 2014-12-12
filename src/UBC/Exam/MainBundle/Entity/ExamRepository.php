@@ -9,8 +9,9 @@ use Doctrine\ORM\QueryBuilder;
 
 class ExamRepository extends EntityRepository
 {
-    private function addVisibleExamCriteria(QueryBuilder $qb, $user_id = 0, $faculties = array(), $courses = array()) {
-        $exp = $qb->expr()->eq('e.access_level' , 1);
+    private function addVisibleExamCriteria(QueryBuilder $qb, $user_id = 0, $faculties = array(), $courses = array())
+    {
+        $exp = $qb->expr()->eq('e.access_level', 1);
 
         if ($user_id != 0) {
             // logged in user access
@@ -88,5 +89,22 @@ class ExamRepository extends EntityRepository
 
         // TODO add cache
         return $query->getResult();
+    }
+
+    public function findExamByPath($path, $user_id = 0, $faculties = array(), $courses = array())
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('e')
+            ->from('UBCExamMainBundle:Exam', 'e')
+            ->where('e.path LIKE :path')
+            ->setParameter('path', trim($path));
+
+        $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
+
+        $query = $qb->getQuery();
+
+        // TODO add cache
+        return $query->getOneOrNullResult();
     }
 } 
