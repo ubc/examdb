@@ -1,0 +1,72 @@
+include:
+  - User.yml
+
+UBC\Exam\MainBundle\Entity\Exam:
+  exam_public{1..3}:
+    uploaded_by: @user*
+    campus: <randomElement(['UBC', 'UBCO'])>
+    faculty: <randomElement(['APSC', 'SCIE'])>
+    dept:  <randomElement(['ASIA', 'CPSC', 'MATH'])>
+    subject_code: "<bothify('???? 101')>"
+    year: <year()>
+    term: <randomElement(['W', 'S'])>
+    type: <numberBetween(1,3)>
+    comments: <paragraph()>
+    legal_content_owner: <name()>
+    legal_uploader: <name()>
+    legal_date: <dateTime()>
+    legal_agreed: 1
+    access_level: 1
+    created: <dateTime()>
+    modified: <dateTime()>
+  exam_auth{1..2}:
+    uploaded_by: @user*
+    campus: <randomElement(['UBC', 'UBCO'])>
+    faculty: <randomElement(['ARTS', 'SCIE'])>
+    dept:  <randomElement(['ASIA', 'CPSC', 'MATH'])>
+    subject_code: "<bothify('???? 201')>"
+    year: <year()>
+    term: <randomElement(['W', 'S'])>
+    type: <numberBetween(1,3)>
+    comments: <paragraph()>
+    legal_content_owner: <name()>
+    legal_uploader: <name()>
+    legal_date: <dateTime()>
+    legal_agreed: 1
+    access_level: 2
+    created: <dateTime()>
+    modified: <dateTime()>
+  exam_faculty{1..3}:
+    uploaded_by: @user*
+    campus: <randomElement(['UBC', 'UBCO'])>
+    faculty: 'ARTS'
+    dept:  <randomElement(['FHIS', 'HXEN', 'ARTH'])>
+    subject_code: "<bothify('???? 301')>"
+    year: <year()>
+    term: <randomElement(['W', 'S'])>
+    type: <numberBetween(1,3)>
+    comments: <paragraph()>
+    legal_content_owner: <name()>
+    legal_uploader: <name()>
+    legal_date: <dateTime()>
+    legal_agreed: 1
+    access_level: 3
+    created: <dateTime()>
+    modified: <dateTime()>
+  exam_course:
+    uploaded_by: @user*
+    campus: <randomElement(['UBC', 'UBCO'])>
+    faculty: 'LFS'
+    dept:  'LFS'
+    subject_code: 'LFS 200'
+    year: <year()>
+    term: <randomElement(['W', 'S'])>
+    type: <numberBetween(1,3)>
+    comments: <paragraph()>
+    legal_content_owner: <name()>
+    legal_uploader: <name()>
+    legal_date: <dateTime()>
+    legal_agreed: 1
+    access_level: 4
+    created: <dateTime()>
+    modified: <dateTime()>

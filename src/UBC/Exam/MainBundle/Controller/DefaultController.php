@@ -10,7 +10,6 @@ use UBC\Exam\MainBundle\Entity\Exam;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\DomCrawler\Crawler;
 
 /**
  * Main controller class
@@ -34,20 +33,17 @@ class DefaultController extends Controller
         $securityContext = $this->get('security.context');
         $isLoggedIn = $securityContext->isGranted('IS_AUTHENTICATED_FULLY');
 
-        //ok, create a form to get user selection of exams
         $em = $this->getDoctrine()->getManager();
-//        list($faculties, $subjectCode) = $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultySubjectCode();
 
-        $subjectCodeQuery = $em->createQueryBuilder('s')
-        ->select(array('e.subject_code'))
-        ->from('UBCExamMainBundle:Exam', 'e')
-        ->where('e.access_level != 5')  // access_level 5 is "Only me" so the subject codes that have that shouldn't show up
-        ->groupBy('e.subject_code');
+        $courses = array_keys($request->getSession()->get('courses'));
+        $faculties = $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses);
 
-        $subjectCodeResult = $subjectCodeQuery->getQuery()->getResult();
-        $uniqueSubjectCodes = array_map(create_function('$o', 'return $o["subject_code"];'), $subjectCodeResult);
+        $uniqueSubjectCodes = $em->getRepository('UBCExamMainBundle:Exam')
+            ->getAvailableSubjectCodes($this->getUser()->getId(), array_values($faculties), $courses);
+
         $subjectCodeForTwig = array_combine(array_values($uniqueSubjectCodes), array_values($uniqueSubjectCodes));
 
+        //ok, create a form to get user selection of exams
         $exam = new Exam();
 
         $form = $this->createFormBuilder($exam);
@@ -209,8 +205,13 @@ class DefaultController extends Controller
 
         //get user
         $user = $this->get('security.context')->getToken()->getUser();
-        $fname = $user->getFirstname();
-        $lname = $user->getLastname();
+        if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+            $fname = $user->getFirstname();
+            $lname = $user->getLastname();
+        } else {
+            $fname = '';
+            $lname = '';
+        }
         $first = empty($fname) ? null : $user->getFirstname().' ';
         $last = empty($lname) ? null : $user->getLastname();
 
@@ -688,7 +689,10 @@ class DefaultController extends Controller
             $securityToken = $securityContext->getToken();
             $user = $securityToken->getUser();
             $securityAttributes = $securityToken->getAttributes();
-            $userPuid = $user->getPuid();
+            $userPuid = '';
+            if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+                $userPuid = $user->getPuid();
+            }
 
             //check if we need to update user to put in puid/first/lastname
             if (!empty($securityAttributes) && isset($securityAttributes['puid']) && empty($userPuid)) {

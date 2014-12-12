@@ -1,0 +1,11 @@
+UBC\Exam\MainBundle\Entity\User:
+  user{1..10}:
+    username (unique): <username()>
+    firstname: <firstname()>
+    lastname: <lastname()>
+    password: 123456
+    email (unique): <email()>
+    puid: <current()>
+    isActive: 1
+    created: <dateTime()>
+    modified: <dateTime()>
