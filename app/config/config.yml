@@ -90,3 +90,13 @@ services:
   twig.extension.debug:
       class:        Twig_Extension_Debug
       tags: [{ name: 'twig.extension' }]
+
+ubcsisapi:
+  Auth2:
+    username: "%auth2_username%"
+    password: "%auth2_password%"
+    service_application: "%auth2_service_application%"
+    service_url:  "%auth2_service_url%"
+
+  SIS:
+    base_url: "%sis_base_url%"

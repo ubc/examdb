@@ -19,3 +19,10 @@ parameters:
     cas_path: /ubc-cas/
 
     wiki_base_url: http://wiki.ubc.ca/index.php?action=render&title=Sandbox:ExamDB/
+
+    auth2_username: username
+    auth2_password: password
+    auth2_service_application: service_app
+    auth2_service_url: https://www.auth.stg.id.ubc.ca
+
+    sis_base_url: http://sisapitest.as.it.ubc.ca:8101/sisapi/v2
