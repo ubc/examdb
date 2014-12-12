@@ -91,7 +91,7 @@ class SubjectCodeRefreshCommand extends ContainerAwareCommand
 
         $xmlFiles = $locator->locate('department_code.xml', null, false);
         if (count($xmlFiles) == 1) {
-            $logger->writeln('Loading XM from ' . $xmlFiles[0]);
+            $logger->writeln('Loading XML from ' . $xmlFiles[0]);
             $departmentCodes =
                 $serializer->deserialize(
                     file_get_contents($xmlFiles[0]),
