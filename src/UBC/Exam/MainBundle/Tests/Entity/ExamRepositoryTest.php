@@ -13,11 +13,7 @@ class ExamRepositoryTest extends WebTestCase {
     public function setUp()
     {
         parent::setUp();
-        $manager = $this->getContainer()->get('h4cc_alice_fixtures.manager');
-        $set = $manager->createFixtureSet();
-        $set->addFile(__DIR__ . '/../Fixtures/Exam.yml', 'yaml');
-        $set->setDoPersist(true);
-        $manager->load($set);
+        $this->loadFixtures(array('UBC\Exam\MainBundle\Tests\Fixtures\ExamFixtures'));
     }
 
     public function testGetAvailableSubjectCodes()
@@ -62,6 +58,20 @@ class ExamRepositoryTest extends WebTestCase {
         $code = $this->getRepository()
             ->getAvailableSubjectCodes(0, array('ARTS'), array('LFS 200'));
         $this->assertEquals(3, count($code), 'should only have 3 public exam');
+    }
+
+    public function testFindExamsByCourse()
+    {
+        $exmas = $this->getRepository()
+            ->findExamsByCourse('LFS 200', 1, array(), array('LFS 200'));
+
+        $this->assertEquals(1, count($exmas));
+        $this->assertAttributeEquals('LFS 200', 'subject_code', $exmas[0]);
+
+        $exmas = $this->getRepository()
+            ->findExamsByCourse('CHIN 200', 1, array('ARTS'), array('LFS 200'));
+
+        $this->assertEmpty($exmas);
     }
 
     public function getRepository()

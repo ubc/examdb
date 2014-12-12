@@ -36,152 +36,45 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $courses = array_keys($request->getSession()->get('courses'));
-        $faculties = $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses);
+        $faculties = array_values(
+            $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
+        );
 
         $uniqueSubjectCodes = $em->getRepository('UBCExamMainBundle:Exam')
-            ->getAvailableSubjectCodes($this->getUser()->getId(), array_values($faculties), $courses);
+            ->getAvailableSubjectCodes($this->getUser()->getId(), $faculties, $courses);
 
         $subjectCodeForTwig = array_combine(array_values($uniqueSubjectCodes), array_values($uniqueSubjectCodes));
 
         //ok, create a form to get user selection of exams
         $exam = new Exam();
+        $formBuilder = $this->createFormBuilder($exam);
+        $formBuilder->add('subject_code', 'choice', array('required' => false, 'label' => 'Type a course code to see matching courses', 'empty_value' => '- Choose course code -', 'choices' => $subjectCodeForTwig));
+        $formBuilder->add('search', 'submit');
+        $form = $formBuilder->getForm();
 
-        $form = $this->createFormBuilder($exam);
-
-        $form->add('subject_code', 'choice', array('required' => false, 'label' => 'Type a course code to see matching courses', 'empty_value' => '- Choose course code -', 'choices' => $subjectCodeForTwig));
-
-        /**
-         * TEMPORARILY ADDING IN: subject code so that folks can type in stuff if they want to instead of dropdown only
-         */
-        /*if (count($subjectCode) > 1) {
-            $form->add('subject_code_letters', 'choice', array('mapped' => false, 'required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
-            ->add('subject_code_numbers', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
-        } else {
-            $form->add('subject_code_letters', 'text', array('label' => 'Subject Code Text Entry', 'mapped' => false, 'required' => false, 'max_length' => 10));
-        }*/
 
         $subjectCodeLabel = '';
-
-        /*  removed to make the interface simpler!
-        $form->add('year', 'text', array('required' => false))
-            ->add('term', 'choice', array('required' => false, 'empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
-            ->add('legal_content_owner', 'text', array('required' => false, 'max_length' => 100));
-
-        if (count($subjectCode) > 1) {
-            $form->add('subject_code', 'choice', array('required' => false, 'empty_value' => '- Choose subject -', 'choices' => $subjectCode))
-                ->add('subject_code_number', 'text', array('required' => false, 'label' => false, 'mapped' => false, 'max_length' => 5));   //extra field to split up code form number
-        } else {
-            $form->add('subject_code', 'text', array('required' => false, 'max_length' => 10));
-        }
-
-        if (count($faculties) > 1) {
-            $form->add('faculty', 'choice', array('required' => false, 'empty_value' => '- Choose faculty -','choices' => $faculties));
-        } else {
-            $form->add('faculty', 'text', array('required' => false, 'max_length' => 50));
-        }*/
-
-        $form->add('search', 'submit');
-
-        $form = $form->getForm();
-
-        //setup so we can get a list of exams to show
-        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-        $query = $repo->createQueryBuilder('e');
         $subjectCode = '';
+        $exams = array();
 
         if ($this->getRequest()->getMethod() == "POST") {
-
             $form->handleRequest($request);
-            $formSubjectCodeNumber = $exam->getSubjectcode();
-
-            $subjectCode = explode(' ', $formSubjectCodeNumber);
+            $subjectCodeLabel = $exam->getSubjectcode();
+            $subjectCode = explode(' ', $subjectCodeLabel);
             $subjectCode = $subjectCode[0];
+            $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+                ->findExamsByCourse($exam->getSubjectcode(), $this->getUser()->getId(), $faculties, $courses);
 
-            //TEMPORARILY ADDING IN: catch for the case when dropdown for just letters and numbers are used
-            /*$letters = $numbers = '';
-            if ($form->has('subject_code_letters')) {
-                $letters = trim($form->get('subject_code_letters')->getData());
-            }
-            if ($form->has('subject_code_numbers')) {
-                $numbers = trim($form->get('subject_code_numbers')->getData());
-            }
-            if ($form->has('subject_code_letters') && !empty($letters)) {
-                $formSubjectCodeNumber = $letters;
-            }
-            if ($form->has('subject_code_numbers') && !empty($numbers)) {
-                if ($form->has('subject_code_letters') && !empty($letters)) {
-                    $formSubjectCodeNumber = $letters.' '.$numbers;
-                } else {
-                    $formSubjectCodeNumber = $numbers;
-                }
-            }*/
-
-            //need try/catch so that it doesn't puke if subject_code_number doesn't exist
-            /* if ($form->has('subject_code_number')) {
-                $combinedCode = $exam->getSubjectcode().' '.trim($form->get('subject_code_number')->getData());
-                if (strlen($combinedCode) > 3) {
-                    $formSubjectCodeNumber = trim($combinedCode);
-                }
-            } */
-
-            $exam->setSubjectcode($formSubjectCodeNumber);
-
-            //setup query based on exam return stuff
-            $query = $query->where('e.access_level != 5');  //5 is "Only me" level.  It's new.  index should NOT show this EVER!
-
-            /* $yearParameter = trim($exam->getYear());
-            if (!empty($yearParameter)) {
-                $query = $query->orWhere('e.year = :year')
-                    ->setParameter('year', $yearParameter);
-            }
-
-            $termParameter = trim($exam->getTerm());
-            if (!empty($termParameter)) {
-                $query = $query->orWhere('e.term = :term')
-                    ->setParameter('term', $termParameter);
-            }
-
-            $legalContentOwnerParameter = trim($exam->getLegalContentOwner());
-            if (!empty($legalContentOwnerParameter)) {
-                //want to say thanks to http://stackoverflow.com/questions/2843009/how-to-escape-like-var-with-doctrine
-                $legalContentOwnerParameter = addcslashes($legalContentOwnerParameter, "%_");
-                $query = $query->orWhere($query->expr()->like('e.legal_content_owner', ':legalContentOwner'))
-                    ->setParameter('legalContentOwner', '%'.$legalContentOwnerParameter.'%');
-            }
-
-            $facultyParameter = trim($exam->getFaculty());
-            if (!empty($facultyParameter)) {
-                $query = $query->orWhere('e.faculty = :faculty')
-                    ->setParameter('faculty', $facultyParameter);
-            }*/
-
-            $subjectCodeParameter = trim($exam->getSubjectcode());
-            $subjectCodeLabel = $subjectCodeParameter;
-
-            if (!empty($subjectCodeParameter)) {
-                $subjectCodeParameter = addcslashes($subjectCodeParameter, "%_");   //sanitizing
-                $query = $query->andWhere($query->expr()->like('e.subject_code', ':subjectCodeParameter'))
-                    ->setParameter('subjectCodeParameter', '%'.$subjectCodeParameter.'%');
-            }
-
-        } else {
-
-            /**
-             * need to stick in some more logic to determine:
-             * - if logged in, what courses the user can see
-             * - if not logged in, then don't worry about doing query even!
-             */
-
-            /* $query = $query->orderBy('e.created', 'DESC'); */
         }
-
-        $query = $query->getQuery();
-        $exams = $query->getResult();
-
+        // TODO move to a listener
         $this->updateuser();
 
-        return $this->render('UBCExamMainBundle:Default:index.html.twig', array('form' => $form->createView(), 'isLoggedIn' => $isLoggedIn, 'exams' => $exams, 'subjectCodeLabel' => $subjectCodeLabel, 'subjectCode' => $subjectCode));
-
+        return $this->render('UBCExamMainBundle:Default:index.html.twig', array(
+            'form' => $form->createView(),
+            'exams' => $exams,
+            'subjectCodeLabel' => $subjectCodeLabel,
+            'subjectCode' => $subjectCode
+        ));
     }
 
     /**
@@ -300,60 +193,6 @@ class DefaultController extends Controller
 
         return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams, 'username' => $user->getUsername()));
     }
-
-    /**
-     * special call to refresh info from https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0
-     * I stil need to think about the best way to do this.
-     *
-     * !!This feature has been moved to console command line!!
-     * Run php app/console exam:subjectcode:refresh
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-/*    public function refreshAction()
-    {
-        //get page content
-        $ch = curl_init('https://courses.students.ubc.ca/cs/main?pname=subjarea&tname=subjareas&req=0');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $curlScrapedPage = curl_exec($ch);
-        curl_close($ch);
-
-        //clean up spaces between elements, cause by default, spaces between element tags are considered textnodes! whaaaaaa?
-        $curlScrapedPageCleaned = preg_replace("/>\s+</", "><", $curlScrapedPage);
-
-        //ok, NOW start parsing
-        $crawler = new Crawler($curlScrapedPageCleaned);
-        $crawler = $crawler->filter('body table#mainTable tbody tr');
-
-        //checks if results empty, then don't update!
-        if (count($crawler) > 0) {
-            $subjectsFaculties = array();
-            foreach ($crawler as $domElement) {
-                $children = $domElement->childNodes;
-                $subjectsFaculties[] = array('code' => preg_replace('/[^A-Z]/', '', $children->item(0)->nodeValue),
-                                        'title' => $children->item(1)->nodeValue,
-                                        'faculty' => $children->item(2)->nodeValue);
-            }
-
-            //dump old subjectfaculty table
-            $em = $this->getDoctrine()->getManager();
-            $cmd = $em->getClassMetadata('UBC\Exam\MainBundle\Entity\SubjectFaculty');
-            $dbPlatform = $em->getConnection()->getDatabasePlatform();
-            $dbPlatform->getTruncateTableSql($cmd->getTableName());
-
-            //insert new subjectfaculties
-            foreach ($subjectsFaculties as $subjectFaculty) {
-                $newSubjectFaculty = new SubjectFaculty();
-                $newSubjectFaculty->setCode($subjectFaculty['code']);
-                $newSubjectFaculty->setTitle($subjectFaculty['title']);
-                $newSubjectFaculty->setFaculty($subjectFaculty['faculty']);
-                $em->persist($newSubjectFaculty);
-            }
-            $em->flush();
-        }
-
-        return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
-    }*/
 
     /**
      * not sure what this is.  It's set in security.yaml check_path of the firewalls.ubc_secured_area.trusted_sso.checkpath.
