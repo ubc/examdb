@@ -21,7 +21,7 @@ class AppKernel extends Kernel
             new Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle(),
 //            new BeSimple\SsoAuthBundle\BeSimpleSsoAuthBundle(),
             new Gorg\Bundle\CasBundle\GorgCasBundle(),  //also need to add "gorg/cas-bundle": "master" to the required part of composer.json,
-            new UBC\SISAPIBundle\UBCSISAPIBundle(),
+            new UBC\LtCommonsBundle\UBCLtCommonsBundle(),
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
         );
 

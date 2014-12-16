@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4ce8c26cc924457996f02c3721635d74",
+    "hash": "c82a7075158e50c97dd4332701d6afd6",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2290,17 +2290,17 @@
             "time": "2014-10-17 12:53:44"
         },
         {
-            "name": "ubc/sisapi",
+            "name": "ubc/ltcommons",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ubc/sisapi.git",
-                "reference": "7ceffe729a98329b50c0ae600c30ce4030f8f0aa"
+                "url": "https://github.com/ubc/ltcommons.git",
+                "reference": "7e7ebd22f41c4b6a9502ae41c5e79107745ab69f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubc/sisapi/zipball/7ceffe729a98329b50c0ae600c30ce4030f8f0aa",
-                "reference": "7ceffe729a98329b50c0ae600c30ce4030f8f0aa",
+                "url": "https://api.github.com/repos/ubc/ltcommons/zipball/7e7ebd22f41c4b6a9502ae41c5e79107745ab69f",
+                "reference": "7e7ebd22f41c4b6a9502ae41c5e79107745ab69f",
                 "shasum": ""
             },
             "require": {
@@ -2308,10 +2308,7 @@
                 "guzzlehttp/guzzle": "5.0.*",
                 "jms/serializer": "~0.16",
                 "pear-pear.php.net/xml_rpc": "1.5.5",
-                "symfony/config": "~2.3",
-                "symfony/dependency-injection": "~2.3",
-                "symfony/proxy-manager-bridge": "~2.3",
-                "symfony/yaml": "~2.3"
+                "symfony/config": "~2.3"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.3.*"
@@ -2319,7 +2316,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "UBC\\SISAPI\\": "src/SISAPI/"
+                    "UBC\\LtCommons\\": "src/LtCommons/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2334,38 +2331,42 @@
                     "role": "Developer"
                 }
             ],
-            "description": "UBC SIS API Services",
-            "homepage": "http://github.com/ubc/sisapi",
+            "description": "UBC LT Commons",
+            "homepage": "http://github.com/ubc/ltcommons",
             "keywords": [
+                "ltcommons",
                 "sis",
                 "ubc"
             ],
-            "time": "2014-12-11 00:39:18"
+            "time": "2014-12-16 22:32:54"
         },
         {
-            "name": "ubc/sisapi-bundle",
+            "name": "ubc/ltcommons-bundle",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/ubc/sisapi-bundle.git",
-                "reference": "2707530d7b268e7791ebac29f230f159c1c2cfff"
+                "url": "https://github.com/ubc/ltcommons-bundle.git",
+                "reference": "597de53ada8c08608f491fe7984bdeb096c6b2e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubc/sisapi-bundle/zipball/2707530d7b268e7791ebac29f230f159c1c2cfff",
-                "reference": "2707530d7b268e7791ebac29f230f159c1c2cfff",
+                "url": "https://api.github.com/repos/ubc/ltcommons-bundle/zipball/597de53ada8c08608f491fe7984bdeb096c6b2e4",
+                "reference": "597de53ada8c08608f491fe7984bdeb096c6b2e4",
                 "shasum": ""
             },
             "require": {
-                "ubc/sisapi": "dev-master"
+                "php": ">=5.3.3",
+                "symfony/http-kernel": "~2.2",
+                "ubc/ltcommons": "dev-master"
             },
             "require-dev": {
-                "phpunit/phpunit": "4.3.*"
+                "phpunit/phpunit": "4.3.*",
+                "symfony/dependency-injection": "~2.3"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "UBC\\SISAPIBundle\\": ""
+                    "UBC\\LtCommonsBundle\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -2380,14 +2381,14 @@
                     "role": "Developer"
                 }
             ],
-            "description": "SIS API library bundle for Symfony 2",
-            "homepage": "http://github.com/ubc/sisapi-bundle",
+            "description": "LtCommons bundle for Symfony 2",
+            "homepage": "http://github.com/ubc/ltcommons-bundle",
             "keywords": [
                 "bundle",
                 "sis",
                 "ubc"
             ],
-            "time": "2014-12-11 08:24:45"
+            "time": "2014-12-16 22:35:37"
         }
     ],
     "packages-dev": [
@@ -5361,7 +5362,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "ubc/sisapi-bundle": 20,
+        "ubc/ltcommons-bundle": 20,
         "sensio/buzz-bundle": 20,
         "doctrine/data-fixtures": 20,
         "liip/functional-test-bundle": 20,

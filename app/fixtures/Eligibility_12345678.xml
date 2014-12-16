@@ -1,0 +1,49 @@
+<eligibility xmlns="http://ubc.ca/sis/services/sisapi" xmlns:atom="http://www.w3.org/2005/Atom">
+    <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/202672233" rel="self"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/202672233/sessionEvaluation" rel="http://sis.ubc.ca/rels/sessionEvaluation"/>
+    <programCategory>DEGR</programCategory>
+    <program>MED</program>
+    <programVersion/>
+    <yearLevel/>
+    <dualDegreeCode/>
+    <specializations>
+        <specialization>
+            <primary>
+                <type/>
+                <subject>HIED</subject>
+            </primary>
+        </specialization>
+    </specializations>
+    <faculties>
+        <faculty>
+            <type>administering</type>
+            <name>EDUC</name>
+        </faculty>
+        <faculty>
+            <type>awarding</type>
+            <name>GRAD</name>
+        </faculty>
+    </faculties>
+    <year>2005</year>
+    <session>W</session>
+    <status>REGI</status>
+    <campus>UBC</campus>
+    <sections>
+        <sectionRef>
+            <atom:link href="http://sisapi.example.com/sisapi/v2/section/1" rel="http://sis.ubc.ca/rels/section"/>
+            <year>2005</year>
+            <session>W</session>
+            <terms>
+                <term>2</term>
+            </terms>
+        </sectionRef>
+        <sectionRef>
+            <atom:link href="http://sisapi.example.com/sisapi/v2/section/2" rel="http://sis.ubc.ca/rels/section"/>
+            <year>2005</year>
+            <session>W</session>
+            <terms>
+                <term>2</term>
+            </terms>
+        </sectionRef>
+    </sections>
+</eligibility>

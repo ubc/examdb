@@ -5,7 +5,6 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 }
 
 if (!in_array(@$_SERVER['REMOTE_ADDR'], array(
-    '10.0.2.2',  # vagrant host ip
     '127.0.0.1',
     '::1',
 ))) {

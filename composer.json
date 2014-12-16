@@ -29,7 +29,7 @@
         "gorg/cas-bundle": "master",
         "symfony/dom-crawler": "2.3.*",
         "symfony/css-selector": "2.3.*",
-        "ubc/sisapi-bundle": "dev-master",
+        "ubc/ltcommons-bundle": "dev-master",
         "sensio/buzz-bundle": "dev-master"
     },
     "require-dev": {

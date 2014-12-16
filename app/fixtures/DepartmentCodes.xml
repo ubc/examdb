@@ -1,0 +1,27 @@
+<departmentCodes xmlns="http://ubc.ca/sis/services/sisapi" xmlns:atom="http://www.w3.org/2005/Atom">
+    <departmentCode>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/departmentCode/AWFA~UBC" rel="self"/>
+        <id>urn:ubc:departmentCode:AWFA~UBC</id>
+        <code>AWFA</code>
+        <adminCampusCode>UBC</adminCampusCode>
+        <description>AWARDS + FINANCIAL AID</description>
+        <adminFacultyCode/>
+    </departmentCode>
+    <departmentCode>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/departmentCode/BKST~UBC" rel="self"/>
+        <id>urn:ubc:departmentCode:BKST~UBC</id>
+        <code>BKST</code>
+        <adminCampusCode>UBC</adminCampusCode>
+        <description>BOOKSTORE</description>
+        <adminFacultyCode/>
+    </departmentCode>
+    <departmentCode>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/departmentCode/HSCI~UBC" rel="self"/>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/facultyCode/HSCO" rel="http://sis.ubc.ca/rels/facultyCode"/>
+        <id>urn:ubc:departmentCode:HSCI~UBC</id>
+        <code>HSCI</code>
+        <adminCampusCode>UBC</adminCampusCode>
+        <description>HEALTH SCIENCES</description>
+        <adminFacultyCode>HSCO</adminFacultyCode>
+    </departmentCode>
+</departmentCodes>

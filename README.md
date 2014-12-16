@@ -98,7 +98,11 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
 5. Setup Exam Database system
   1. Create the DB tables: ```php app/console doctrine:schema:update --force```
   2. Copy over CSS and JavaScript from src to web folder: ```php app/console assetic:dump --env=prod```
-  3. Refresh the subject/department code (with --local to refresh from SIS): ```php app/console exam:subjectcode:refresh --local```
+  3. Refresh the subject/department code (without --local to refresh from SIS): ```php app/console exam:subjectcode:refresh --local```
+  4. Create a test user: ```php app/console doctrine:query:sql "INSERT INTO user (username, password, puid, is_active) VALUES ('test', 'test', '12345678', 1);"```
+    * Username and password are both test
+    * puid should be 12345678, which is the ID used in app/fixtures data for local SIS data repository
+    * The test fixture contains two sections: MATH 101 and ENGL 100
 
 5. Open a browser from host
     
@@ -126,7 +130,9 @@ NOTES
     ```
 * to make the system work standalone (aka skipping out using CAS), you'll need to make a few changes:
   * modify app/config/security_prod.yml and change security_cas.yml to security_internal.yml
-  * insert a user into DB manually (make sure you're in the vagrant instance! eg. cd <path_to_examdb_folder>;vagrant ssh;mysql -uroot -p examdb)
-      ```sql
-      insert into user (username, password) values ('blah', 'blah');
+  * insert a user into DB manually 
+      ```
+      vagrant ssh
+      cd /vagrant
+      php app/console doctrine:query:sql "INSERT INTO user (username, password, puid, is_active) VALUES ('test', 'test', '12345678', 1);
       ```
