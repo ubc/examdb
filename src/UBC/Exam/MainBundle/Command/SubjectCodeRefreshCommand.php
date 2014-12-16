@@ -10,6 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
+use UBC\LtCommons\Provider\XMLDataProvider;
+use UBC\LtCommons\Serializer\JMSSerializer;
 
 class SubjectCodeRefreshCommand extends ContainerAwareCommand
 {
@@ -72,33 +74,14 @@ class SubjectCodeRefreshCommand extends ContainerAwareCommand
 
     protected function refreshFromLocal(OutputInterface $logger)
     {
-        $serializer = $this->getContainer()->get('sisapi.serializer');
+        $path = __DIR__ . '/../Resources/fixtures/';
+        $provider = new XMLDataProvider($path, new JMSSerializer());
 
-        $locator = new FileLocator(array(__DIR__ . '/../Resources/fixtures'));
-        $subjectCodes = array();
-        $departmentCodes = array();
+        $logger->writeln('Loading subject code from XML in ' . $path);
+        $subjectCodes = $provider->getSubjectCodes();
 
-        $xmlFiles = $locator->locate('subject_code.xml', null, false);
-        if (count($xmlFiles) == 1) {
-            $logger->writeln('Loading XM from ' . $xmlFiles[0]);
-            $subjectCodes =
-                $serializer->deserialize(
-                    file_get_contents($xmlFiles[0]),
-                    'UBC\SISAPI\Entity\SubjectCodes',
-                    'xml'
-                );
-        }
-
-        $xmlFiles = $locator->locate('department_code.xml', null, false);
-        if (count($xmlFiles) == 1) {
-            $logger->writeln('Loading XM from ' . $xmlFiles[0]);
-            $departmentCodes =
-                $serializer->deserialize(
-                    file_get_contents($xmlFiles[0]),
-                    'UBC\SISAPI\Entity\DepartmentCodes',
-                    'xml'
-                );
-        }
+        $logger->writeln('Loading department code from XML in ' . $path);
+        $departmentCodes = $provider->getDepartmentCodes();
 
         return array($subjectCodes, $departmentCodes);
     }
@@ -107,17 +90,16 @@ class SubjectCodeRefreshCommand extends ContainerAwareCommand
      * @param OutputInterface $logger
      * @return array
      */
-    protected
-    function refreshFromSIS(OutputInterface $logger)
+    protected function refreshFromSIS(OutputInterface $logger)
     {
         $logger->writeln('Calling SIS API to get subject codes...');
 
-        $subjectCodeService = $this->getContainer()->get('sisapi.subject_code');
+        $subjectCodeService = $this->getContainer()->get('ubc_lt_commons.service.subject_code');
         $subjectCodes = $subjectCodeService->getSubjectCodes();
 
         $logger->writeln('Calling SIS API to get faculty codes...');
 
-        $departmentCodeService = $this->getContainer()->get('sisapi.department_code');
+        $departmentCodeService = $this->getContainer()->get('ubc_lt_commons.service.department_code');
         $departmentCodes = $departmentCodeService->getDepartmentCodes();
 
         return array($subjectCodes, $departmentCodes);

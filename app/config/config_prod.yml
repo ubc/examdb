@@ -22,3 +22,17 @@ monolog:
             type:  stream
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
+
+ubc_lt_commons:
+  providers:
+    sis:
+      base_url:            %sis_base_url%
+      http_client:         Guzzle
+      auth:
+        module:              Auth2
+        rpc_path:            "/auth/rpc"
+        username:            %auth2_username%
+        password:            %auth2_password%
+        service_application: %auth2_service_application%
+        service_url:         %auth2_service_url%
+      serializer:          JMS

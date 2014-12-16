@@ -85,13 +85,7 @@
                                 </td>
                             {% endif %}
                             <td>
-                                <!-- show button *only* if user can download this file
-                                     FUTURE TO DO: for now just use public as the identifier till we have SIS done -->
-                                {% if exam.getAccessLevelString == "Everyone" %}
-                                    <a class="btn-download btn btn-primary" href="{{ exam.getWebPath }}"><i class="icon-download-alt"></i> Download</a>
-                                {% else %}
-                                    <em class="muted">File access limited to {{ exam.getAccessLevelString }}</em>
-                                {% endif %}
+                                <a class="btn-download btn btn-primary" href="{{ exam.getWebPath }}"><i class="icon-download-alt"></i> Download</a>
                             </td>
                             <td class="hidden-phone">
                                 {{ exam.getTypeString }}

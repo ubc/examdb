@@ -9,10 +9,10 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\Container;
 use UBC\Exam\MainBundle\Command\SubjectCodeRefreshCommand;
-use UBC\SISAPI\Entity\DepartmentCode;
-use UBC\SISAPI\Entity\DepartmentCodes;
-use UBC\SISAPI\Entity\SubjectCode;
-use UBC\SISAPI\Entity\SubjectCodes;
+use UBC\LtCommons\Entity\DepartmentCode;
+use UBC\LtCommons\Entity\DepartmentCodes;
+use UBC\LtCommons\Entity\SubjectCode;
+use UBC\LtCommons\Entity\SubjectCodes;
 
 class SubjectCodeRefreshCommandTest extends WebTestCase
 {
@@ -47,14 +47,14 @@ class SubjectCodeRefreshCommandTest extends WebTestCase
             ->will($this->returnSelf());
 
         // mock services
-        $mockSubjectCodeService = $this->getMockBuilder('UBC\SISAPI\Service\SubjectCodeService')
+        $mockSubjectCodeService = $this->getMockBuilder('UBC\LtCommons\Service\SubjectCodeService')
             ->disableOriginalConstructor()
             ->getMock();
         $mockSubjectCodeService->expects($this->once())
             ->method('getSubjectCodes')
             ->will($this->returnValue($this->getSubjectCodes()));
 
-        $mockDepartmentCodeService = $this->getMockBuilder('UBC\SISAPI\Service\DepartmentCodeService')
+        $mockDepartmentCodeService = $this->getMockBuilder('UBC\LtCommons\Service\DepartmentCodeService')
             ->disableOriginalConstructor()
             ->getMock();
         $mockDepartmentCodeService->expects($this->once())
@@ -87,8 +87,8 @@ class SubjectCodeRefreshCommandTest extends WebTestCase
 
         $mapping = array(
             array('logger', Container::EXCEPTION_ON_INVALID_REFERENCE, $logger),
-            array('sisapi.subject_code', Container::EXCEPTION_ON_INVALID_REFERENCE, $mockSubjectCodeService),
-            array('sisapi.department_code', Container::EXCEPTION_ON_INVALID_REFERENCE, $mockDepartmentCodeService),
+            array('ubc_lt_commons.service.subject_code', Container::EXCEPTION_ON_INVALID_REFERENCE, $mockSubjectCodeService),
+            array('ubc_lt_commons.service.department_code', Container::EXCEPTION_ON_INVALID_REFERENCE, $mockDepartmentCodeService),
             array('doctrine', Container::EXCEPTION_ON_INVALID_REFERENCE, $registry)
         );
 

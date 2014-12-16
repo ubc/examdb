@@ -1,0 +1,26 @@
+<subjectCodes xmlns="http://ubc.ca/sis/services/sisapi" xmlns:atom="http://www.w3.org/2005/Atom">
+    <subjectCode>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/subjectCode/AWFA~UBC" rel="self"/>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/departmentCode/AWFA~UBC" rel="http://sis.ubc.ca/rels/departmentCode"/>
+        <id>urn:ubc:subjectCode:AWFA~UBC</id>
+        <adminCampusCode>UBC</adminCampusCode>
+        <fullDescription>AWARDS + FINANCIAL AID</fullDescription>
+        <departmentCode>AWFA</departmentCode>
+    </subjectCode>
+    <subjectCode>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/subjectCode/BKST~UBC" rel="self"/>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/departmentCode/BKST~UBC" rel="http://sis.ubc.ca/rels/departmentCode"/>
+        <id>urn:ubc:subjectCode:BKST~UBC</id>
+        <adminCampusCode>UBC</adminCampusCode>
+        <fullDescription>BOOKSTORE</fullDescription>
+        <departmentCode>BKST</departmentCode>
+    </subjectCode>
+    <subjectCode>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/subjectCode/AMS~UBC" rel="self"/>
+        <atom:link href="http://sisapitest.as.it.ubc.ca:8101/sisapi/v2/departmentCode/AMS~UBC" rel="http://sis.ubc.ca/rels/departmentCode"/>
+        <id>urn:ubc:subjectCode:AMS~UBC</id>
+        <adminCampusCode>UBC</adminCampusCode>
+        <fullDescription>ALMA MATER SOCIETY</fullDescription>
+        <departmentCode>AMS</departmentCode>
+    </subjectCode>
+</subjectCodes>

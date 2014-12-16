@@ -296,6 +296,22 @@ class User implements UserInterface, EquatableInterface, \Serializable
     }
 
     /**
+     * @return boolean
+     */
+    public function isActive()
+    {
+        return $this->isActive;
+    }
+
+    /**
+     * @param boolean $isActive
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+    }
+
+    /**
      * Get created
      *
      * @return \DateTime

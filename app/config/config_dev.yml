@@ -30,3 +30,9 @@ assetic:
     bundles:        [ ]
 #swiftmailer:
 #    delivery_address: me@example.com
+
+ubc_lt_commons:
+  providers:
+    xml:
+      path: "%kernel.root_dir%/fixtures/"
+      serializer: JMS

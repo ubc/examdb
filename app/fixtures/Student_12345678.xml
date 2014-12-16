@@ -1,0 +1,13 @@
+<student xmlns="http://ubc.ca/sis/services/sisapi" xmlns:atom="http://www.w3.org/2005/Atom">
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55" rel="self"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/eligibilities" rel="http://sis.ubc.ca/rels/eligibilities"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/programEnrolments" rel="http://sis.ubc.ca/rels/programEnrolments"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/awards" rel="http://sis.ubc.ca/rels/studentAwards"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/loans" rel="http://sis.ubc.ca/rels/studentLoans"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/comments" rel="http://sis.ubc.ca/rels/studentComments"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/esp" rel="http://sis.ubc.ca/rels/esp"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/disabilityDeclarations" rel="http://sis.ubc.ca/rels/disabilityDeclarations"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/ubcCardInfo" rel="http://sis.ubc.ca/rels/ubcCardInfo"/>
+    <id>urn:ubc:PUID:WYZ2B1O7QD55</id>
+    <studentNumber>12345678</studentNumber>
+</student>

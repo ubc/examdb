@@ -59,3 +59,9 @@ doctrine:
 
 liip_functional_test:
     cache_sqlite_db: true
+
+ubc_lt_commons:
+  providers:
+    xml:
+      path: "%kernel.root_dir%/fixtures/"
+      serializer: JMS

@@ -1,0 +1,64 @@
+<eligibilities xmlns="http://ubc.ca/sis/services/sisapi" xmlns:atom="http://www.w3.org/2005/Atom">
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55/eligibilities" rel="self"/>
+    <atom:link href="http://sisapi.example.com/sisapi/v2/student/WYZ2B1O7QD55" rel="http://sis.ubc.ca/rels/student"/>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/202672233" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2005</year>
+        <session>W</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/226444769" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2006</year>
+        <session>S</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/231369970" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2006</year>
+        <session>W</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/253267541" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2007</year>
+        <session>S</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/257274384" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2007</year>
+        <session>W</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/279317070" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2008</year>
+        <session>S</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/279442187" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2008</year>
+        <session>W</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/305504925" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2009</year>
+        <session>S</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/309804148" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2009</year>
+        <session>W</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/328182097" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2010</year>
+        <session>S</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/332056107" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2010</year>
+        <session>W</session>
+    </eligibilityRef>
+    <eligibilityRef>
+        <atom:link href="http://sisapi.example.com/sisapi/v2/eligibility/351657194" rel="http://sis.ubc.ca/rels/eligibility"/>
+        <year>2011</year>
+        <session>S</session>
+    </eligibilityRef>
+</eligibilities>
