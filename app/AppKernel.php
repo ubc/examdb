@@ -42,4 +42,13 @@ class AppKernel extends Kernel
     {
         $loader->load(__DIR__.'/config/config_'.$this->getEnvironment().'.yml');
     }
+
+    public function getLogDir()
+    {
+        if (false !== getEnv('OPENSHIFT_LOG_DIR')) {
+            return getEnv('OPENSHIFT_LOG_DIR');
+        } else {
+            return parent::getLogDir();
+        }
+    }
 }
