@@ -21,10 +21,6 @@ export GIT_DIR=$GIT_DIR_SAVE ; unset GIT_DIR_SAVE
 export GIT_WORK_TREE=$GIT_WORK_TREE_SAVE ; unset GIT_WORK_TREE
 
 chmod -R 0777 $OPENSHIFT_REPO_DIR/app/cache
-chmod -R 0777 $OPENSHIFT_REPO_DIR/app/logs
-
-# copy the parameters.yml
-cp $OPENSHIFT_DATA_DIR/parameters.yml $OPENSHIFT_REPO_DIR/app/config/parameters.yml
 
 php app/console doctrine:schema:update --force
 php app/console cache:clear --env=prod
