@@ -8,9 +8,13 @@ Running in 5 mins
 2. Install [CLI](https://www.openshift.com/developers/rhc-client-tools-install)
 3. Provision the application by running the following command:
 
-    rhc app create examdb php-5.4 mysql-5.5 phpmyadmin-4 --from-code=https://github.com/ubc/examdb.git
+        rhc app create examdb php-5.4 mysql-5.5 phpmyadmin-4 --from-code=https://github.com/ubc/examdb.git
 
-4. Open the browser and enter the URL printed from the result of above command.
+4. Setup custom parameters by custom environment variable: (for full list of available env variables, see app/config/params.php)s
+
+        rhc env set auth2_username=service_username auth2_password=service_password auth2_service_application=service_app -a examdb 
+
+5. Open the browser and enter the URL printed from the result of above command.
 
 Detailed Version
 ----------------
@@ -69,7 +73,7 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
     ```
     vagrant plugin install vagrant-hostmanager
     ```
-    
+
     Otherwise, you will need to manually add the following line to your /etc/hosts
 
     ```
@@ -81,7 +85,7 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
     ```
     git clone git@github.com:ubc/examdb.git
     ```
-    
+
 3. Setup the Dev VM
 
     ```
@@ -109,7 +113,7 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
     ```
     http://examdb.dev:8089/app_dev.php
     ```
-    
+
 6. Develop!
 
 Running Tests
@@ -120,11 +124,11 @@ Running Tests
 NOTES
 -----
 * to see changes if on production environment, then you'll need to run a few commands in console to see the changes (aka move from src folder to web folder)
-    
+
     ```
     php app/console cache:clear --env=prod
     ```
-    
+
     ```
     sudo rm -rf app/cache/*
     ```
