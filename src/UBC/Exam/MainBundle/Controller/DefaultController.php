@@ -185,7 +185,6 @@ class DefaultController extends Controller
 
         if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
             $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-            $exams = array();
 
             $query = $repo->createQueryBuilder('e')
                 ->where('e.uploaded_by = :user')

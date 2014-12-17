@@ -1,6 +1,8 @@
 security:
     firewalls:
         exam_secured_area:
+            pattern:    ^/exam
+            anonymous: true
             http_basic: ~
     providers:
         in_memory:
