@@ -2346,12 +2346,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubc/ltcommons-bundle.git",
-                "reference": "597de53ada8c08608f491fe7984bdeb096c6b2e4"
+                "reference": "30e73c4c208b07a0a2b80b9c9e4d16954ce67361"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubc/ltcommons-bundle/zipball/597de53ada8c08608f491fe7984bdeb096c6b2e4",
-                "reference": "597de53ada8c08608f491fe7984bdeb096c6b2e4",
+                "url": "https://api.github.com/repos/ubc/ltcommons-bundle/zipball/30e73c4c208b07a0a2b80b9c9e4d16954ce67361",
+                "reference": "30e73c4c208b07a0a2b80b9c9e4d16954ce67361",
                 "shasum": ""
             },
             "require": {
@@ -2388,7 +2388,7 @@
                 "sis",
                 "ubc"
             ],
-            "time": "2014-12-16 22:35:37"
+            "time": "2014-12-17 00:03:16"
         }
     ],
     "packages-dev": [
