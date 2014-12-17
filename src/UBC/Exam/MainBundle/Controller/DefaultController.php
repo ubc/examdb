@@ -35,13 +35,15 @@ class DefaultController extends Controller
 
         $em = $this->getDoctrine()->getManager();
 
-        $courses = array_keys($request->getSession()->get('courses'));
+        $coursesWithKeys = $request->getSession()->get('courses') ? $request->getSession()->get('courses') : array();
+        $courses = array_keys($coursesWithKeys);
         $faculties = array_values(
             $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
         );
 
+        $userId = ($this->getUser() instanceof \UBC\Exam\MainBundle\Entity\User) ? $this->getUser()->getId() : 0;
         $uniqueSubjectCodes = $em->getRepository('UBCExamMainBundle:Exam')
-            ->getAvailableSubjectCodes($this->getUser()->getId(), $faculties, $courses);
+            ->getAvailableSubjectCodes($userId, $faculties, $courses);
 
         $subjectCodeForTwig = array_combine(array_values($uniqueSubjectCodes), array_values($uniqueSubjectCodes));
 
@@ -178,16 +180,20 @@ class DefaultController extends Controller
      */
     public function listAction()
     {
-        $user = $this->get('security.context')->getToken()->getUser();
-        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
         $exams = array();
+        $user = $this->get('security.context')->getToken()->getUser();
 
-        $query = $repo->createQueryBuilder('e')
+        if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+            $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
+            $exams = array();
+
+            $query = $repo->createQueryBuilder('e')
                 ->where('e.uploaded_by = :user')
                 ->setParameter('user', $user)
                 ->orderBy('e.created', 'DESC')
                 ->getQuery();
-        $exams = $query->getResult();
+            $exams = $query->getResult();
+        }
 
         $this->updateuser();
 

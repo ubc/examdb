@@ -36,6 +36,31 @@ class DefaultControllerTest extends WebTestCase
         $user->setUsername('tester');
         $this->user = $user;
     }
+
+    /**
+     * Smoke testing all the URLs
+     * @dataProvider providerUrls
+     * @param string $url the url to test
+     */
+    public function testPageIsSuccessful($url)
+    {
+        $this->client->request('GET', $url);
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+    }
+
+    public function providerUrls()
+    {
+        return array(
+            array('/exam/'),
+            array('/exam/upload'),
+            array('/exam/list'),
+            array('/exam/wikicontent/CHIN'),
+            array('/exam/subjectcode/UBC'),
+            array('/exam/subjectcode/UBC/CHIN'),
+        );
+    }
+
     /**
      * Tests main page
      */
