@@ -65,7 +65,7 @@ class DefaultController extends Controller
             $subjectCode = explode(' ', $subjectCodeLabel);
             $subjectCode = $subjectCode[0];
             $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-                ->findExamsByCourse($exam->getSubjectcode(), $this->getUser()->getId(), $faculties, $courses);
+                ->findExamsByCourse($exam->getSubjectcode(), $userId, $faculties, $courses);
 
         }
         // TODO move to a listener
