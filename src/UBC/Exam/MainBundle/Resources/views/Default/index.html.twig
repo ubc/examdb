@@ -13,9 +13,9 @@
          FUTURE TO DO: provide general public search for publically-available exams -->
     {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 
-        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong> to search the Exam Prep Database.</p>
+        <p class="alert alert-info"><i class="icon-exclamation-sign"></i> Please <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong> to get full access to Exam Prep Database.</p>
 
-    {% else %}
+    {% endif %}
 
         {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
 
@@ -116,7 +116,6 @@
         
         {% endif %}
 
-    {% endif %}
 
     <hr />
 

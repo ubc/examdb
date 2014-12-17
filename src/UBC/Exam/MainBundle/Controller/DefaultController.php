@@ -65,7 +65,7 @@ class DefaultController extends Controller
             $subjectCode = explode(' ', $subjectCodeLabel);
             $subjectCode = $subjectCode[0];
             $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-                ->findExamsByCourse($exam->getSubjectcode(), $this->getUser()->getId(), $faculties, $courses);
+                ->findExamsByCourse($exam->getSubjectcode(), $userId, $faculties, $courses);
 
         }
         // TODO move to a listener
@@ -185,7 +185,6 @@ class DefaultController extends Controller
 
         if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
             $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-            $exams = array();
 
             $query = $repo->createQueryBuilder('e')
                 ->where('e.uploaded_by = :user')

@@ -49,6 +49,30 @@ class DefaultControllerTest extends WebTestCase
         $this->assertTrue($this->client->getResponse()->isSuccessful());
     }
 
+    /**
+     * Smoke testing all the URLs
+     * @dataProvider providerPublicUrls
+     * @param string $url the url to test
+     */
+    public function testPageIsSuccessfulWithPublicAccess($url)
+    {
+        $client = self::createClient();
+        $client->request('GET', $url);
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+    }
+
+    public function providerPublicUrls()
+    {
+        return array(
+            array('/exam/'),
+            array('/exam/wikicontent/CHIN'),
+            array('/exam/subjectcode/UBC'),
+            array('/exam/subjectcode/UBC/CHIN'),
+            array('/exam/guide'),
+        );
+    }
+
     public function providerUrls()
     {
         return array(
@@ -58,6 +82,7 @@ class DefaultControllerTest extends WebTestCase
             array('/exam/wikicontent/CHIN'),
             array('/exam/subjectcode/UBC'),
             array('/exam/subjectcode/UBC/CHIN'),
+            array('/exam/guide'),
         );
     }
 
