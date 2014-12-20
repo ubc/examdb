@@ -10,6 +10,10 @@
         {
             "type": "pear",
             "url": "http://pear.php.net"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/xcompass/GorgCasBundle"
         }
     ],
     "require": {
@@ -26,7 +30,7 @@
         "sensio/generator-bundle": "2.3.*",
         "incenteev/composer-parameter-handler": "~2.0",
         "stof/doctrine-extensions-bundle": "1.1.*",
-        "gorg/cas-bundle": "master",
+        "gorg/cas-bundle": "dev-logout-service",
         "symfony/dom-crawler": "2.3.*",
         "symfony/css-selector": "2.3.*",
         "ubc/ltcommons-bundle": "dev-master",

@@ -20,6 +20,7 @@ security:
                 cas_mapping_attribute: cwlLoginName
                 check_path: login_check
                 login_path: exam_login
+                cas_logout: ubc_exam_main_homepage
 
     access_control:
         - { path: ^/exam/login, roles: IS_AUTHENTICATED_FULLY }
