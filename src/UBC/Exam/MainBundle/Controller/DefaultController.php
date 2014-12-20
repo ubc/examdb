@@ -227,6 +227,12 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
+        $securityContext = $this->container->get('security.context');
+        if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
+            // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
+            return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
+        }
+
         $session = $request->getSession();
 
         // get the login error if there is one
@@ -252,7 +258,6 @@ class DefaultController extends Controller
                 'error'         => $error,
             )
         );
-        #return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
     }
 
     /**
