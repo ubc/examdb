@@ -200,26 +200,9 @@ class DefaultController extends Controller
     }
 
     /**
-     * not sure what this is.  It's set in security.yaml check_path of the firewalls.ubc_secured_area.trusted_sso.checkpath.
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     *
-     * @Route("/loggedin", name="exam_loggged_in")
-     */
-    public function loggedinAction()
-    {
-        //we delete layout cache so that the menu can reset to whatever it's supposed to me (login button or logout buton)
-        $fileCache = $this->container->get('twig')->getCacheFilename('UBCExamMainBundle::layout.html.twig');
-        if (is_file($fileCache)) {
-            @unlink($fileCache);
-        }
-
-        return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
-    }
-
-    /**
      * if you type in login url, it will redirect to main exam page.
      *
+     * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/login", name="exam_login")

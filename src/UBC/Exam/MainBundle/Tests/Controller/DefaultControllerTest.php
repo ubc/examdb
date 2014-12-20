@@ -44,6 +44,7 @@ class DefaultControllerTest extends WebTestCase
      */
     public function testPageIsSuccessful($url)
     {
+        $this->client->followRedirects();
         $this->client->request('GET', $url);
 
         $this->assertTrue($this->client->getResponse()->isSuccessful());
@@ -83,18 +84,8 @@ class DefaultControllerTest extends WebTestCase
             array('/exam/subjectcode/UBC'),
             array('/exam/subjectcode/UBC/CHIN'),
             array('/exam/guide'),
+            array('/exam/logout'),
         );
-    }
-
-    /**
-     * Tests main page
-     */
-    public function testIndex()
-    {
-        $this->assertTrue(true);    //garbage holder just so it won't throw errors about no tests.
-//         $crawler = $this->client->request('GET', '/');
-//         
-//         $this->assertTrue($crawler->filter('#ubc7-header')->count() === 1);
     }
 
     public function testGetWikiContent()
@@ -241,21 +232,6 @@ class DefaultControllerTest extends WebTestCase
         $this->assertSame(array(), $data);
     }
 
-    /**
-     * Tests going to page that requires auth
-     */
-//     public function testAuth()
-//     {
-//         $crawler = $this->client->request('GET', '/exam/list');
-        
-//         $this->assertFalse($crawler->filter('table.list-uploads')->count() === 1);
-        
-//         $this->logIn();
-        
-//         $crawler = $this->client->request('GET', '/exam/list');
-        
-//         $this->assertTrue($crawler->filter('table.list-uploads')->count() === 1);
-//     }
 
     /**
      * This test whether the upload page has validate form

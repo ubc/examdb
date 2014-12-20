@@ -24,8 +24,7 @@ security:
     access_control:
         - { path: ^/exam/login, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/exam/download, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/exam/loggedin, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/exam/logout, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/exam/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/exam/list, roles: ROLE_USER }
         - { path: ^/exam/upload, roles: ROLE_USER }
         - { path: ^/exam/delete_exam, roles: ROLE_USER }

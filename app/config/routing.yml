@@ -7,3 +7,6 @@ root:
         _controller: FrameworkBundle:Redirect:urlRedirect
         path: /exam
         permanent: true
+
+logout:
+    path:   /exam/logout
