@@ -88,7 +88,7 @@
     /* .wiki-content class used for div where wiki content loads */
     .content .wiki-content {
 	max-height: 150px;
-	overflow: scroll;
+	overflow-y: scroll;
     }
 
 /* .resource-header used on h3 before resource links */
