@@ -1,7 +1,0 @@
-TODO:
-- create users (possibly using basic auth for now, and cas later) 
-- link users to exam when uploading
-- create ACL (so users can modify their own stuff, maybe voters?)
-- create secure area for uploading
-- exam browser
-- spiffy up the upload form to use things OTHER than text input fields
