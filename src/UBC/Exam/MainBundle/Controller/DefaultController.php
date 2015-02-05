@@ -354,10 +354,27 @@ class DefaultController extends Controller
                 $em->persist($exam);
                 $em->flush();
 
+                // log to upload log channel
+                $uploadLogger = $this->get("monolog.logger.upload");
+                $uploadLogger->info(join(',', array(
+                    $exam->getCampus(),
+                    $exam->getFaculty(),
+                    $exam->getDept(),
+                    $exam->getSubjectCode(),
+                    $exam->getYear(),
+                    $exam->getTerm(),
+                    $exam->getType(),
+                    $exam->getUploadedBy()->getUsername(),
+                    $exam->getLegalContentOwner(),
+                    $exam->getLegalUploader(),
+                    $exam->getAccessLevel(),
+                    $exam->getPath(),
+                )));
+
                 return $this->redirect($this->generateUrl('exam_list'));
             }
         }
-            return $this->render('UBCExamMainBundle:Default:update.html.twig', array('form' => $form->createView()));
+        return $this->render('UBCExamMainBundle:Default:update.html.twig', array('form' => $form->createView()));
     }
 
     /**
@@ -384,6 +401,29 @@ class DefaultController extends Controller
 
             return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
         }
+
+        $accessLogger = $this->get("monolog.logger.access");
+        $user = $this->get('security.context')->getToken()->getUser();
+        if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+            $username = $user->getUsername();
+        } else {
+            $usernmae = $user;
+        }
+        $accessLogger->info(join(',', array(
+            $username,
+            $exam->getCampus(),
+            $exam->getFaculty(),
+            $exam->getDept(),
+            $exam->getSubjectCode(),
+            $exam->getYear(),
+            $exam->getTerm(),
+            $exam->getType(),
+            $exam->getUploadedBy()->getUsername(),
+            $exam->getLegalContentOwner(),
+            $exam->getLegalUploader(),
+            $exam->getAccessLevel(),
+            $exam->getPath(),
+        )));
 
         return $this->downloadPDF($exam);
     }

@@ -84,9 +84,12 @@ swiftmailer:
     username:  "%mailer_user%"
     password:  "%mailer_password%"
     spool:     { type: memory }
-    
+
 # allows use or dump() in production twig
 services:
   twig.extension.debug:
       class:        Twig_Extension_Debug
       tags: [{ name: 'twig.extension' }]
+
+monolog:
+  channels: ["upload", "access"]

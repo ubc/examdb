@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * This class holds the concept of exam (aka file associated with course)
- * 
+ *
  * @ORM\Entity
  * @ORM\Table(name="exam")
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\ExamRepository")
@@ -19,11 +19,11 @@ class Exam
     static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'People with UBC CWLs', '3' => 'Students with Courses in This Faculty', '4' => 'Current Course Participants', '5' => 'Only Me');
     static public $TYPES = array('Actual Assessment' => 'Past Exam', 'Practice Assessment' => 'Practice Exam', 'Other Material' => 'Other Exam Prep Material');
     static public $TERMS = array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD');
-    
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO") 
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     protected $id;
 
@@ -38,66 +38,66 @@ class Exam
      * @Assert\NotBlank(message="Please choose a faculty")
      */
     protected $faculty;
-    
+
     /**
      * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Please include a department or 'n/a'")
      */
     protected $dept;
-    
-    
+
+
     /**
      * @ORM\Column(type="string", length=10)
      * @Assert\NotBlank(message="Please provide a subject code")
      */
     protected $subject_code;
-    
+
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="Please provide a year")
      */
     protected $year;
-    
+
     /**
      * @ORM\Column(type="string", length=10)
      * @Assert\NotBlank(message="Please provide a term")
      */
     protected $term;
-    
+
     /**
      * @ORM\Column(type="string", length=50)
      * @Assert\NotBlank(message="Please provide a document type")
      */
     protected $type;
-    
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $comments;
-    
+
     /**
      * @ORM\Column(type="text", nullable=true)
      */
     protected $cross_listed;
-    
+
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(message="Please attribute an owner")
      */
     protected $legal_content_owner;
-    
+
     /**
      * @ORM\Column(type="string", length=100)
      * @Assert\NotBlank(message="Please designate an uploader")
      */
     protected $legal_uploader;
-    
+
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank(message="Please provide the date")
      */
     protected $legal_date;
-    
+
     /**
      * @ORM\Column(type="boolean")
      * @Assert\NotBlank(message="Please agree to the terms")
@@ -105,12 +105,12 @@ class Exam
     protected $legal_agreed;
 
     /**
-     * 
+     *
      * @ORM\ManyToOne(targetEntity="User")
      * @ORM\JoinColumn(name="uploaded_by", referencedColumnName="id")
      */
     protected $uploaded_by;
-    
+
     /**
      * @ORM\Column(type="integer")
      * @Assert\NotBlank(message="Please choose an access level")
@@ -127,7 +127,7 @@ class Exam
      * @var unknown
      */
     private $file;
-    
+
     /**
      * @var datetime $created
      *
@@ -135,7 +135,7 @@ class Exam
      * @ORM\Column(type="datetime")
      */
     private $created;
-    
+
     /**
      * @var datetime $updated
      *
@@ -143,20 +143,20 @@ class Exam
      * @ORM\Column(type="datetime")
      */
     private $modified;
-    
+
     private $temp;
-    
+
     /**
      * Sets file.
      *
      * @param UploadedFile $file
-     * 
+     *
      * @return void
      */
     public function setFile(UploadedFile $file = null)
     {
         $this->file = $file;
-        
+
         // check if we have an old image path
         if (isset($this->path)) {
             // store the old name to delete after the update
@@ -172,7 +172,7 @@ class Exam
      * @ORM\PreUpdate()
      */
     public function preUpload()
-    { 
+    {
         if (null !== $this->getFile()) {
             // do whatever you want to generate a unique name
             $filename = sha1(uniqid(mt_rand(), true));
@@ -213,7 +213,7 @@ class Exam
         if ($file = $this->getAbsolutePath()) {
             unlink($file);
         }
-    }   
+    }
 
     /**
      * Get file.
@@ -235,17 +235,7 @@ class Exam
     }
 
     /**
-     * returns either null or relative web path to file
-     * @return mixed <NULL, string>
-     */
-    public function getWebPath()
-    {
-        return null === $this->path ? null : '/exam/download/'.$this->path;
-        //return null === $this->path ? null : '/'.$this->getUploadDir().'/'.$this->path;
-    }
-
-    /**
-     * Please see http://symfony.com/doc/2.3/cookbook/doctrine/file_uploads.html#using-lifecycle-callbacks to remove 
+     * Please see http://symfony.com/doc/2.3/cookbook/doctrine/file_uploads.html#using-lifecycle-callbacks to remove
      * hard coded __DIR__
      * @return string
      */
@@ -258,7 +248,7 @@ class Exam
 
     /**
      * returns upload directory
-     * 
+     *
      * @return string
      */
     protected function getUploadDir()
@@ -271,7 +261,7 @@ class Exam
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -298,13 +288,13 @@ class Exam
      * Set faculty
      *
      * @param string $faculty
-     * 
+     *
      * @return Exam
      */
     public function setFaculty($faculty)
     {
         $this->faculty = $faculty;
-    
+
         return $this;
     }
 
@@ -322,20 +312,20 @@ class Exam
      * Set dept
      *
      * @param string $dept
-     * 
+     *
      * @return Exam
      */
     public function setDept($dept)
     {
         $this->dept = $dept;
-    
+
         return $this;
     }
 
     /**
      * Get dept
      *
-     * @return string 
+     * @return string
      */
     public function getDept()
     {
@@ -346,20 +336,20 @@ class Exam
      * Set subject_code
      *
      * @param string
-     * 
+     *
      * @return Exam
      */
     public function setSubjectcode($subject_code)
     {
         $this->subject_code = $subject_code;
-    
+
         return $this;
     }
 
     /**
      * Get subject_code (aka APSC, ADHE, etc)
      *
-     * @return string 
+     * @return string
      */
     public function getSubjectcode()
     {
@@ -380,20 +370,20 @@ class Exam
      * Set year
      *
      * @param integer $year
-     * 
+     *
      * @return Exam
      */
     public function setYear($year)
     {
         $this->year = $year;
-    
+
         return $this;
     }
 
     /**
      * Get year
      *
-     * @return integer 
+     * @return integer
      */
     public function getYear()
     {
@@ -410,10 +400,10 @@ class Exam
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
-    
+
     /**
      * Get type
      *
@@ -423,37 +413,37 @@ class Exam
     {
         return $this->type;
     }
-    
-    
+
+
     /**
      * gets user-friendly version of type
-     * 
+     *
      * @return String
      */
     public function getTypeString()
     {
         return self::$TYPES[$this->type];
     }
-    
+
 
     /**
      * Set term
      *
      * @param string $term
-     * 
+     *
      * @return Exam
      */
     public function setTerm($term)
     {
         $this->term = $term;
-    
+
         return $this;
     }
 
     /**
      * Get term
      *
-     * @return string 
+     * @return string
      */
     public function getTerm()
     {
@@ -464,13 +454,13 @@ class Exam
      * Set comments
      *
      * @param string $comments
-     * 
+     *
      * @return Exam
      */
     public function setComments($comments)
     {
         $this->comments = $comments;
-    
+
         return $this;
     }
 
@@ -487,7 +477,7 @@ class Exam
     /**
      * Get cross_listed
      *
-     * @return string 
+     * @return string
      */
     public function getCrossListed()
     {
@@ -498,7 +488,7 @@ class Exam
      * Set cross_listed
      *
      * @param string $cross_listed
-     * 
+     *
      * @return Exam
      */
     public function setCrossListed($cross_listed)
@@ -510,12 +500,12 @@ class Exam
 
     /**
      * set legal_content_owner
-     * 
+     *
      * @param string $legal_content_owner
-     * 
+     *
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
-    public function setLegalContentOwner($legal_content_owner) 
+    public function setLegalContentOwner($legal_content_owner)
     {
         $this->legal_content_owner = $legal_content_owner;
 
@@ -524,46 +514,46 @@ class Exam
 
     /**
      * gets legal_content_owner
-     * 
+     *
      * @return string
      */
-    public function getLegalContentOwner() 
+    public function getLegalContentOwner()
     {
         return $this->legal_content_owner;
     }
 
     /**
      * sets legal_uploader
-     * 
+     *
      * @param string $legal_uploader
-     * 
+     *
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
-    public function setLegalUploader($legal_uploader) 
+    public function setLegalUploader($legal_uploader)
     {
     $this->legal_uploader = $legal_uploader;
 
     return $this;
     }
-    
+
     /**
      * gets legal_uploader
-     * 
+     *
      * @return string
      */
-    public function getLegalUploader() 
+    public function getLegalUploader()
     {
         return $this->legal_uploader;
     }
-    
+
     /**
      * sets legal_date
-     * 
+     *
      * @param string $legal_date
-     * 
+     *
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
-    public function setLegalDate($legal_date) 
+    public function setLegalDate($legal_date)
     {
         if (is_string($legal_date)) {
             $this->legal_date = new \DateTime($legal_date);
@@ -572,13 +562,13 @@ class Exam
         } else {
             throw new \Exception();
         }
-        
+
         return $this;
     }
 
     /**
      * get legal date
-     * 
+     *
      * @return \DateTime
      */
     public function getLegalDate()
@@ -588,21 +578,21 @@ class Exam
 
     /**
      * set legal agreed checkbox result
-     * 
+     *
      * @param bool $legal_agreed
-     * 
+     *
      * @return \UBC\Exam\MainBundle\Entity\Exam
      */
     public function setLegalAgreed($legal_agreed)
     {
         $this->legal_agreed = $legal_agreed;
-        
+
         return $this;
     }
 
     /**
      * get legal chekbox result
-     * 
+     *
      * @return boolean
      */
     public function getLegalAgreed()
@@ -614,20 +604,20 @@ class Exam
      * Set uploaded_by
      *
      * @param integer $uploadedBy
-     * 
+     *
      * @return Exam
      */
     public function setUploadedBy($uploadedBy)
     {
         $this->uploaded_by = $uploadedBy;
-    
+
         return $this;
     }
 
     /**
      * Get uploaded_by
      *
-     * @return integer 
+     * @return integer
      */
     public function getUploadedBy()
     {
@@ -638,36 +628,36 @@ class Exam
      * Set access_level
      *
      * @param integer $accessLevel
-     * 
+     *
      * @return Exam
      */
     public function setAccessLevel($accessLevel)
     {
         $this->access_level = $accessLevel;
-    
+
         return $this;
     }
 
     /**
      * Get access_level
      *
-     * @return integer 
+     * @return integer
      */
     public function getAccessLevel()
     {
         return $this->access_level;
     }
-    
+
     /**
      * converts integer representation of access level to string
-     * 
+     *
      * @return String
      */
     public function getAccessLevelString()
     {
         return self::$ACCESS_LEVELS[$this->access_level];
     }
-    
+
     /**
      * Get created
      *
@@ -677,7 +667,7 @@ class Exam
     {
         return $this->created;
     }
-    
+
     /**
      * Get modified
      *

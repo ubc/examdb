@@ -34,8 +34,8 @@
                     <td class="td-course">{{ exam.year }} {{ exam.term | capitalize }} - {{ exam.subjectcode }} {% if exam.crosslisted %}({{ exam.crosslisted }}){% endif %}</td>
                     {% if list is defined %}
                         <td>
-                            {% if exam.getWebPath %}
-                                <a href="{{ exam.getWebPath }}">View File</a>
+                            {% if exam.path %}
+                                <a href="{{ path('exam_download', {'filename': exam.path}) }}">View File</a>
                             {% else %}
                                 No file uploaded yet
                             {% endif %}

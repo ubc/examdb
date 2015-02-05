@@ -9,42 +9,42 @@
     <p>In addition to the uploaded files and additional resources below, please see the <a href="{{ url('exam_guide') }}">FAQ</a> for tips on how you can get the most out of this database.</p>
 
         {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
-        
+
             <h2>Find Material by Course</h2>
-            
+
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <!-- if user has not logged in -->
                 <p><i class="icon-exclamation-sign"></i> <strong>UBC Users:</strong> To access <em>all</em> materials available to you, first <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong>, and then conduct a search below.</p>
             {% endif %}
-            
+
             <fieldset>
-                
+
                 <div class="row-fluid search-box-row">
-                
+
                     <div class="span8">
                         {{ form_label(form.subject_code) }}
                         {{ form_widget(form.subject_code, { 'attr': {'class': 'main-search'} }) }}
                     </div>
-                    
+
                     <div class="span4">
                         <!-- need empty label here for alignment
                              FUTURE TO DO: change results to on click and remove submit button and label? -->
                         <label class="hidden-phone">&nbsp;</label>
                         {{ form_widget(form.search, { 'attr': {'class': 'btn btn-primary'}}) }}
                     </div>
-                
+
                 </div>
-                
+
             </fieldset>
-        
+
         {{ form_end(form) }}
-        
+
         <!-- show *only* when results are available AND a subject code has been selected, i.e, a search has been done
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
         {% if exams|length > 0 and subjectCodeLabel is not empty %}
-            
+
             <table class="table table-striped">
-            
+
                 <!-- populate caption with course number selected and number of results after each search -->
                 <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ exams|length }} found for {{ subjectCodeLabel }}{% endif %} {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search for more{% endif %}</caption>
 
@@ -68,7 +68,7 @@
                         <th>Notes</th>
                     </tr>
                 </thead>
-                
+
                 <tbody>
                     {% for exam in exams %}
                         <tr>
@@ -81,7 +81,7 @@
                                 </td>
                             {% endif %}
                             <td>
-                                <a class="btn-download btn btn-primary" href="{{ exam.getWebPath }}"><i class="icon-download-alt"></i> Download</a>
+                                <a class="btn-download btn btn-primary" href="{{ path('exam_download', {'filename': exam.path}) }}"><i class="icon-download-alt"></i> Download</a>
                             </td>
                             <td class="hidden-phone">
                                 {{ exam.getTypeString }}
@@ -95,25 +95,25 @@
                         </tr>
                     {% endfor %}
                 </tbody>
-            
+
             </table>
-            
+
             <p class="alert alert-warning"><strong>Never assume that past or sample exams will be similar to exams used in a current section of a course</strong>&mdash;unless your instructor has explicitly indicated this. Note especially when material was uploaded either by a different instructor than the instructor teaching the current course or for a course that took place more than one or two years ago.</p>
-            
+
             <div class="wiki-toggle">
-                
+
                 <hr />
-                
+
                 <h3 class="resource-header">Study resources for exams in this department</h3>
-                
+
                 <div class="wiki-content">
                     <!-- wiki content loads here -->
                 </div>
-                
+
             </div>
-        
+
         {% endif %}
-        
+
     <hr />
 
     <h3 class="resource-header">Additional resources for exam preparation</h3>
