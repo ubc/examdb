@@ -18,4 +18,5 @@ security:
         - { path: ^/exam/upload, roles: ROLE_USER }
         - { path: ^/exam/delete_exam, roles: ROLE_USER }
         - { path: ^/exam/update_exam, roles: ROLE_USER }
+        - { path: ^/exam/user, roles: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

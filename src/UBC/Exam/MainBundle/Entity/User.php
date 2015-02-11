@@ -15,48 +15,72 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface, EquatableInterface, \Serializable
 {
+    const ROLE_DEFAULT = 'ROLE_USER';
+    const ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN';
+
     /**
      * @ORM\Column(type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      */
-    private $id;
+    protected $id;
     
     /**
      * @ORM\Column(type="string", length=25, unique=true)
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $firstname;
     
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $firstname;
-    
-    /**
-     * @ORM\Column(type="string", length=100, nullable=true)
-     */
-    private $lastname;
-    
+    protected $lastname;
+
     /**
      * @ORM\Column(type="string", length=64, nullable=true)
      */
-    private $password;
-    
+    protected $password;
+
     /**
      * @ORM\Column(type="string", length=60, unique=true, nullable=true)
      */
-    private $email;
-    
+    protected $email;
+
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $puid;
-    
+    protected $puid;
+
     /**
+     * @var boolean
      * @ORM\Column(name="is_active", type="boolean")
      */
-    private $isActive;
-    
+    protected $active;
+
+    /**
+     * The salt to use for hashing
+     *
+     * @var string
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    protected $salt;
+
+    /**
+     * @ORM\Column(name="last_login", type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    protected $lastLogin;
+
+    /**
+     * @ORM\Column(name="roles", type="array")
+     * @var array
+     */
+    protected $roles;
+
     /**
      *
      * @var datetime $created
@@ -64,7 +88,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
      * @Gedmo\Timestampable(on="create")
      * @ORM\Column(type="datetime")
      */
-    private $created;
+    protected $created;
     
     /**
      *
@@ -73,18 +97,18 @@ class User implements UserInterface, EquatableInterface, \Serializable
      * @Gedmo\Timestampable(on="update")
      * @ORM\Column(type="datetime")
      */
-    private $modified;
+    protected $modified;
 
     /**
      * constructor to make default user active.
      */
     public function __construct()
     {
-        $this->isActive = true;
-        // may not be needed, see section on salt below
-        // $this->salt = md5(uniqid(null, true));
+        $this->salt = base_convert(sha1(uniqid(mt_rand(), true)), 16, 36);
+        $this->active = false;
+        $this->roles = array();
     }
-    
+
 
     /**
      * returns user's id
@@ -98,7 +122,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
     /**
      * @inheritDoc
-     * 
+     *
      * @return String
      */
     public function getUsername()
@@ -108,21 +132,21 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
     /**
      * sets the user's username
-     * 
+     *
      * @param string $username
-     * 
+     *
      * @return \UBC\Exam\MainBundle\Entity\User
      */
     public function setUsername($username)
     {
         $this->username = $username;
-        
+
         return $this;
     }
 
     /**
      * @inheritDoc
-     * 
+     *
      * @return null
      */
     public function getSalt()
@@ -134,7 +158,7 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
     /**
      * @inheritDoc
-     * 
+     *
      * @return String
      */
     public function getPassword()
@@ -144,14 +168,58 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
     /**
      * @inheritDoc
-     * 
+     *
      * @return array
      */
     public function getRoles()
     {
-        return array(
-                'ROLE_USER' 
-        );
+        $roles = $this->roles;
+
+        // we need to make sure to have at least one role
+        $roles[] = static::ROLE_DEFAULT;
+
+        return array_unique($roles);
+    }
+
+    public function addRole($role)
+    {
+        $role = strtoupper($role);
+        if ($role === static::ROLE_DEFAULT) {
+            return $this;
+        }
+
+        if (!in_array($role, $this->roles, true)) {
+            $this->roles[] = $role;
+        }
+
+        return $this;
+    }
+
+    public function setRoles(array $roles)
+    {
+        $this->roles = array();
+
+        foreach ($roles as $role) {
+            $this->addRole($role);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
+    }
+
+    /**
+     * @param \DateTime $lastLogin
+     */
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
     }
 
     /**
@@ -169,15 +237,15 @@ class User implements UserInterface, EquatableInterface, \Serializable
     public function serialize()
     {
         return serialize( array(
-                $this->id,
-                $this->username,
-                $this->firstname,
-                $this->lastname,
-                $this->password,
-                $this->puid
-        // see section on salt below
-        // $this->salt,
-                ));
+            $this->id,
+            $this->username,
+            $this->firstname,
+            $this->lastname,
+            $this->password,
+            $this->puid,
+            $this->salt,
+            $this->active,
+        ));
     }
 
     /**
@@ -187,16 +255,21 @@ class User implements UserInterface, EquatableInterface, \Serializable
      */
     public function unserialize($serialized)
     {
+        $data = unserialize($serialized);
+        // add a few extra elements in the array to ensure that we have enough keys when unserializing
+        // older data which does not include all properties.
+        $data = array_merge($data, array_fill(0, 2, null));
+
         list(
             $this->id,
             $this->username,
             $this->firstname,
             $this->lastname,
             $this->password,
-            $this->puid
-            // see section on salt below
-            // $this->salt
-        ) = unserialize($serialized);
+            $this->puid,
+            $this->salt,
+            $this->active,
+        ) = $data;
     }
     
     /**
@@ -251,19 +324,19 @@ class User implements UserInterface, EquatableInterface, \Serializable
      * Set email
      *
      * @param String $email
-     * 
+     *
      * @return Exam
      */
     public function setEmail($email)
     {
         $this->email = $email;
-    
+
         return $this;
     }
-    
+
     /**
      * Get email
-     * 
+     *
      * @return string
      */
     public function getEmail()
@@ -360,5 +433,15 @@ class User implements UserInterface, EquatableInterface, \Serializable
         }
 
         return true;
+    }
+
+
+    public function setRoleString($roleString)
+    {
+       $this->setRoles(explode(',', $roleString));
+    }
+
+    public function getRoleString() {
+        return join(',', $this->getRoles());
     }
 }

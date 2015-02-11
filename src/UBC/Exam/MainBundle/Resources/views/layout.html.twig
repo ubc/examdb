@@ -19,6 +19,9 @@
   <meta name="description" content="The UBC exam preparation database contains exams and other assessment-related material used in current and past UBC courses.">
   <meta name="author" content="">
   <!-- Stylesheets -->
+  <link href="{{ asset('bundles/jordillonchcrudgenerator/css/bootstrap.css') }}" rel="stylesheet">
+  <link href="{{ asset('bundles/jordillonchcrudgenerator/css/bootstrap-responsive.css') }}" rel="stylesheet">
+  <link href="{{ asset('bundles/jordillonchcrudgenerator/css/crud.css') }}" rel="stylesheet">
   <link href="//cdn.ubc.ca/clf/7.0.4/css/ubc-clf-full.min.css" rel="stylesheet">
   {% stylesheets 'bundles/ubcexammain/css/*' filter='cssrewrite' %}
   <link rel="stylesheet" href="{{ asset_url }}" />
@@ -123,13 +126,22 @@
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
+				 app.request.attributes.get('_route') == 'exam_list' %}active{% endif %}">
 		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
 		<a href="{{ url('exam_guide') }}">FAQ</a>
 	      </li>
+          {% if is_granted('ROLE_ADMIN') %}
+          <li class="{% if app.request.attributes.get('_route') == 'user' %}active{% endif %}">
+            <a href="{{ url('user') }}">Admin</a>
+          </li>
+          <li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
+            <a href="{{ url('exam_log') }}">Logs</a>
+          </li>
+          {% endif %}
+
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
@@ -164,14 +176,14 @@
                 {{ flashMessage }}
             </div>
         {% endfor %}
-	{% block body %}
-	{% endblock %}
+        {% block body %}
+        {% endblock %}
       </div>
       <!-- End of Content Area -->
     </div>
     <!-- Footer Area Unit Menu - Mobile Only -->
     <div id="ubc7-unit-alternate-navigation" style="display:none !important" class="navbar expand visible-phone" role="navigation">
-      <div class="navbar-inner expand">
+        <div class="navbar-inner expand">
 	<div class="container">
 	  <div class="nav-collapse collapse">
 	    <ul class="nav">
@@ -180,17 +192,25 @@
 		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
 	      </li>
 	      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
-		<li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
+			  <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
+				 app.request.attributes.get('_route') == 'exam_list' %}active{% endif %}">
 		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
-		<a href="{{ url('exam_guide') }}">FAQ</a>
+			  <a href="{{ url('exam_guide') }}">FAQ</a>
 	      </li>
+          {% if is_granted('ROLE_ADMIN') %}
+          <li class="{% if app.request.attributes.get('_route') == 'user' %}active{% endif %}">
+            <a href="{{ url('user') }}">Admin</a>
+          </li>
+          <li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
+            <a href="{{ url('exam_log') }}">Logs</a>
+          </li>
+          {% endif %}
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
@@ -257,6 +277,7 @@
     <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css" />
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
     <script src="//cdn.ubc.ca/clf/7.0.4/js/ubc-clf.min.js"></script>
+	<script src="{{ asset('bundles/jordillonchcrudgenerator/js/bootstrap.js') }}"></script>
     {% javascripts 'bundles/ubcexammain/js/*' %}
       <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
@@ -265,16 +286,16 @@
 	$.ajax({
 	  type: 'GET',
 	  url: '{{ path('exam_wiki', {'subject': subjectCode}) }}',
-	  async: false, 
+	  async: false,
 	  success: function (data) {
 	    if (data.length > 0) {
 	      $(".wiki-content").html(data);  // load Wiki HTML
 	      $(".wiki-toggle").show();       // show hidden Wiki div
 	    }
-	    //alert("success");  
+	    //alert("success");
 	  },
 	  error: function() {
-	    //alert("error");        
+	    //alert("error");
 	  }
 	});
       </script>
@@ -299,10 +320,10 @@
 		optionItems += '<option value="'+ item.code +'">'+ item.code +'</option>';
 	      });
 	      $("#form_subject_code").html(optionItems);   // add subject codes to the subject  dropdown list
-	      // alert("success");  
+	      // alert("success");
 	    },
 	    error: function() {
-	      //alert("error");        
+	      //alert("error");
 	    },
 	    dataType: 'json'
 	  });
@@ -319,10 +340,10 @@
 	    success: function (data) {
 	      $("#form_faculty").val(data.faculty);  // set faculty value based on subject, if available
 	      $("#form_dept").val(data.department);  // set department value based on subject, if available
-	      //alert("success");  
+	      //alert("success");
 	    },
 	    error: function() {
-	      //alert("error");        
+	      //alert("error");
 	    },
 	    dataType: 'json'
 	  });

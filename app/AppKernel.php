@@ -23,6 +23,8 @@ class AppKernel extends Kernel
             new Gorg\Bundle\CasBundle\GorgCasBundle(),  //also need to add "gorg/cas-bundle": "master" to the required part of composer.json,
             new UBC\LtCommonsBundle\UBCLtCommonsBundle(),
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
+            new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
+            new JordiLlonch\Bundle\CrudGeneratorBundle\JordiLlonchCrudGeneratorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

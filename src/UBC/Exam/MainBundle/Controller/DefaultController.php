@@ -499,6 +499,20 @@ class DefaultController extends Controller
         return new JsonResponse($subjectCode);
     }
 
+
+    /**
+     * Handles log manage page
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/log", name="exam_log")
+     */
+    public function logAction(Request $request)
+    {
+
+    }
     /**
      * private function to just encapsulate downloading pdf so that we don't repeat code
      *

@@ -3,8 +3,6 @@
 namespace UBC\Exam\MainBundle\Tests\Controller;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
-use Symfony\Component\BrowserKit\Cookie;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 use UBC\Exam\MainBundle\Entity\User;
 
@@ -19,14 +17,14 @@ class DefaultControllerTest extends WebTestCase
 {
     private $client = null;
     private $user = null;
-    
+
     public function setUp()
     {
         $this->client = static::createClient(array(), array(
             'PHP_AUTH_USER' => 'user',
             'PHP_AUTH_PW'   => 'userpass',
         ));
-        
+
         //I think I should be using mock objects, but how to do that with interface checks? (instanceof UserInterfac)
         //I believe that this also causes side effect of entering this user into DB. might need to change config_test.yml
         $user = new User();
@@ -244,21 +242,6 @@ class DefaultControllerTest extends WebTestCase
         
 //         $this->assertTrue($crawler->filter('div.content > form.validate-form')->count() === 1);
 //     }
-    
-    private function logIn()
-    {
-        $session = $this->client->getContainer()->get('session');
-        
-        $firewall = 'secured_area';
-        $token = new UsernamePasswordToken($this->user, null, $firewall, array('ROLE_USER'));
-        $token->setAttributes(array());
-        
-        $session->set('_security_'.$firewall, serialize($token));
-        $session->save();
-    
-        $cookie = new Cookie($session->getName(), $session->getId());
-        $this->client->getCookieJar()->set($cookie);
-    }
     
     public function tearDown()
     {

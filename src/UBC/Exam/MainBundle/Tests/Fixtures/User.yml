@@ -1,5 +1,31 @@
 UBC\Exam\MainBundle\Entity\User:
-  user{1..10}:
+  user1:
+    username (unique): <username()>
+    firstname: <firstname()>
+    lastname: <lastname()>
+    password: 123456
+    email (unique): <email()>
+    puid: 1
+    isActive: 1
+    created: <dateTime()>
+    modified: <dateTime()>
+    roles:
+      - ROLE_SUPER_ADMIN
+      - ROLE_USER
+  user2:
+    username (unique): <username()>
+    firstname: <firstname()>
+    lastname: <lastname()>
+    password: 123456
+    email (unique): <email()>
+    puid: 2
+    isActive: 1
+    created: <dateTime()>
+    modified: <dateTime()>
+    roles:
+      - ROLE_ADMIN
+      - ROLE_USER
+  user{3..8}:
     username (unique): <username()>
     firstname: <firstname()>
     lastname: <lastname()>
@@ -9,3 +35,5 @@ UBC\Exam\MainBundle\Entity\User:
     isActive: 1
     created: <dateTime()>
     modified: <dateTime()>
+    roles:
+      - ROLE_USER
