@@ -1,8 +1,10 @@
 {
     "name": "ubc/ExamDB",
     "license": "MIT",
+    "version": "0.1.0",
     "type": "project",
     "description": "Exam Database",
+    "homepage": "https://github.com/ubc/examdb",
     "autoload": {
         "psr-0": { "": "src/" }
     },
@@ -17,7 +19,7 @@
         }
     ],
     "require": {
-        "php": ">=5.3.3",
+        "php": ">=5.4",
         "symfony/symfony": "2.3.*",
         "doctrine/orm": ">=2.2.3,<2.4-dev",
         "doctrine/doctrine-bundle": "1.2.*",
@@ -68,7 +70,8 @@
         ]
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "preferred-install": "dist"
     },
     "include-path": ["vendor/pdepend/pdepend/src/main/php"],
     "minimum-stability": "dev",
