@@ -2,6 +2,7 @@
 
 namespace UBC\Exam\MainBundle\Controller;
 
+use Doctrine\ORM\EntityNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -367,7 +368,7 @@ class DefaultController extends Controller
                     $exam->getUploadedBy()->getUsername(),
                     $exam->getLegalContentOwner(),
                     $exam->getLegalUploader(),
-                    $exam->getAccessLevel(),
+                    Exam::$ACCESS_LEVELS[$exam->getAccessLevel()],
                     $exam->getPath(),
                 )));
 
@@ -404,10 +405,19 @@ class DefaultController extends Controller
 
         $accessLogger = $this->get("monolog.logger.access");
         $user = $this->get('security.context')->getToken()->getUser();
-        if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+        if ($user instanceof \UBC\Exam\MainBundle\Entity\User ||
+            $user instanceof \Symfony\Component\Security\Core\User\User
+        ) {
             $username = $user->getUsername();
         } else {
-            $usernmae = $user;
+            $username = $user;
+        }
+
+        $uploader = 'N/A';
+        // try to load the upload user. If the user is deleted, we just ignore it
+        try {
+            $uploader = $exam->getUploadedBy()->getUsername();
+        } catch (EntityNotFoundException $e) {
         }
         $accessLogger->info(join(',', array(
             $username,
@@ -418,10 +428,10 @@ class DefaultController extends Controller
             $exam->getYear(),
             $exam->getTerm(),
             $exam->getType(),
-            $exam->getUploadedBy()->getUsername(),
+            $uploader,
             $exam->getLegalContentOwner(),
             $exam->getLegalUploader(),
-            $exam->getAccessLevel(),
+            Exam::$ACCESS_LEVELS[$exam->getAccessLevel()],
             $exam->getPath(),
         )));
 
@@ -503,16 +513,89 @@ class DefaultController extends Controller
     /**
      * Handles log manage page
      *
-     * @param Request $request
-     *
      * @return \Symfony\Component\HttpFoundation\Response
      *
      * @Route("/log", name="exam_log")
      */
-    public function logAction(Request $request)
+    public function logAction()
     {
-
+        return $this->render('UBCExamMainBundle:Default:log.html.twig');
     }
+
+    /**
+     * Handles log downloads
+     *
+     * @param string $type type of log to download
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @Route("/log/download/{type}", name="exam_log_download", )
+     */
+    public function logDownloadAction($type)
+    {
+        $header = array(
+            'upload' => array(
+                'timestamp',
+                'campus',
+                'faculty',
+                'department',
+                'subject code',
+                'year',
+                'term',
+                'type',
+                'uploaded by',
+                'legal content owner',
+                'legal uploader',
+                'access level',
+                'file',
+            ),
+            'access' => array(
+                'timestamp',
+                'user',
+                'campus',
+                'faculty',
+                'department',
+                'subject code',
+                'year',
+                'term',
+                'type',
+                'uploaded by',
+                'legal content owner',
+                'legal uploader',
+                'access level',
+                'file',
+            )
+        );
+        if (!in_array($type, array('upload', 'access'))) {
+            throw $this->createNotFoundException("$type log is not found.");
+        }
+
+        //get exam file path
+        $filename = $this->container->getParameter('kernel.logs_dir')."/$type.log";
+        $logContent = file_get_contents($filename);
+
+        $logContent = preg_replace('/\[(\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}:\d{1,2})\] (access|upload)\.INFO: /', '$1,', $logContent);
+        $logContent = str_replace(' [] []', '', $logContent);
+        $logContent = join(',', $header[$type]) . "\n" . $logContent;
+
+        // append file name with .csv
+        $download_filename = basename($filename . '.csv');
+
+        // Generate response
+        $response = new Response();
+
+        // Set headers
+        $response->headers->set('Content-Transfer-Encoding', 'binary');
+        $response->headers->set('Last-Modified', gmdate('D, d M Y H:i:s', filemtime($filename)) . 'GMT');
+        $response->headers->set('Accept-Ranges', 'byte');
+        $response->headers->set('Content-Encoding', 'none');
+        $response->headers->set('Content-type', mime_content_type($filename));
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $download_filename . '";');
+        $response->setContent($logContent);
+
+        return $response;
+    }
+
     /**
      * private function to just encapsulate downloading pdf so that we don't repeat code
      *

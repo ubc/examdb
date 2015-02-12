@@ -1,0 +1,12 @@
+{% extends 'UBCExamMainBundle::layout.html.twig' %}
+
+{% block body %}
+    <h1>Application Logs</h1>
+
+    <ul>
+        <li><a href="{{ path('exam_log_download', {'type': 'upload'}) }}">Upload Logs</a></li>
+        <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Access Logs</a></li>
+    </ul>
+
+{% endblock %}
+
