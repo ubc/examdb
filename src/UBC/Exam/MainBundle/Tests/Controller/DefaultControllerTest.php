@@ -25,6 +25,11 @@ class DefaultControllerTest extends WebTestCase
             'PHP_AUTH_PW'   => 'userpass',
         ));
 
+        $this->loadFixtures(array(
+            'UBC\Exam\MainBundle\Tests\Fixtures\ExamFixtures',
+            'UBC\Exam\MainBundle\Tests\Fixtures\SubjectCodeFixtures',
+        ));
+
         //I think I should be using mock objects, but how to do that with interface checks? (instanceof UserInterfac)
         //I believe that this also causes side effect of entering this user into DB. might need to change config_test.yml
         $user = new User();
