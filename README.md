@@ -116,6 +116,13 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
 
 6. Develop!
 
+Notes:
+
+* Update dependencies: it may run into memory limits when running `composer update`, so use the following command:
+
+    php -d memory_limit=1024M /path/to/composer update
+
+
 Running Tests
 -------------
 
