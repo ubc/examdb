@@ -12,7 +12,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity
  * @ORM\Table(name="exam")
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\ExamRepository")
- * @ORM\HasLifecycleCallbacks
  */
 class Exam
 {
@@ -167,10 +166,6 @@ class Exam
         }
     }
 
-    /**
-     * @ORM\PrePersist()
-     * @ORM\PreUpdate()
-     */
     public function preUpload()
     {
         if (null !== $this->getFile()) {
@@ -180,11 +175,7 @@ class Exam
         }
     }
 
-    /**
-     * @ORM\PostPersist()
-     * @ORM\PostUpdate()
-     */
-    public function upload()
+    public function upload($uploadDir)
     {
         if (null === $this->getFile()) {
             return;
@@ -193,24 +184,21 @@ class Exam
         // if there is an error when moving the file, an exception will
         // be automatically thrown by move(). This will properly prevent
         // the entity from being persisted to the database on error
-        $this->getFile()->move($this->getUploadRootDir(), $this->path);
+        $this->getFile()->move($uploadDir, $this->path);
 
         // check if we have an old image
         if (isset($this->temp)) {
             // delete the old image
-            unlink($this->getUploadRootDir().'/'.$this->temp);
+            unlink($uploadDir.'/'.$this->temp);
             // clear the temp image path
             $this->temp = null;
         }
         $this->file = null;
     }
 
-    /**
-     * @ORM\PostRemove()
-     */
-    public function removeUpload()
+    public function removeUpload($uploadDir)
     {
-        if ($file = $this->getAbsolutePath()) {
+        if ($file = $this->getAbsolutePath($uploadDir)) {
             unlink($file);
         }
     }
@@ -229,33 +217,9 @@ class Exam
      * returns null or absolute system path to file
      * @return Ambigous <NULL, string>
      */
-    public function getAbsolutePath()
+    public function getAbsolutePath($uploadDir)
     {
-        return null === $this->path ? null : $this->getUploadRootDir().'/'.$this->path;
-    }
-
-    /**
-     * Please see http://symfony.com/doc/2.3/cookbook/doctrine/file_uploads.html#using-lifecycle-callbacks to remove
-     * hard coded __DIR__
-     * @return string
-     */
-    protected function getUploadRootDir()
-    {
-        // the absolute directory path where uploaded
-        // documents should be saved
-        return __DIR__.'/../../../../../data/'.$this->getUploadDir();
-    }
-
-    /**
-     * returns upload directory
-     *
-     * @return string
-     */
-    protected function getUploadDir()
-    {
-        // get rid of the __DIR__ so it doesn't screw up
-        // when displaying uploaded doc/image in the view.
-        return 'uploads/documents';
+        return null === $this->path ? null : $uploadDir.'/'.$this->path;
     }
 
     /**

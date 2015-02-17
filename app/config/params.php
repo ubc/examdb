@@ -20,6 +20,7 @@ $envs = array(
     'auth2_service_application' => 'auth2_service_application',
     'auth2_service_url' => 'auth2_service_url',
     'sis_base_url' => 'sis_base_url',
+    'upload_dir' => 'upload_dir',
 );
 
 array_walk($envs, function($v, $k) use ($container) {

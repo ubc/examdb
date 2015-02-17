@@ -113,11 +113,19 @@ class User implements UserInterface, EquatableInterface, \Serializable
     /**
      * returns user's id
      *
-     * @return string
+     * @return integer
      */
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param integer $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**

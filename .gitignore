@@ -14,7 +14,7 @@
 .settings/*
 .vagrant/*
 .idea/
-data/
+app/data/
 #css are genreated
 web/css/
 app/config/parameters.yml

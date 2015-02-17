@@ -5,6 +5,7 @@ namespace UBC\Exam\MainBundle\Controller;
 use Doctrine\ORM\EntityNotFoundException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use UBC\Exam\MainBundle\Entity\Exam;
@@ -157,6 +158,11 @@ class DefaultController extends Controller
             if ($form->isValid()) {
                 //setup who did it!
                 $user = $this->get('security.context')->getToken()->getUser();
+                // if in_memory user is used to login, we manually find the first user in db
+                if ($user instanceof \Symfony\Component\Security\Core\User\User) {
+                    $user = $this->getDoctrine()->getRepository('UBCExamMainBundle:User')
+                        ->findOneBy(array());
+                }
                 $exam->setUploadedBy($user);
 
                 //save to DB
@@ -610,7 +616,10 @@ class DefaultController extends Controller
         }
 
         //get exam file path
-        $filename = realpath($exam->getAbsolutePath());
+        $filename = realpath($exam->getAbsolutePath($this->container->getParameter('upload_dir')));
+        if (!$filename) {
+            throw new FileNotFoundException($exam->getPath());
+        }
 
         // Generate response
         $response = new Response();

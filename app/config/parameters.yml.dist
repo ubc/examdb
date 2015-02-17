@@ -26,3 +26,5 @@ parameters:
     auth2_service_url: https://www.auth.stg.id.ubc.ca
 
     sis_base_url: http://sisapitest.as.it.ubc.ca:8101/sisapi/v2
+
+    upload_dir: "%kernel.root_dir%/data/uploads/documents"
