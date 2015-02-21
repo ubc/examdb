@@ -4,6 +4,8 @@ security:
         UBC\Exam\MainBundle\Entity\User: sha512
 
     role_hierarchy:
+        ROLE_STUDENT:     ROLE_USER
+        ROLE_INSTRUCTOR:  ROLE_STUDENT
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 

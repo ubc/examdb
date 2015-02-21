@@ -26,7 +26,7 @@ security:
                 cas_logout: ubc_exam_main_homepage
                 cas_role_mapping:
                     student: ROLE_STUDENT
-                    staff:   ROLE_STAFF
+                    employee:   ROLE_STAFF
 
     access_control:
         - { path: ^/exam/login, roles: IS_AUTHENTICATED_FULLY }
