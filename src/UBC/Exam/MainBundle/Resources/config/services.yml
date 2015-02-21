@@ -2,6 +2,8 @@ parameters:
 #    ubc_exam_main.example.class: UBC\Exam\MainBundle\Example
     ubc_exam_main.course_code_inject_listener.class: UBC\Exam\MainBundle\EventListener\CourseInjectionListener
     ubc_exam_main.file_upload_subscriber.class: UBC\Exam\MainBundle\EventListener\FileUploadSubscriber
+    ubc_exam_main.user_provider.class: UBC\Exam\MainBundle\Entity\UserRepository
+    ubc_exam_main.user_entity.class: UBC\Exam\MainBundle\Entity\User
 
 services:
 #    ubc_exam_main.example:
@@ -16,3 +18,8 @@ services:
         class: %ubc_exam_main.file_upload_subscriber.class%
         arguments: [%upload_dir%]
         tags: [{ name: doctrine.event_subscriber, connection: default }]
+    ubc.exam.user_provider:
+        class: %ubc_exam_main.user_provider.class%
+        factory_service: doctrine
+        factory_method: getRepository
+        arguments: [%ubc_exam_main.user_entity.class%]

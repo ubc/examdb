@@ -4,6 +4,7 @@ namespace UBC\Exam\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Security\Core\Role\RoleInterface;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -191,7 +192,11 @@ class User implements UserInterface, EquatableInterface, \Serializable
 
     public function addRole($role)
     {
+        if ($role instanceof RoleInterface) {
+            $role = $role->getRole();
+        }
         $role = strtoupper($role);
+
         if ($role === static::ROLE_DEFAULT) {
             return $this;
         }

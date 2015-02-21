@@ -1,15 +1,13 @@
 <?php 
 namespace UBC\Exam\MainBundle\Entity;
 
+use Gorg\Bundle\CasBundle\Security\Firewall\CasUserProviderInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\NoResultException;
-// use BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface;
-use UBC\Exam\MainBundle\Entity\User;
-use BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface;
 
 /**
  * This is the class that creates the user if one is not found by cas
@@ -17,7 +15,7 @@ use BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface;
  * @author Loong Chan <loong.chan@ubc.ca>
  *
  */
-class UserRepository extends EntityRepository implements UserProviderInterface//, UserFactoryInterface
+class UserRepository extends EntityRepository implements CasUserProviderInterface
 {
     /**
      * This function is called when user logs into cas.  checks if user exists, if not then creates one (non-PHPdoc)
@@ -41,16 +39,9 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
             // if there is no record matching the criteria.
             $user = $q->getSingleResult();
         } catch (NoResultException $e) {
-            /*
-             * instead of throwing exception, why not create a user!  WORK-AROUND!!!!!
-             * What SHOULD happen is:
-             * 1)in security.yml, security.firewalls.ubc_secured_area.trusted_sso.create_users: true
-             * 2)uncomment ln 10/14 in this file
-             * 3) 
-             * 
-             */
-            $user = $this->createUser($username, array(), array());
-            return $user;
+            $ex = new UsernameNotFoundException();
+            $ex->setUsername($username);
+            throw $ex;
         }
 
         return $user;
@@ -96,20 +87,19 @@ class UserRepository extends EntityRepository implements UserProviderInterface//
     }
     
     /**
-     * function that can be called to create a new user. (was supposed to be from BeSimple\SsoAuthBundle\Security\Core\User\UserFactoryInterface)
+     * function that can be called to create a new user.
      * 
-     * @param String $username
-     * @param Array $roles
-     * @param Array $attributes
-     * 
+     * @param TokenInterface $token
+     *
      * @inheritDoc
      * 
      * @return \Entities\User
      */
-    public function createUser($username, array $roles, array $attributes)
+    public function createUser(TokenInterface $token)
     {
         $newUser = new User();
-        $newUser->setUsername($username);
+        $newUser->setUsername($token->getUsername());
+        $newUser->setRoles($token->getRoles());
         $em = $this->getEntityManager();
         $em->persist($newUser);
         $em->flush();

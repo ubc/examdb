@@ -1,8 +1,7 @@
 security:
     providers:
-        administrators:
-            entity:
-                class: UBCExamMainBundle:User
+        exam_user:
+            id: ubc.exam.user_provider
     firewalls:
         exam_secured_area:
             pattern:    ^/exam
@@ -17,10 +16,17 @@ security:
                 cas_path: "%cas_path%"
                 ca_cert_path: ~
                 cas_protocol: S1
-                cas_mapping_attribute: cwlLoginName
+                cas_mapping_attribute:
+                    username: cwlLoginName
+                    roles: ubcAffiliation
+#                    firstname: givenName
+#                    lastname: sn
                 check_path: login_check
                 login_path: exam_login
                 cas_logout: ubc_exam_main_homepage
+                cas_role_mapping:
+                    student: ROLE_STUDENT
+                    staff:   ROLE_STAFF
 
     access_control:
         - { path: ^/exam/login, roles: IS_AUTHENTICATED_FULLY }

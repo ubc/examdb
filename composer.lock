@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "48adc8de8d381756a54cdba886ef9aa1",
+    "hash": "58326386c21bf739a3e3f4c07eacad54",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -735,17 +735,17 @@
         },
         {
             "name": "gorg/cas-bundle",
-            "version": "dev-logout-service",
+            "version": "dev-auth-provider",
             "target-dir": "Gorg/Bundle/CasBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/xcompass/GorgCasBundle.git",
-                "reference": "4f9e646f518a6e2bcbda8d71e5d08e22746acc4c"
+                "reference": "9a89c0015f3dc11cb76d89839665dac5ab94d42b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/xcompass/GorgCasBundle/zipball/4f9e646f518a6e2bcbda8d71e5d08e22746acc4c",
-                "reference": "4f9e646f518a6e2bcbda8d71e5d08e22746acc4c",
+                "url": "https://api.github.com/repos/xcompass/GorgCasBundle/zipball/9a89c0015f3dc11cb76d89839665dac5ab94d42b",
+                "reference": "9a89c0015f3dc11cb76d89839665dac5ab94d42b",
                 "shasum": ""
             },
             "require": {
@@ -779,9 +779,9 @@
                 "jasig"
             ],
             "support": {
-                "source": "https://github.com/xcompass/GorgCasBundle/tree/logout-service"
+                "source": "https://github.com/xcompass/GorgCasBundle/tree/auth-provider"
             },
-            "time": "2014-12-20 23:46:57"
+            "time": "2015-02-21 00:26:35"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -3539,16 +3539,16 @@
         },
         {
             "name": "phing/phing",
-            "version": "2.10.0",
+            "version": "2.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phingofficial/phing.git",
-                "reference": "4927448a7bda2e1408d5fcbf7f725dc5bdcaf76d"
+                "reference": "f6c25373cbce5e042dddd9b951a3d5638bb78f67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phingofficial/phing/zipball/4927448a7bda2e1408d5fcbf7f725dc5bdcaf76d",
-                "reference": "4927448a7bda2e1408d5fcbf7f725dc5bdcaf76d",
+                "url": "https://api.github.com/repos/phingofficial/phing/zipball/f6c25373cbce5e042dddd9b951a3d5638bb78f67",
+                "reference": "f6c25373cbce5e042dddd9b951a3d5638bb78f67",
                 "shasum": ""
             },
             "require": {
@@ -3563,9 +3563,9 @@
                 "pear-pear.php.net/pear_packagefilemanager": "1.7.x",
                 "pear-pear.php.net/pear_packagefilemanager2": "1.0.x",
                 "pear-pear.php.net/xml_serializer": "0.20.x",
-                "pear/pear_exception": "@dev",
+                "pear/pear_exception": "~1.0",
                 "pear/versioncontrol_git": "@dev",
-                "pear/versioncontrol_svn": "@dev",
+                "pear/versioncontrol_svn": "~0.5",
                 "phpdocumentor/phpdocumentor": "2.x",
                 "phploc/phploc": "2.x",
                 "phpmd/phpmd": "~2.2",
@@ -3592,7 +3592,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.9.x-dev"
+                    "dev-master": "2.10.x-dev"
                 }
             },
             "autoload": {
@@ -3625,7 +3625,7 @@
                 "task",
                 "tool"
             ],
-            "time": "2015-02-09 20:05:38"
+            "time": "2015-02-19 15:49:46"
         },
         {
             "name": "phpdocumentor/fileset",
