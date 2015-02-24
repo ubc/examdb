@@ -70,8 +70,6 @@ class DefaultController extends Controller
                 ->findExamsByCourse($exam->getSubjectcode(), $userId, $faculties, $courses);
 
         }
-        // TODO move to a listener
-        $this->updateuser();
 
         return $this->render('UBCExamMainBundle:Default:index.html.twig', array(
             'form' => $form->createView(),
@@ -173,8 +171,6 @@ class DefaultController extends Controller
             }
         }
 
-        $this->updateuser();
-
         return $this->render('UBCExamMainBundle:Default:upload.html.twig', array('form' => $form->createView()));
     }
 
@@ -200,8 +196,6 @@ class DefaultController extends Controller
                 ->getQuery();
             $exams = $query->getResult();
         }
-
-        $this->updateuser();
 
         return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams, 'username' => $user->getUsername()));
     }
@@ -638,38 +632,5 @@ class DefaultController extends Controller
         $response->setContent(file_get_contents($filename));
 
         return $response;
-    }
-
-    /**
-     * TODO move it into a listener
-     * checks and updates user profile if puid not set
-     *
-     * @return void
-     */
-    private function updateuser()
-    {
-        $securityContext = $this->get('security.context');
-
-        if ($securityContext->isGranted('IS_AUTHENTICATED_FULLY')) {
-            $securityToken = $securityContext->getToken();
-            $user = $securityToken->getUser();
-            $securityAttributes = $securityToken->getAttributes();
-            $userPuid = '';
-            if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
-                $userPuid = $user->getPuid();
-            }
-
-            //check if we need to update user to put in puid/first/lastname
-            if (!empty($securityAttributes) && isset($securityAttributes['puid']) && empty($userPuid)) {
-                $user->setPuid($securityAttributes['puid']);
-                $user->setLastname($securityAttributes['sn']);
-                $user->setFirstname($securityAttributes['givenName']);
-
-                //save updated user info
-                $em = $this->getDoctrine()->getManager();
-                $em->persist($user);
-                $em->flush();
-            }
-        }
     }
 }

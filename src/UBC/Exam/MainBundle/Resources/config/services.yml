@@ -1,18 +1,18 @@
 parameters:
-#    ubc_exam_main.example.class: UBC\Exam\MainBundle\Example
     ubc_exam_main.course_code_inject_listener.class: UBC\Exam\MainBundle\EventListener\CourseInjectionListener
     ubc_exam_main.file_upload_subscriber.class: UBC\Exam\MainBundle\EventListener\FileUploadSubscriber
     ubc_exam_main.user_provider.class: UBC\Exam\MainBundle\Entity\UserRepository
     ubc_exam_main.user_entity.class: UBC\Exam\MainBundle\Entity\User
+    ubc_exam_main.login_listener.class: UBC\Exam\MainBundle\EventListener\LoginListener
 
 services:
-#    ubc_exam_main.example:
-#        class: %ubc_exam_main.example.class%
-#        arguments: [@service_id, "plain_value", %parameter%]
-
     ubc.exam.course_code_injection_listener:
         class: %ubc_exam_main.course_code_inject_listener.class%
-        arguments: [ @session, @ubc_lt_commons.service.student ]
+        arguments: [ @session, @ubc_lt_commons.service.student, @logger ]
+        tags: [{ name: kernel.event_listener, event: security.interactive_login, method: onLoginSuccess }]
+    ubc.exam.login_listener:
+        class: %ubc_exam_main.login_listener.class%
+        arguments: [ @doctrine ]
         tags: [{ name: kernel.event_listener, event: security.interactive_login, method: onLoginSuccess }]
     ubc.exam.file_upload_subscriber:
         class: %ubc_exam_main.file_upload_subscriber.class%

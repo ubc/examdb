@@ -12,11 +12,13 @@ use UBC\LtCommons\Service\StudentService;
 class CourseInjectionListener {
     protected $session;
     protected $service;
+    protected $logger;
 
-    public function __construct(Session $session, StudentService $service)
+    public function __construct(Session $session, StudentService $service, $logger)
     {
         $this->session = $session;
         $this->service = $service;
+        $this->logger = $logger;
     }
 
     public function onLoginSuccess(InteractiveLoginEvent $event)
@@ -37,6 +39,9 @@ class CourseInjectionListener {
                     } else {
                         throw $e;
                     }
+                } catch (\RuntimeException $e) {
+                    $sections = array();
+                    $this->logger->warn("Failed to load current section for $id. Reason: " . $e->getMessage());
                 }
 
                 foreach($sections as $s) {
