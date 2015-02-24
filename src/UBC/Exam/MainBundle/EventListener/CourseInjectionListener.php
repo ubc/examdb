@@ -4,6 +4,7 @@
 namespace UBC\Exam\MainBundle\EventListener;
 
 
+use GuzzleHttp\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 use UBC\LtCommons\Service\StudentService;
@@ -27,8 +28,16 @@ class CourseInjectionListener {
             $id = $user->getPuid();
 
             if (!empty($id)) {
-                // TODO don't throw exceptions on 404
-                $sections = $this->service->getStudentCurrentSections($id);
+                try {
+                    $sections = $this->service->getStudentCurrentSections($id);
+                } catch (ClientException $e) {
+                    // the user may not exists in SIS
+                    if (404 == $e->getResponse()->getStatusCode()) {
+                        $sections = array();
+                    } else {
+                        throw $e;
+                    }
+                }
 
                 foreach($sections as $s) {
                     $key = $s->getCourse()->getCode() . ' ' . $s->getCourse()->getNumber();
