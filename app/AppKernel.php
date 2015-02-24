@@ -4,6 +4,8 @@ use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Stof\DoctrineExtensionsBundle\StofDoctrineExtensionsBundle;
 
+ini_set('date.timezone', 'America/Vancouver');
+
 class AppKernel extends Kernel
 {
     public function registerBundles()
