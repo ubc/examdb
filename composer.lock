@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "88c6898fcc53372e02f238aac954747a",
+    "hash": "aedfe8b750305a0aeb8375d0653b9fad",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -2584,7 +2584,7 @@
         },
         {
             "name": "ubc/ltcommons",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubc/ltcommons.git",
@@ -2635,22 +2635,22 @@
         },
         {
             "name": "ubc/ltcommons-bundle",
-            "version": "dev-master",
+            "version": "0.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ubc/ltcommons-bundle.git",
-                "reference": "30e73c4c208b07a0a2b80b9c9e4d16954ce67361"
+                "reference": "e5d710a72db83ac17fc7b00134ec8accbf1b351b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ubc/ltcommons-bundle/zipball/30e73c4c208b07a0a2b80b9c9e4d16954ce67361",
-                "reference": "30e73c4c208b07a0a2b80b9c9e4d16954ce67361",
+                "url": "https://api.github.com/repos/ubc/ltcommons-bundle/zipball/e5d710a72db83ac17fc7b00134ec8accbf1b351b",
+                "reference": "e5d710a72db83ac17fc7b00134ec8accbf1b351b",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3",
                 "symfony/http-kernel": "~2.2",
-                "ubc/ltcommons": "dev-master"
+                "ubc/ltcommons": "~0.1"
             },
             "require-dev": {
                 "phpunit/phpunit": "4.3.*",
@@ -2681,7 +2681,7 @@
                 "sis",
                 "ubc"
             ],
-            "time": "2014-12-17 00:03:16"
+            "time": "2015-02-25 05:34:14"
         }
     ],
     "packages-dev": [
@@ -5661,7 +5661,6 @@
     "minimum-stability": "dev",
     "stability-flags": {
         "gorg/cas-bundle": 20,
-        "ubc/ltcommons-bundle": 20,
         "sensio/buzz-bundle": 20,
         "doctrine/data-fixtures": 20,
         "liip/functional-test-bundle": 20,
