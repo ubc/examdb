@@ -33,7 +33,9 @@ class LoginListener {
             $user->setFirstname($attributes['givenName']);
         }
 
-        $user->setLastLogin(new \DateTime());
+        if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+            $user->setLastLogin(new \DateTime());
+        }
 //            $em->persist($user);
         $entityManager->flush();
     }
