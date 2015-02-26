@@ -21,15 +21,6 @@ class UserControllerTest extends WebTestCase
         ));
 
         $this->loadFixtures(array('UBC\Exam\MainBundle\Tests\Fixtures\ExamFixtures'));
-
-        //I think I should be using mock objects, but how to do that with interface checks? (instanceof UserInterfac)
-        //I believe that this also causes side effect of entering this user into DB. might need to change config_test.yml
-        $user = new User();
-        $user->setPuid('123456');
-        $user->setFirstname('test');
-        $user->setLastname('ing');
-        $user->setUsername('tester');
-        $this->user = $user;
     }
 
     public function providerUrls()
@@ -61,6 +52,17 @@ class UserControllerTest extends WebTestCase
 
         $this->assertEquals(
             403,
+            $this->client->getResponse()->getStatusCode()
+        );
+
+    }
+
+    public function testEditAdminUser()
+    {
+        $this->client->request('GET', '/exam/user/2/edit');
+
+        $this->assertEquals(
+            200,
             $this->client->getResponse()->getStatusCode()
         );
 
