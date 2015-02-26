@@ -189,11 +189,18 @@ class DefaultController extends Controller
         if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
             $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
 
-            $query = $repo->createQueryBuilder('e')
-                ->where('e.uploaded_by = :user')
-                ->setParameter('user', $user)
-                ->orderBy('e.created', 'DESC')
-                ->getQuery();
+            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+                // admin can see all exams
+                $query = $repo->createQueryBuilder('e')
+                    ->orderBy('e.created', 'DESC')
+                    ->getQuery();
+            } else {
+                $query = $repo->createQueryBuilder('e')
+                    ->where('e.uploaded_by = :user')
+                    ->setParameter('user', $user)
+                    ->orderBy('e.created', 'DESC')
+                    ->getQuery();
+            }
             $exams = $query->getResult();
         }
 
