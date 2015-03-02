@@ -216,7 +216,7 @@ class UserController extends Controller
         $roles = $entity->getRoles();
         foreach ($roles as $role) {
             if (!$this->get('security.context')->isGranted($role)) {
-                throw new AccessDeniedException('You don\'t have permission to edit this user.');
+                throw new AccessDeniedException('You don\'t have permission to edit this user with role ' . $role);
             }
         }
 
