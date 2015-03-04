@@ -18,9 +18,9 @@ security:
         - { path: ^/exam/download, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/exam/list, roles: ROLE_USER }
-        - { path: ^/exam/upload, roles: ROLE_USER }
-        - { path: ^/exam/delete_exam, roles: ROLE_USER }
-        - { path: ^/exam/update_exam, roles: ROLE_USER }
+        - { path: ^/exam/upload, roles: ROLE_STAFF }
+        - { path: ^/exam/delete_exam, roles: ROLE_STAFF }
+        - { path: ^/exam/update_exam, roles: ROLE_STAFF }
         - { path: ^/exam/user, roles: ROLE_ADMIN }
         - { path: ^/exam/log, roles: ROLE_ADMIN }
         #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }

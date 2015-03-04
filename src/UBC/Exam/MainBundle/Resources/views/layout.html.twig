@@ -121,7 +121,7 @@
 	      <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
 		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
 	      </li>
-	      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+	      {% if is_granted('ROLE_STAFF') %}
 		<li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
@@ -191,7 +191,7 @@
 	      <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
 		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
 	      </li>
-	      {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+	      {% if is_granted('ROLE_STAFF') %}
 			  <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>

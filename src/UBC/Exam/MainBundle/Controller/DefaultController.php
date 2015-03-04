@@ -33,7 +33,6 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $securityContext = $this->get('security.context');
-        $isLoggedIn = $securityContext->isGranted('IS_AUTHENTICATED_FULLY');
 
         $em = $this->getDoctrine()->getManager();
 
