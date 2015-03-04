@@ -4,6 +4,7 @@ parameters:
     ubc_exam_main.user_provider.class: UBC\Exam\MainBundle\Entity\UserRepository
     ubc_exam_main.user_entity.class: UBC\Exam\MainBundle\Entity\User
     ubc_exam_main.login_listener.class: UBC\Exam\MainBundle\EventListener\LoginListener
+    ubc_exam_main.has_permission_validator.class: UBC\Exam\MainBundle\Validator\Constraints\HasPermissionValidator
 
 services:
     ubc.exam.course_code_injection_listener:
@@ -23,3 +24,8 @@ services:
         factory_service: doctrine
         factory_method: getRepository
         arguments: [%ubc_exam_main.user_entity.class%]
+    ubc.exam.has_permission_validator:
+        class: %ubc_exam_main.has_permission_validator.class%
+        arguments: [@security.context]
+        tags:
+            - { name: validator.constraint_validator, alias: has_permission }

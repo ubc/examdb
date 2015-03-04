@@ -1,0 +1,4 @@
+UBC\Exam\MainBundle\Entity\User:
+    properties:
+        roles:
+            - UBC\Exam\MainBundle\Validator\Constraints\HasPermission: ~
