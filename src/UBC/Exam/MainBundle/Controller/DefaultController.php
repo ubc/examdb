@@ -32,8 +32,6 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $securityContext = $this->get('security.context');
-
         $em = $this->getDoctrine()->getManager();
 
         $coursesWithKeys = $request->getSession()->get('courses') ? $request->getSession()->get('courses') : array();
@@ -42,7 +40,7 @@ class DefaultController extends Controller
             $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
         );
 
-        $userId = ($this->getUser() instanceof \UBC\Exam\MainBundle\Entity\User) ? $this->getUser()->getId() : 0;
+        $userId = $this->getCurrentUserId();
         $uniqueSubjectCodes = $em->getRepository('UBCExamMainBundle:Exam')
             ->getAvailableSubjectCodes($userId, $faculties, $courses);
 
@@ -397,7 +395,7 @@ class DefaultController extends Controller
     {
         //try to get exam based on filename
         $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-            ->findExamByPath($filename);
+            ->findExamByPath($filename, $this->getCurrentUserId());
 
         if (empty($exam)) {
             //flash message to show lack of permission
@@ -638,5 +636,10 @@ class DefaultController extends Controller
         $response->setContent(file_get_contents($filename));
 
         return $response;
+    }
+
+    private function getCurrentUserId()
+    {
+        return ($this->getUser() instanceof \UBC\Exam\MainBundle\Entity\User) ? $this->getUser()->getId() : 0;
     }
 }
