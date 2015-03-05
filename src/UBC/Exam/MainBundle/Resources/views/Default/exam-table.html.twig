@@ -57,7 +57,7 @@
         <tbody>
             <tr>
                 {% if list is defined %}
-                    <td>Would you like to <a href="/exam/upload">upload material</a>?</td>
+                    <td>Would you like to <a href="{{ url('exam_upload') }}">upload material</a>?</td>
                 {% else %}
                     <td>Please widen your search criteria.</td>
                 {% endif %}

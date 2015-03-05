@@ -183,21 +183,22 @@ class DefaultController extends Controller
         $exams = array();
         $user = $this->get('security.context')->getToken()->getUser();
 
-        if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
-            $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
+        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
 
-            if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-                // admin can see all exams
-                $query = $repo->createQueryBuilder('e')
-                    ->orderBy('e.created', 'DESC')
-                    ->getQuery();
-            } else {
-                $query = $repo->createQueryBuilder('e')
-                    ->where('e.uploaded_by = :user')
-                    ->setParameter('user', $user)
-                    ->orderBy('e.created', 'DESC')
-                    ->getQuery();
-            }
+        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
+            // admin can see all exams
+            $query = $repo->createQueryBuilder('e')
+                ->orderBy('e.created', 'DESC')
+                ->getQuery();
+                
+            $exams = $query->getResult();
+        } elseif ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
+            $query = $repo->createQueryBuilder('e')
+                ->where('e.uploaded_by = :user')
+                ->setParameter('user', $user)
+                ->orderBy('e.created', 'DESC')
+                ->getQuery();
+            
             $exams = $query->getResult();
         }
 
