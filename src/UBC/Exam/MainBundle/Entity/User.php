@@ -455,6 +455,6 @@ class User implements UserInterface, EquatableInterface, \Serializable
     }
 
     public function getRoleString() {
-        return join(',', $this->getRoles());
+        return join(', ', $this->getRoles());
     }
 }

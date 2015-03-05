@@ -5,21 +5,60 @@
 {% endblock %}
 
 {% block body %}
+    
+    <ul class="breadcrumb expand">
+        <li>
+            <a href="{{ url('user') }}">Edit Users</a> <span class="divider">/</span>
+        </li>
+        <li class="active">Add User</li>
+    </ul>
 
-<h1>{{ 'views.new.creation'|trans({'%entity%': 'User'}, 'JordiLlonchCrudGeneratorBundle') }}</h1>
+    <h1>Add User</h1>
+    
+    <p>Usernames must match the user's CWL (Campus-Wide Login). Users can have one or more of the following roles:</p>
+    
+    <ul>
+        <li><strong>ROLE_USER</strong> (Default): All users who log into the application receive this role</li>
+        <li><strong>ROLE_STUDENT</strong>: Users with a student role can see additional exam prep material based on courses they are enrolled in</li>
+        <li><strong>ROLE_STAFF</strong>: Users with a staff role can upload material and manage any content they've uploaded</li>
+        <li><strong>ROLE_ADMIN</strong>: Users with an admin role can see and manage all material in the database, upload new material, edit users (users, students, staff, and other admins), and download activity logs</li>
+        <li><strong>ROLE_SUPER_ADMIN</strong>: Users with a super admin role are identical to those with an admin role, but they can edit all user roles</li>
+    </ul>
+    
+    <form action="{{ path('user_create') }}" method="post" {{ form_enctype(form) }}>
+        
+        <fieldset>
+            <legend>New User Details</legend>
+            <div class="row-fluid">
+                <div class="span6">
+                    {{ form_label(form.username) }}
+                    {{ form_errors(form.username) }}
+                    {{ form_widget(form.username) }}
+                </div>
+                <div class="span6">
+                    {{ form_label(form.roleString) }}
+                    {{ form_errors(form.roleString) }}
+                    {{ form_widget(form.roleString) }}
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span6">
+                    {{ form_label(form.firstname) }}
+                    {{ form_errors(form.firstname) }}
+                    {{ form_widget(form.firstname) }}
+                </div>
+                <div class="span6">
+                    {{ form_label(form.lastname) }}
+                    {{ form_errors(form.lastname) }}
+                    {{ form_widget(form.lastname) }}
+                </div>
+            </div>
+        </fieldset>
+        
+        <div class="text-center">
+            <button type="submit" class="btn-large btn-primary btn-save">Save</button>
+        </div>
+        
+    </form>
 
-<form class="well" action="{{ path('user_create') }}" method="post" {{ form_enctype(form) }}>
-    {{ form_widget(form) }}
-    <p>
-        <button type="submit" class="btn btn-success">{{ 'views.new.create'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
-    </p>
-</form>
-
-<div>
-    <div class="float-left">
-        <a class="btn" href="{{ path('user') }}">
-            {{ 'views.recordactions.backtothelist'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
-        </a>
-    </div>
-</div>
 {% endblock %}

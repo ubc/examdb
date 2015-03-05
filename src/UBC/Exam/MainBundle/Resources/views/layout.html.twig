@@ -130,18 +130,19 @@
 		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
+	      {% if is_granted('ROLE_ADMIN') %}
+		<li class="{% if app.request.attributes.get('_route') == 'user' or
+				 app.request.attributes.get('_route') == 'user_edit' or
+				 app.request.attributes.get('_route') == 'user_new' %}active{% endif %}">
+		  <a href="{{ url('user') }}">Edit Users</a>
+		</li>
+		<li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
+		  <a href="{{ url('exam_log') }}">Download Logs</a>
+	        </li>
+	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
 		<a href="{{ url('exam_guide') }}">FAQ</a>
 	      </li>
-          {% if is_granted('ROLE_ADMIN') %}
-          <li class="{% if app.request.attributes.get('_route') == 'user' %}active{% endif %}">
-            <a href="{{ url('user') }}">Admin</a>
-          </li>
-          <li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
-            <a href="{{ url('exam_log') }}">Logs</a>
-          </li>
-          {% endif %}
-
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
@@ -200,17 +201,19 @@
 		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
+	      {% if is_granted('ROLE_ADMIN') %}
+		<li class="{% if app.request.attributes.get('_route') == 'user' or
+				 app.request.attributes.get('_route') == 'user_edit' or
+				 app.request.attributes.get('_route') == 'user_new' %}active{% endif %}">
+		  <a href="{{ url('user') }}">Edit Users</a>
+		</li>
+		<li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
+		  <a href="{{ url('exam_log') }}"> Download Logs</a>
+		</li>
+	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
 			  <a href="{{ url('exam_guide') }}">FAQ</a>
 	      </li>
-          {% if is_granted('ROLE_ADMIN') %}
-          <li class="{% if app.request.attributes.get('_route') == 'user' %}active{% endif %}">
-            <a href="{{ url('user') }}">Admin</a>
-          </li>
-          <li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
-            <a href="{{ url('exam_log') }}">Logs</a>
-          </li>
-          {% endif %}
 	      <li class="pull-right">
 		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
 		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>

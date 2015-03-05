@@ -12,9 +12,9 @@ class UserType extends AbstractType
     {
         $builder
             ->add('username', 'text', array('trim' => true))
-            ->add('firstname', 'text', array('trim' => true))
-            ->add('lastname', 'text', array('trim' => true))
-            ->add('roleString', 'text', array('trim' => true))
+            ->add('firstname', 'text', array('label' => 'First Name', 'trim' => true))
+            ->add('lastname', 'text', array('label' => 'Last Name', 'trim' => true))
+            ->add('roleString', 'text', array('label' => 'Role(s) (separate each with a comma)', 'trim' => true))
         ;
     }
 

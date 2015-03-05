@@ -1,11 +1,14 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block body %}
-    <h1>Application Logs</h1>
+    
+    <h1>Download Logs</h1>
+
+    <p>Application activity logs are available for admins and super admins to download in a CSV (comma-separated values) file.</p>
 
     <ul>
-        <li><a href="{{ path('exam_log_download', {'type': 'upload'}) }}">Upload Logs</a></li>
-        <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Access Logs</a></li>
+        <li><a href="{{ path('exam_log_download', {'type': 'upload'}) }}">Download "Upload Log" <i class="icon-download"></i></a></li>
+        <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Download "Access Log" <i class="icon-download"></i></a></li>
     </ul>
 
 {% endblock %}
