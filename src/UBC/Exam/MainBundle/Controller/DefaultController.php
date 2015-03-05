@@ -40,7 +40,7 @@ class DefaultController extends Controller
             $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
         );
 
-        $userId = $this->getCurrentUserId();
+        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
         $uniqueSubjectCodes = $em->getRepository('UBCExamMainBundle:Exam')
             ->getAvailableSubjectCodes($userId, $faculties, $courses);
 
@@ -394,9 +394,11 @@ class DefaultController extends Controller
      */
     public function downloadAction($filename)
     {
+        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+
         //try to get exam based on filename
         $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-            ->findExamByPath($filename, $this->getCurrentUserId());
+            ->findExamByPath($filename, $userId);
 
         if (empty($exam)) {
             //flash message to show lack of permission

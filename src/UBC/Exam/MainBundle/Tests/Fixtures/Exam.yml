@@ -57,7 +57,7 @@ UBC\Exam\MainBundle\Entity\Exam:
     created: <dateTime()>
     modified: <dateTime()>
   exam_course:
-    uploaded_by: @user*
+    uploaded_by: @instructor
     campus: <randomElement(['UBC', 'UBCO'])>
     faculty: 'LFS'
     dept:  'LFS'
@@ -72,5 +72,23 @@ UBC\Exam\MainBundle\Entity\Exam:
     legal_agreed: 1
     access_level: 4
     path: course.pdf
+    created: <dateTime()>
+    modified: <dateTime()>
+  exam_me:
+    uploaded_by: @instructor
+    campus: <randomElement(['UBC', 'UBCO'])>
+    faculty: 'LFS'
+    dept:  'LFS'
+    subject_code: 'LFS 300'
+    year: <year()>
+    term: <randomElement(['W', 'S'])>
+    type: <numberBetween(1,3)>
+    comments: <paragraph()>
+    legal_content_owner: <name()>
+    legal_uploader: <name()>
+    legal_date: <dateTime()>
+    legal_agreed: 1
+    access_level: 5
+    path: me.pdf
     created: <dateTime()>
     modified: <dateTime()>

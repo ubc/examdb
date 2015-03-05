@@ -11,6 +11,11 @@ class ExamRepository extends EntityRepository
 {
     private function addVisibleExamCriteria(QueryBuilder $qb, $user_id = 0, $faculties = array(), $courses = array())
     {
+        // user_id = -1 means admin user, no additional filter needed.
+        if ($user_id == -1) {
+            return $qb;
+        }
+
         $exp = $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_EVERYONE);
 
         if ($user_id != 0) {
@@ -42,10 +47,7 @@ class ExamRepository extends EntityRepository
 
             $exp = $qb->expr()->orX(
                 $exp,
-                $qb->expr()->andX(
-                    $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_ME), // only me
-                    $qb->expr()->eq('e.uploaded_by', $user_id)
-                )
+                $qb->expr()->eq('e.uploaded_by', $user_id)
             );
         }
 

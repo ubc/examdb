@@ -130,7 +130,7 @@ class DefaultControllerTest extends WebTestCase
             ->with($this->equalTo($this->client->getContainer()->getParameter('wiki_base_url') . urlencode('UBC/ARTS/ASIA')))
             ->will($this->returnValue($response));
 
-        $this->client->getContainer()->set('doctrine.orm.default_entity_manager', $entityManager);
+//        $this->client->getContainer()->set('doctrine.orm.default_entity_manager', $entityManager);
         $this->client->getContainer()->set('buzz', $buzz);
 
         $crawler = $this->client->request('GET', '/exam/wikicontent/CHIN');
@@ -231,6 +231,66 @@ class DefaultControllerTest extends WebTestCase
         $this->assertSame(array(), $data);
     }
 
+    public function testHomeWithPublicAccess()
+    {
+        $client = self::createClient();
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/exam');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertCount(1, $crawler->filter('select.main-search'));
+        $this->assertCount(1, $crawler->filter('#form_search'));
+        // three public courses plus default selection
+        $this->assertCount(4, $crawler->filter('select.main-search option'));
+    }
+
+    public function testHomeWithAdmin()
+    {
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'admin',
+            'PHP_AUTH_PW' => 'pass',
+        ));
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/exam');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertCount(1, $crawler->filter('select.main-search'));
+        $this->assertCount(1, $crawler->filter('#form_search'));
+        // all courses plus default selection
+        $this->assertCount(11, $crawler->filter('select.main-search option'));
+    }
+
+    public function testHomeWithStudent()
+    {
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'student',
+            'PHP_AUTH_PW' => 'pass',
+        ));
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/exam');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertCount(1, $crawler->filter('select.main-search'));
+        $this->assertCount(1, $crawler->filter('#form_search'));
+        // all courses plus default selection
+        $this->assertCount(6, $crawler->filter('select.main-search option'));
+    }
+
+    public function testHomeWithInstructor()
+    {
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'instructor',
+            'PHP_AUTH_PW' => 'pass',
+        ));
+        $client->followRedirects();
+        $crawler = $client->request('GET', '/exam');
+
+        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertCount(1, $crawler->filter('select.main-search'));
+        $this->assertCount(1, $crawler->filter('#form_search'));
+        // all courses plus default selection
+        $this->assertCount(8, $crawler->filter('select.main-search option'));
+    }
 
     public function testDownload()
     {

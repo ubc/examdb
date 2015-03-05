@@ -106,7 +106,7 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->submit($form);
 
-        $this->assertTrue($crawler->filter('td:contains("Test")')->count() > 0);
+        $this->assertTrue($crawler->filter('td:contains("Test")')->count() > 0, 'Did the new user go to the second page of list?');
     }
 
     public function testEditUser()
