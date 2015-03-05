@@ -81,7 +81,6 @@ class DefaultControllerTest extends WebTestCase
     {
         return array(
             array('/exam/'),
-            array('/exam/upload'),
             array('/exam/list'),
             array('/exam/wikicontent/CHIN'),
             array('/exam/subjectcode/UBC'),
