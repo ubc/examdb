@@ -636,6 +636,9 @@ class DefaultController extends Controller
 
         $response->setContent(file_get_contents($filename));
 
+        $exam->increaseDownloads();
+        $this->getDoctrine()->getManager()->flush();
+
         return $response;
     }
 

@@ -15,7 +15,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Exam
 {
-    static public $ACCESS_LEVELS = array('1' => 'Everyone', '2' => 'People with UBC CWLs', '3' => 'Students with Courses in This Faculty', '4' => 'Current Course Participants', '5' => 'Only Me');
+    const ACCESS_LEVEL_EVERYONE = 1;
+    const ACCESS_LEVEL_CWL      = 2;
+    const ACCESS_LEVEL_FACULTY  = 3;
+    const ACCESS_LEVEL_COURSE   = 4;
+    const ACCESS_LEVEL_ME       = 5;
+    static public $ACCESS_LEVELS = array(
+        self::ACCESS_LEVEL_EVERYONE => 'Everyone',
+        self::ACCESS_LEVEL_CWL      => 'People with UBC CWLs',
+        self::ACCESS_LEVEL_FACULTY  => 'Students with Courses in This Faculty',
+        self::ACCESS_LEVEL_COURSE   => 'Current Course Participants',
+        self::ACCESS_LEVEL_ME       => 'Only Me'
+    );
     static public $TYPES = array('Actual Assessment' => 'Past Exam', 'Practice Assessment' => 'Practice Exam', 'Other Material' => 'Other Exam Prep Material');
     static public $TERMS = array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD');
 
@@ -142,6 +153,13 @@ class Exam
      * @ORM\Column(type="datetime")
      */
     private $modified;
+
+    /**
+     * @var int $downloads
+     * @ORM\Column(type="integer")
+     * @Assert\NotBlank(message="Please choose an access level")
+     */
+    private $downloads = 0;
 
     private $temp;
 
@@ -514,8 +532,8 @@ class Exam
      * sets legal_date
      *
      * @param string $legal_date
-     *
-     * @return \UBC\Exam\MainBundle\Entity\Exam
+     * @return Exam
+     * @throws \Exception
      */
     public function setLegalDate($legal_date)
     {
@@ -640,5 +658,26 @@ class Exam
     public function getModified()
     {
         return $this->modified;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDownloads()
+    {
+        return $this->downloads;
+    }
+
+    /**
+     * @param int $downloads
+     */
+    public function setDownloads($downloads)
+    {
+        $this->downloads = $downloads;
+    }
+
+    public function increaseDownloads()
+    {
+        $this->downloads++;
     }
 }
