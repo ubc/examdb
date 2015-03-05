@@ -8,8 +8,9 @@ security:
         in_memory:
             memory:
                 users:
-                    user:  { password: userpass, roles: [ 'ROLE_USER' ] }
-                    admin: { password: adminpass, roles: [ 'ROLE_ADMIN' ] }
+                    admin: { password: pass, roles: [ 'ROLE_ADMIN' ] }
+                    student: { password: pass, roles: [ 'ROLE_STUDENT' ] }
+                    instructor: { password: pass, roles: [ 'ROLE_STAFF' ] }
     access_control:
         - { path: ^/exam/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/download, roles: IS_AUTHENTICATED_ANONYMOUSLY }

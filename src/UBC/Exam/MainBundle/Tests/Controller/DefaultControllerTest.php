@@ -16,28 +16,18 @@ use UBC\Exam\MainBundle\Entity\User;
 class DefaultControllerTest extends WebTestCase
 {
     private $client = null;
-    private $user = null;
 
     public function setUp()
     {
         $this->client = static::createClient(array(), array(
-            'PHP_AUTH_USER' => 'user',
-            'PHP_AUTH_PW'   => 'userpass',
+            'PHP_AUTH_USER' => 'student',
+            'PHP_AUTH_PW'   => 'pass',
         ));
 
         $this->loadFixtures(array(
             'UBC\Exam\MainBundle\Tests\Fixtures\ExamFixtures',
             'UBC\Exam\MainBundle\Tests\Fixtures\SubjectCodeFixtures',
         ));
-
-        //I think I should be using mock objects, but how to do that with interface checks? (instanceof UserInterfac)
-        //I believe that this also causes side effect of entering this user into DB. might need to change config_test.yml
-        $user = new User();
-        $user->setPuid('123456');
-        $user->setFirstname('test');
-        $user->setLastname('ing');
-        $user->setUsername('tester');
-        $this->user = $user;
     }
 
     /**
@@ -45,12 +35,16 @@ class DefaultControllerTest extends WebTestCase
      * @dataProvider providerUrls
      * @param string $url the url to test
      */
-    public function testPageIsSuccessful($url)
+    public function testPageIsSuccessful($url, $username)
     {
-        $this->client->followRedirects();
-        $this->client->request('GET', $url);
+        $client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => $username,
+            'PHP_AUTH_PW'   => 'pass',
+        ));
+        $client->followRedirects();
+        $client->request('GET', $url);
 
-        $this->assertTrue($this->client->getResponse()->isSuccessful());
+        $this->assertTrue($client->getResponse()->isSuccessful());
     }
 
     /**
@@ -80,13 +74,13 @@ class DefaultControllerTest extends WebTestCase
     public function providerUrls()
     {
         return array(
-            array('/exam/'),
-            array('/exam/list'),
-            array('/exam/wikicontent/CHIN'),
-            array('/exam/subjectcode/UBC'),
-            array('/exam/subjectcode/UBC/CHIN'),
-            array('/exam/guide'),
-            array('/exam/logout'),
+            array('/exam/', 'student'),
+            array('/exam/list', 'instructor'),
+            array('/exam/upload', 'instructor'),
+            array('/exam/logout', 'student'),
+            array('/exam/log', 'admin'),
+            array('/exam/log/download/access', 'admin'),
+            array('/exam/log/download/upload', 'admin'),
         );
     }
 
@@ -249,7 +243,6 @@ class DefaultControllerTest extends WebTestCase
     
     public function tearDown()
     {
-        unset($this->user);
     }
 
 

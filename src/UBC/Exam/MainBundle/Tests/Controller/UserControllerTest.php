@@ -9,7 +9,6 @@ use UBC\Exam\MainBundle\Entity\User;
 class UserControllerTest extends WebTestCase
 {
     private $client = null;
-    private $user = null;
 
     public function setUp()
     {
@@ -17,7 +16,7 @@ class UserControllerTest extends WebTestCase
 
         $this->client = static::createClient(array(), array(
             'PHP_AUTH_USER' => 'admin',
-            'PHP_AUTH_PW'   => 'adminpass',
+            'PHP_AUTH_PW'   => 'pass',
         ));
 
         $this->loadFixtures(array('UBC\Exam\MainBundle\Tests\Fixtures\ExamFixtures'));
