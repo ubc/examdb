@@ -615,7 +615,7 @@ class DefaultController extends Controller
         }
 
         //get exam file path
-        $filename = realpath($exam->getAbsolutePath($this->container->getParameter('upload_dir')));
+        $filename = $exam->getAbsolutePath($this->container->getParameter('upload_dir'));
         if (!$filename) {
             throw new FileNotFoundException($exam->getPath());
         }

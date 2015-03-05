@@ -11,20 +11,20 @@ class ExamRepository extends EntityRepository
 {
     private function addVisibleExamCriteria(QueryBuilder $qb, $user_id = 0, $faculties = array(), $courses = array())
     {
-        $exp = $qb->expr()->eq('e.access_level', 1);
+        $exp = $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_EVERYONE);
 
         if ($user_id != 0) {
             // logged in user access
             $exp = $qb->expr()->orX(
                 $exp,
-                $qb->expr()->eq('e.access_level', 2)
+                $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_CWL)
             );
 
             if (!empty($faculties)) {
                 $exp = $qb->expr()->orX(
                     $exp,
                     $qb->expr()->andX(
-                        $qb->expr()->eq('e.access_level', 3), // faculty level
+                        $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_FACULTY), // faculty level
                         $qb->expr()->in('e.faculty', $faculties)
                     )
                 );
@@ -34,7 +34,7 @@ class ExamRepository extends EntityRepository
                 $exp = $qb->expr()->orX(
                     $exp,
                     $qb->expr()->andX(
-                        $qb->expr()->eq('e.access_level', 4), // course level
+                        $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_COURSE), // course level
                         $qb->expr()->in('e.subject_code', $courses)
                     )
                 );
@@ -43,7 +43,7 @@ class ExamRepository extends EntityRepository
             $exp = $qb->expr()->orX(
                 $exp,
                 $qb->expr()->andX(
-                    $qb->expr()->eq('e.access_level', 5), // only me
+                    $qb->expr()->eq('e.access_level', Exam::ACCESS_LEVEL_ME), // only me
                     $qb->expr()->eq('e.uploaded_by', $user_id)
                 )
             );
@@ -106,5 +106,10 @@ class ExamRepository extends EntityRepository
 
         // TODO add cache
         return $query->getOneOrNullResult();
+    }
+
+    public function getExamStats()
+    {
+
     }
 } 

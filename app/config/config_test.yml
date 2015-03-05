@@ -65,3 +65,6 @@ ubc_lt_commons:
     xml:
       path: "%kernel.root_dir%/fixtures/"
       serializer: JMS
+
+parameters:
+  upload_dir: vfs://upload_dir

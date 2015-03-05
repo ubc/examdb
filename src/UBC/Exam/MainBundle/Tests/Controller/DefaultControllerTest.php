@@ -3,11 +3,12 @@
 namespace UBC\Exam\MainBundle\Tests\Controller;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
+use org\bovigo\vfs\vfsStream;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 
 /**
  * tests default controller
- * 
+ *
  * @author Loong Chan <loong.chan@ubc.ca>
  * @author Pan Luo <pan.luo@ubc.ca>
  *
@@ -20,7 +21,7 @@ class DefaultControllerTest extends WebTestCase
     {
         $this->client = static::createClient(array(), array(
             'PHP_AUTH_USER' => 'student',
-            'PHP_AUTH_PW'   => 'pass',
+            'PHP_AUTH_PW' => 'pass',
         ));
 
         $this->loadFixtures(array(
@@ -38,11 +39,11 @@ class DefaultControllerTest extends WebTestCase
     {
         $client = static::createClient(array(), array(
             'PHP_AUTH_USER' => $username,
-            'PHP_AUTH_PW'   => 'pass',
+            'PHP_AUTH_PW' => 'pass',
         ));
 
-        touch($this->getContainer()->getParameter('kernel.logs_dir').'/'.'access.log');
-        touch($this->getContainer()->getParameter('kernel.logs_dir').'/'.'upload.log');
+        touch($this->getContainer()->getParameter('kernel.logs_dir') . '/' . 'access.log');
+        touch($this->getContainer()->getParameter('kernel.logs_dir') . '/' . 'upload.log');
         $client->followRedirects();
         $client->request('GET', $url);
 
@@ -126,7 +127,7 @@ class DefaultControllerTest extends WebTestCase
             ->getMock();
         $buzz->expects($this->any())
             ->method('get')
-            ->with($this->equalTo($this->client->getContainer()->getParameter('wiki_base_url').urlencode('UBC/ARTS/ASIA')))
+            ->with($this->equalTo($this->client->getContainer()->getParameter('wiki_base_url') . urlencode('UBC/ARTS/ASIA')))
             ->will($this->returnValue($response));
 
         $this->client->getContainer()->set('doctrine.orm.default_entity_manager', $entityManager);
@@ -231,21 +232,37 @@ class DefaultControllerTest extends WebTestCase
     }
 
 
+    public function testDownload()
+    {
+        // mock the file system on vfs, upload_dir is set in config_test.yml
+        vfsStream::setup('upload_dir', 777, array('public1.pdf' => 'test'));
+
+        $this->client->request('GET', '/exam/download/public1.pdf');
+
+        $this->assertTrue($this->client->getResponse()->isSuccessful());
+
+        ob_start();
+        // Send the response to the output buffer
+        $this->client->getResponse()->sendContent();
+        // Get the contents of the output buffer
+        $content = ob_get_contents();
+        // Clean the output buffer and end it
+        ob_end_clean();
+
+        $this->assertEquals('test', $content);
+
+        $this->client->request('GET', '/exam/download/non_exists.pdf');
+        $this->assertTrue($this->client->getResponse()->isRedirect('/exam/'));
+    }
     /**
      * This test whether the upload page has validate form
      */
 //     public function testUpload()
 //     {
 //         $this->logIn();
-        
+
 //         $crawler = $this->client->request('GET', '/exam/upload');
-        
+
 //         $this->assertTrue($crawler->filter('div.content > form.validate-form')->count() === 1);
 //     }
-    
-    public function tearDown()
-    {
-    }
-
-
 }
