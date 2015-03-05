@@ -25,6 +25,22 @@ class FileUploadSubscriber implements EventSubscriber
     }
 
     /**
+     * @param string $uploadDir
+     */
+    public function setUploadDir($uploadDir)
+    {
+        $this->uploadDir = $uploadDir;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUploadDir()
+    {
+        return $this->uploadDir;
+    }
+
+    /**
      * Returns an array of events this subscriber wants to listen to.
      *
      * @return array
