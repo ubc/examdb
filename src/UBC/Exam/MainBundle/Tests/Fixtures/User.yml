@@ -1,35 +1,61 @@
 UBC\Exam\MainBundle\Entity\User:
-  user1:
-    username (unique): <username()>
+  superadmin:
+    username: superadmin
     firstname: <firstname()>
     lastname: <lastname()>
-    password: 123456
+    password: pass
     email (unique): <email()>
-    puid: 1
+    puid: superadmin
     isActive: 1
     created: <dateTime()>
     modified: <dateTime()>
     roles:
       - ROLE_SUPER_ADMIN
       - ROLE_USER
-  user2:
-    username (unique): <username()>
+  admin:
+    username: admin
     firstname: <firstname()>
     lastname: <lastname()>
-    password: 123456
+    password: pass
     email (unique): <email()>
-    puid: 2
+    puid: admin
     isActive: 1
     created: <dateTime()>
     modified: <dateTime()>
     roles:
       - ROLE_ADMIN
       - ROLE_USER
-  user{3..8}:
+  instructor:
+    username: instructor
+    firstname: <firstname()>
+    lastname: <lastname()>
+    password: pass
+    email (unique): <email()>
+    puid: staff
+    isActive: 1
+    created: <dateTime()>
+    modified: <dateTime()>
+    roles:
+      - ROLE_STAFF
+      - ROLE_USER
+  student:
+    username: student
+    firstname: <firstname()>
+    lastname: <lastname()>
+    password: pass
+    email (unique): <email()>
+    puid: student
+    isActive: 1
+    created: <dateTime()>
+    modified: <dateTime()>
+    roles:
+      - ROLE_STUDENT
+      - ROLE_USER
+  user{1..5}:
     username (unique): <username()>
     firstname: <firstname()>
     lastname: <lastname()>
-    password: 123456
+    password: pass
     email (unique): <email()>
     puid: <current()>
     isActive: 1

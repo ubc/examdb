@@ -1,4 +1,6 @@
 security:
+    encoders:
+        UBC\Exam\MainBundle\Entity\User: plaintext
     providers:
         administrators:
             entity:
@@ -7,14 +9,15 @@ security:
         exam_secured_area:
             pattern:    ^/exam
             anonymous: true
-            form_login:
-                check_path: login_check
-                login_path: exam_login
+            http_basic: ~
+#            form_login:
+#                check_path: login_check
+#                login_path: exam_login
             logout:
                 path:   exam_logout
                 target: ubc_exam_main_homepage
     access_control:
-        - { path: ^/exam/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/exam/login, roles: ROLE_USER }
         - { path: ^/exam/download, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/exam/logout, roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/exam/list, roles: ROLE_USER }
