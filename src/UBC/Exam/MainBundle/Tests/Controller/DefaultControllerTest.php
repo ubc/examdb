@@ -4,7 +4,6 @@ namespace UBC\Exam\MainBundle\Tests\Controller;
 
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
-use UBC\Exam\MainBundle\Entity\User;
 
 /**
  * tests default controller
@@ -41,6 +40,9 @@ class DefaultControllerTest extends WebTestCase
             'PHP_AUTH_USER' => $username,
             'PHP_AUTH_PW'   => 'pass',
         ));
+
+        touch($this->getContainer()->getParameter('kernel.logs_dir').'/'.'access.log');
+        touch($this->getContainer()->getParameter('kernel.logs_dir').'/'.'upload.log');
         $client->followRedirects();
         $client->request('GET', $url);
 

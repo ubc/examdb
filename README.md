@@ -120,7 +120,7 @@ Notes:
 
 * Update dependencies: it may run into memory limits when running `composer update`, so use the following command:
 
-    php -d memory_limit=1024M /path/to/composer update
+    php -d memory_limit=-1 /path/to/composer update
 
 
 Running Tests
