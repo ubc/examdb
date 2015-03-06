@@ -172,12 +172,23 @@
       <!-- End of UBC Unit Breadcrumbs -->
       <!-- Content Area -->
       <div class="content expand" role="main">
-        {% for flashMessage in app.session.flashbag.get('notice') %}
-            <div class="flash-notice">
-                {{ flashMessage }}
-            </div>
-        {% endfor %}
-        {% block body %}
+		  {% for flashMessage in app.session.flashbag.get('notice') %}
+			  <div class="flash-notice">
+				  {{ flashMessage }}
+			  </div>
+		  {% endfor %}
+		  {% for flashMessage in app.session.flashbag.get('success') %}
+			  <div class="flash-success">
+				  {{ flashMessage }}
+			  </div>
+		  {% endfor %}
+
+		  {% for flashMessage in app.session.flashbag.get('error') %}
+			  <div class="flash-error">
+				  {{ flashMessage }}
+			  </div>
+		  {% endfor %}
+		  {% block body %}
         {% endblock %}
       </div>
       <!-- End of Content Area -->
