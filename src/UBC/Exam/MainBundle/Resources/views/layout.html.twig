@@ -137,7 +137,7 @@
 		  <a href="{{ url('user') }}">Edit Users</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
-		  <a href="{{ url('exam_log') }}">Download Logs</a>
+		  <a href="{{ url('exam_log') }}">Stats & Logs</a>
 	        </li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
@@ -219,7 +219,7 @@
 		  <a href="{{ url('user') }}">Edit Users</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
-		  <a href="{{ url('exam_log') }}"> Download Logs</a>
+		  <a href="{{ url('exam_log') }}">Stats & Logs</a>
 		</li>
 	      {% endif %}
 	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">

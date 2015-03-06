@@ -1,7 +1,8 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block body %}
-    
+
+    {% if is_granted('ROLE_ADMIN') %}
     <h1>Download Logs</h1>
 
     <p>Application activity logs are available for admins and super admins to download in a CSV (comma-separated values) file.</p>
@@ -10,6 +11,10 @@
         <li><a href="{{ path('exam_log_download', {'type': 'upload'}) }}">Download "Upload Log" <i class="icon-download"></i></a></li>
         <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Download "Access Log" <i class="icon-download"></i></a></li>
     </ul>
+    {% endif %}
+
+    {% if is_granted('ROLE_AMS') %}
+    <h1>System Statistics</h1>
 
     <table>
         <tr>
@@ -27,5 +32,6 @@
         </tr>
         {% endfor %}
     </table>
+    {% endif %}
 {% endblock %}
 
