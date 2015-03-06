@@ -11,5 +11,21 @@
         <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Download "Access Log" <i class="icon-download"></i></a></li>
     </ul>
 
+    <table>
+        <tr>
+            <th>Campus</th>
+            <th>Faculty</th>
+            <th>Uploads</th>
+            <th>Downloads</th>
+        </tr>
+        {% for item in stats %}
+        <tr>
+            <td>{{ item.campus }}</td>
+            <td>{{ item.faculty }}</td>
+            <td>{{ item.uploads }}</td>
+            <td>{{ item.downloads }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 {% endblock %}
 

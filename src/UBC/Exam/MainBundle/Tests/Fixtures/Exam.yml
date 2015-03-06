@@ -18,6 +18,7 @@ UBC\Exam\MainBundle\Entity\Exam:
     legal_agreed: 1
     access_level: 1
     path: "public<current()>.pdf"
+    downloads: 2
     created: <dateTime()>
     modified: <dateTime()>
   exam_auth{1..2}:
@@ -36,6 +37,7 @@ UBC\Exam\MainBundle\Entity\Exam:
     legal_agreed: 1
     access_level: 2
     path: auth<current()>.pdf
+    downloads: 2
     created: <dateTime()>
     modified: <dateTime()>
   exam_faculty{1..3}:
@@ -54,11 +56,12 @@ UBC\Exam\MainBundle\Entity\Exam:
     legal_agreed: 1
     path: faculty<current()>.pdf
     access_level: 3
+    downloads: 2
     created: <dateTime()>
     modified: <dateTime()>
   exam_course:
     uploaded_by: @instructor
-    campus: <randomElement(['UBC', 'UBCO'])>
+    campus: 'UBC'
     faculty: 'LFS'
     dept:  'LFS'
     subject_code: 'LFS 200'
@@ -72,11 +75,12 @@ UBC\Exam\MainBundle\Entity\Exam:
     legal_agreed: 1
     access_level: 4
     path: course.pdf
+    downloads: 2
     created: <dateTime()>
     modified: <dateTime()>
   exam_me:
     uploaded_by: @instructor
-    campus: <randomElement(['UBC', 'UBCO'])>
+    campus: 'UBC'
     faculty: 'LFS'
     dept:  'LFS'
     subject_code: 'LFS 300'
@@ -90,5 +94,6 @@ UBC\Exam\MainBundle\Entity\Exam:
     legal_agreed: 1
     access_level: 5
     path: me.pdf
+    downloads: 2
     created: <dateTime()>
     modified: <dateTime()>

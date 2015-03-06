@@ -74,6 +74,18 @@ class ExamRepositoryTest extends WebTestCase {
         $this->assertEmpty($exmas);
     }
 
+    public function testGetStats()
+    {
+        $result = ($this->getRepository()
+            ->getExamStats());
+        foreach($result as $stat) {
+            if ($stat['faculty'] == 'LFS') {
+                $this->assertEquals('2', $stat['uploads']);
+                $this->assertEquals('4', $stat['downloads']);
+            }
+        }
+    }
+
     public function getRepository()
     {
         return $this->getContainer()

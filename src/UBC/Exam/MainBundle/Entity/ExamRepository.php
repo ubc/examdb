@@ -110,8 +110,27 @@ class ExamRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
+    /**
+     * Generate statistics by faculty.
+     *
+     * @return array statistics of the db with the following format:
+     * array(
+     *   array(
+     *     campus => 'UBC',
+     *     faculty => 'facutly1',
+     *     uploads => 1,
+     *     downloads => 20,
+     *   ),
+     * )
+     */
     public function getExamStats()
     {
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
+        $qb->select('e.campus, e.faculty, count(e.id) AS uploads, sum(e.downloads) AS downloads')
+            ->from('UBCExamMainBundle:Exam', 'e')
+            ->groupBy('e.campus, e.faculty');
+
+        return $qb->getQuery()->getResult();
     }
 } 

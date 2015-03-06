@@ -526,7 +526,12 @@ class DefaultController extends Controller
      */
     public function logAction()
     {
-        return $this->render('UBCExamMainBundle:Default:log.html.twig');
+        $stats = $this->getDoctrine()
+            ->getRepository('UBCExamMainBundle:Exam')
+            ->getExamStats();
+        return $this->render('UBCExamMainBundle:Default:log.html.twig', array(
+            'stats' => $stats
+        ));
     }
 
     /**
