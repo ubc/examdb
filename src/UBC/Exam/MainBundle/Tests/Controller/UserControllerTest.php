@@ -71,10 +71,10 @@ class UserControllerTest extends WebTestCase
     {
         $crawler = $this->client->request('GET', '/exam/user/');
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $crawler = $this->client->click($crawler->selectLink('Create a new User')->link());
+        $crawler = $this->client->click($crawler->selectLink('Add User')->link());
 
         // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
+        $form = $crawler->selectButton('Save')->form(array(
             'ubc_exam_mainbundle_user[username]'  => 'Test',
             'ubc_exam_mainbundle_user[firstname]'  => 'Test',
             'ubc_exam_mainbundle_user[lastname]'  => 'Test',
@@ -93,11 +93,11 @@ class UserControllerTest extends WebTestCase
     {
         $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/exam/user/');
+        $crawler = $this->client->click($crawler->selectLink('Add User')->link());
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $crawler = $this->client->click($crawler->selectLink('Create a new User')->link());
 
         // Fill in the form and submit it
-        $form = $crawler->selectButton('Create')->form(array(
+        $form = $crawler->selectButton('Save')->form(array(
             'ubc_exam_mainbundle_user[username]'  => 'Test',
             'ubc_exam_mainbundle_user[firstname]'  => 'Test',
             'ubc_exam_mainbundle_user[lastname]'  => 'Test',
@@ -112,12 +112,13 @@ class UserControllerTest extends WebTestCase
     public function testEditUser()
     {
         $this->client->followRedirects();
-        $crawler = $this->client->request('GET', '/exam/user/3');
+        $crawler = $this->client->request('GET', '/exam/user/');
+        // edit instructor
+        $crawler = $this->client->click($crawler->filter('div.content table a')->eq(3)->link());
         $this->assertTrue($this->client->getResponse()->isSuccessful());
-        $crawler = $this->client->click($crawler->selectLink('Edit')->link());
 
         // Fill in the form and submit it
-        $form = $crawler->selectButton('Edit')->form(array(
+        $form = $crawler->selectButton('Save')->form(array(
             'ubc_exam_mainbundle_user[username]'  => 'TestEdit',
             'ubc_exam_mainbundle_user[firstname]'  => 'TestEdit',
             'ubc_exam_mainbundle_user[lastname]'  => 'TestEdit',

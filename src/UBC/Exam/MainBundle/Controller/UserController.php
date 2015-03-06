@@ -122,6 +122,8 @@ class UserController extends Controller
      * @Route("/", name="user_create")
      * @Method("POST")
      * @Template("UBCExamMainBundle:User:new.html.twig")
+     * @param Request $request
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function createAction(Request $request)
     {
