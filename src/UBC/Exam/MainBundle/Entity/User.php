@@ -176,6 +176,14 @@ class User implements UserInterface, EquatableInterface, \Serializable
     }
 
     /**
+     * @param mixed $password
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+    }
+
+    /**
      * @inheritDoc
      *
      * @return array

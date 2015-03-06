@@ -103,7 +103,7 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
   1. Create the DB tables: ```php app/console doctrine:schema:update --force```
   2. Copy over CSS and JavaScript from src to web folder: ```php app/console assetic:dump --env=prod```
   3. Refresh the subject/department code (without --local to refresh from SIS): ```php app/console exam:subjectcode:refresh --local```
-  4. Create a test user: ```php app/console doctrine:query:sql "INSERT INTO user (username, password, puid, is_active) VALUES ('test', 'test', '12345678', 1);"```
+  4. Create a test user: ```php app/console exam:user:create admin PASSWORD ROLE_SUPER_ADMIN;```
     * Username and password are both test
     * puid should be 12345678, which is the ID used in app/fixtures data for local SIS data repository
     * The test fixture contains two sections: MATH 101 and ENGL 100
@@ -145,5 +145,5 @@ NOTES
       ```
       vagrant ssh
       cd /vagrant
-      php app/console doctrine:query:sql "INSERT INTO user (username, password, puid, is_active) VALUES ('test', 'test', '12345678', 1);
+      php app/console exam:user:create admin PASSWORD ROLE_SUPER_ADMIN;
       ```
