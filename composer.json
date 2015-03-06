@@ -67,6 +67,12 @@
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::clearCache",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installAssets",
             "Sensio\\Bundle\\DistributionBundle\\Composer\\ScriptHandler::installRequirementsFile"
+        ],
+        "post-create-project-cmd": [
+            "php app/console doctrine:schema:update --force",
+            "php app/console assetic:dump --env=prod",
+            "php app/console exam:subjectcode:refresh --local",
+            "php app/console exam:user:create admin admin ROLE_SUPER_ADMIN"
         ]
     },
     "config": {
