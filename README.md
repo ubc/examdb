@@ -67,11 +67,14 @@ The port will be forwarded to localhost and you can setup your tool to connect t
 Development
 -----------
 
+### Installation
+
 1. Install Vagrant
 The project environment can be provision by [Vagrant](http://www.vagrantup.com/). Follow the instruction on the site to install vagrant first. Then install vagrant-hostmanager plugin if you want vagrant to manage your /etc/hosts for you.
 
     ```
     vagrant plugin install vagrant-hostmanager
+    vagrant plugin install vagrant-bindfs
     ```
 
     Otherwise, you will need to manually add the following line to your /etc/hosts
@@ -92,58 +95,41 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
     cd examdb && vagrant up
     ```
 
-4. Install Dependencies
-
-    ```
-    vagrant ssh
-    cd /vagrant
-    composer install
-    ```
-5. Setup Exam Database system
-  1. Create the DB tables: ```php app/console doctrine:schema:update --force```
-  2. Copy over CSS and JavaScript from src to web folder: ```php app/console assetic:dump --env=prod```
-  3. Refresh the subject/department code (without --local to refresh from SIS): ```php app/console exam:subjectcode:refresh --local```
-  4. Create a test user: ```php app/console exam:user:create admin PASSWORD ROLE_SUPER_ADMIN;```
-    * Username and password are both test
-    * puid should be 12345678, which is the ID used in app/fixtures data for local SIS data repository
-    * The test fixture contains two sections: MATH 101 and ENGL 100
-
-5. Open a browser from host
+4. Open a browser from host
     
     ```
     http://examdb.dev:8089/app_dev.php
     ```
 
-6. Develop!
+5. Develop!
 
-Notes:
-
-* Update dependencies: it may run into memory limits when running `composer update`, so use the following command:
-
-    php -d memory_limit=-1 /path/to/composer update
-
-
-Running Tests
--------------
+### Running Tests
 
     bin/phing test
 
 NOTES
 -----
+* Default username and password are both "admin"
+* When testing student features, the student user puid should be 12345678, which is the ID used in app/fixtures data for local SIS data repository
+* The test fixture contains two sections: MATH 101 and ENGL 100
+* Update dependencies: it may run into memory limits when running `composer update`, so use the following command:
+
+    ```
+    php -d memory_limit=-1 /path/to/composer update
+    ```
+    
 * to see changes if on production environment, then you'll need to run a few commands in console to see the changes (aka move from src folder to web folder)
 
     ```
     php app/console cache:clear --env=prod
     ```
 
+* Default authentication for production is CAS and for development is internal login. To make the system work standalone (aka skipping out using CAS), you'll need to make a few changes:
+  * modify app/config/config_prod.yml and change security_cas.yml to security_internal.yml
+* To create a user from command line: 
+
     ```
-    sudo rm -rf app/cache/*
+    vagrant ssh
+    cd /vagrant
+    php app/console exam:user:create USERNAME PASSWORD ROLE_ADMIN;
     ```
-* to make the system work standalone (aka skipping out using CAS), you'll need to make a few changes:
-  * modify app/config/security_prod.yml and change security_cas.yml to security_internal.yml
-  * insert a user into DB manually 
-      ```
-      vagrant ssh
-      cd /vagrant
-      php app/console exam:user:create admin PASSWORD ROLE_SUPER_ADMIN;
-      ```

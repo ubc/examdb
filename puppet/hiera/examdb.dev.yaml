@@ -1,0 +1,30 @@
+---
+classes:
+  - examdb
+  - mysql::server
+  - mysql::client
+
+selinux::mode: permissive
+
+examdb::server_domain: examdb.dev
+examdb::github_token: e0f5acf2c1df630d671b7bb5ab4e80d454e23fec
+examdb::writable_dirs:
+  - "app/cache/"
+  - "app/logs/"
+examdb::manage_dir_permission: false
+examdb::appuser: vagrant
+
+mysql::server::root_password: examdb
+mysql::server::remove_default_accounts: true
+mysql::server::users:
+  'examdb@localhost':
+    password_hash: '*CB98B897ADC970A0F1D6CE0001B4439EE29352A1' #examdb
+mysql::server::grants:
+  'examdb@localhost/examdb.*':
+    table: 'examdb.*'
+    user: 'examdb@localhost'
+    privileges:
+      - ALL
+mysql::server::databases:
+  'examdb':
+    charset: utf8
