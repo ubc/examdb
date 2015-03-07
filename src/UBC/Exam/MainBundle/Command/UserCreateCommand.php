@@ -37,12 +37,20 @@ class UserCreateCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $createOrUpdated = 'updated';
         $username = $input->getArgument('username');
         $password = $input->getArgument('password') ?
             $input->getArgument('password') :
             self::randomPassword();
 
-        $user = new User();
+        // check if user exists
+        $repo = $this->getContainer()->get('doctrine')->getRepository('UBCExamMainBundle:User');
+        $user = $repo->findOneByUsername($username);
+        if (!$user) {
+            $user = new User();
+            $createOrUpdated = 'created';
+        }
+
         $user->setUsername($username);
         $user->setPassword($password);
         $user->setRoleString($input->getArgument('role'));
@@ -54,7 +62,7 @@ class UserCreateCommand extends ContainerAwareCommand
         $passwordMsg = $input->getArgument('password') ?
             '' :
             " with password '$password'";
-        $output->writeln("User $username has been created successfully$passwordMsg.");
+        $output->writeln("User $username has been $createOrUpdated successfully$passwordMsg.");
     }
 
     private static function randomPassword() {
