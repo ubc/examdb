@@ -2,36 +2,52 @@
 
 {% block body %}
 
-    {% if is_granted('ROLE_ADMIN') %}
-    <h1>Download Logs</h1>
+    <h1>View Statistics</h1>
 
-    <p>Application activity logs are available for admins and super admins to download in a CSV (comma-separated values) file.</p>
-
-    <ul>
-        <li><a href="{{ path('exam_log_download', {'type': 'upload'}) }}">Download "Upload Log" <i class="icon-download"></i></a></li>
-        <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Download "Access Log" <i class="icon-download"></i></a></li>
-    </ul>
+    {% if is_granted('ROLE_ADMIN') %}    
+        <h2>Download full statistics</h2>
+    
+        <p>Full application activity logs are available for admins and super admins to download.</p>
+    
+        <ul>
+            <li><a href="{{ path('exam_log_download', {'type': 'upload'}) }}">Download "Upload Log" <i class="icon-download"></i></a></li>
+            <li><a href="{{ path('exam_log_download', {'type': 'access'}) }}">Download "Access Log" <i class="icon-download"></i></a></li>
+        </ul>
     {% endif %}
 
     {% if is_granted('ROLE_AMS') %}
-    <h1>System Statistics</h1>
-
-    <table>
-        <tr>
-            <th>Campus</th>
-            <th>Faculty</th>
-            <th>Uploads</th>
-            <th>Downloads</th>
-        </tr>
-        {% for item in stats %}
-        <tr>
-            <td>{{ item.campus }}</td>
-            <td>{{ item.faculty }}</td>
-            <td>{{ item.uploads }}</td>
-            <td>{{ item.downloads }}</td>
-        </tr>
-        {% endfor %}
-    </table>
+        <h2>Statistics overview</h2>
+        
+        <p>Totals are shown for material currently in the database and do not include material that has been deleted.</p>
+    
+        <table class="table table-striped">
+            <caption>Currently Archived Files</caption>
+            <thead>
+                <tr>
+                    <th>Campus</th>
+                    <th>Faculty</th>
+                    <th>Uploaded</th>
+                    <th>Downloaded</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in stats %}
+                    <tr>
+                        <td>{{ item.campus|replace({'UBC': 'Vancouver', 'UBCO': 'Okanagan'}) }}</td>
+                        <td>{{ item.faculty }}</td>
+                        <td>{{ item.uploads }} {{ item.uploads == 1 ? 'file' : 'files' }}</td>
+                        <td>{{ item.downloads }} {{ item.downloads == 1 ? 'download' : 'downloads' }}</td>
+                    </tr>
+                {% endfor %}
+                {% if stats is empty %}
+                    <tr>
+                        <td colspan="4">No material found</td>
+                    </tr>
+                {% endif %}
+                
+            </tbody>
+        </table>
     {% endif %}
+
 {% endblock %}
 
