@@ -51,9 +51,8 @@
                 <thead>
                     <tr>
                         <th>Term</th>
-                        {% if subjectCodeLabel is empty %}
-                            <th>Course</th>
-                        {% endif %}
+                        <th>Course</th>
+                        <th>Cross Listed</th>
                         <th>File</th>
                         <th class="hidden-phone">Type
                             <a class="exam-tooltip">
@@ -75,11 +74,12 @@
                             <td>
                                 {{ exam.year }} {{ exam.term | capitalize }}
                             </td>
-                            {% if subjectCodeLabel is empty %}
-                                <td>
-                                    {{ exam.subjectcode }}
-                                </td>
-                            {% endif %}
+                            <td>
+                                {{ exam.subjectcode }}
+                            </td>
+                            <td>
+                                {{ exam.crossListed }}
+                            </td>
                             <td>
                                 <a class="btn-download btn btn-primary" href="{{ path('exam_download', {'filename': exam.path}) }}"><i class="icon-download-alt"></i> Download</a>
                             </td>
