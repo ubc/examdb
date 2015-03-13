@@ -83,6 +83,7 @@ class ExamRepository extends EntityRepository
         $qb->select('e')
             ->from('UBCExamMainBundle:Exam', 'e')
             ->where('e.subject_code LIKE :course')
+            ->orderBy('e.year', 'DESC')
             ->setParameter('course', trim($course));
 
         $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
