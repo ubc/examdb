@@ -2,6 +2,7 @@
 namespace UBC\Exam\MainBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -10,7 +11,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  * This class holds the concept of exam (aka file associated with course)
  *
  * @ORM\Entity
- * @ORM\Table(name="exam")
+ * @ORM\Table(name="exam", indexes={@Index(name="IDX_STATS",   columns={"campus", "faculty"}),
+ *                                  @Index(name="IDX_SUBJECT", columns={"subject_code"})})
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\ExamRepository")
  */
 class Exam

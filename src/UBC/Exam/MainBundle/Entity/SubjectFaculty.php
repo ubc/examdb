@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  * This class holds the 4 letters representing course codes in UBC
  *
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\SubjectCodeRepository")
- * @ORM\Table(name="subjectfaculty", indexes={@Index(name="code_idx", columns={"code"})})
+ * @ORM\Table(name="subjectfaculty", indexes={@Index(name="IDX_CODE_CAMPUS", columns={"code", "campus"})})
  */
 class SubjectFaculty
 {
