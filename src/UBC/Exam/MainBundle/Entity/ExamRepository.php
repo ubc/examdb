@@ -54,6 +54,19 @@ class ExamRepository extends EntityRepository
         return $qb->andWhere($exp);
     }
 
+    private function addEditableExamCriteria(QueryBuilder $qb, $user_id = 0)
+    {
+        if ($user_id == -1) {
+            // -1 means admin user, no additional filter needed.
+            return $qb;
+        } else if ($user_id == 0) {
+            // 0 means unauthenticated user, no result should be returned.
+            return $qb->andWhere('1 = 0');
+        } else {
+            return $qb->andWhere("e.uploaded_by = $user_id");
+        }
+    }
+
     public function getAvailableSubjectCodes($user_id = 0, $faculties = array(), $courses = array())
     {
         $qb = $this->getEntityManager()->createQueryBuilder();
@@ -112,6 +125,36 @@ class ExamRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
+    public function findEditableExamById($id, $user_id = 0) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('e')
+            ->from('UBCExamMainBundle:Exam', 'e')
+            ->where('e.id = :id')
+            ->setParameter('id', $id);
+
+        $qb = $this->addEditableExamCriteria($qb, $user_id);
+
+        $query = $qb->getQuery();
+
+        // TODO add cache
+        return $query->getOneOrNullResult();
+    }
+
+    public function findAllEditableExams($user_id = 0) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('e')
+            ->from('UBCExamMainBundle:Exam', 'e')
+            ->orderBy('e.created', 'DESC');
+
+        $qb = $this->addEditableExamCriteria($qb, $user_id);
+
+        $query = $qb->getQuery();
+
+        // TODO add cache
+        return $query->getResult();
+    }
     /**
      * Generate statistics by faculty.
      *

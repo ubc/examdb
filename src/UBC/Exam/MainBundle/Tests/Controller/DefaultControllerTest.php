@@ -47,7 +47,7 @@ class DefaultControllerTest extends WebTestCase
         $client->followRedirects();
         $client->request('GET', $url);
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertTrue($client->getResponse()->isSuccessful(), "page $url failed to load with user $username.");
     }
 
     /**

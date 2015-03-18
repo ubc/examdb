@@ -180,29 +180,11 @@ class DefaultController extends Controller
      */
     public function listAction()
     {
-        $exams = array();
-        $user = $this->get('security.context')->getToken()->getUser();
+        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+            ->findAllEditableExams($userId);
 
-        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-
-        if ($this->get('security.context')->isGranted('ROLE_ADMIN')) {
-            // admin can see all exams
-            $query = $repo->createQueryBuilder('e')
-                ->orderBy('e.created', 'DESC')
-                ->getQuery();
-                
-            $exams = $query->getResult();
-        } elseif ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
-            $query = $repo->createQueryBuilder('e')
-                ->where('e.uploaded_by = :user')
-                ->setParameter('user', $user)
-                ->orderBy('e.created', 'DESC')
-                ->getQuery();
-            
-            $exams = $query->getResult();
-        }
-
-        return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams, 'username' => $user->getUsername()));
+        return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams));
     }
 
     /**
@@ -274,17 +256,12 @@ class DefaultController extends Controller
         }
 
         //check that user is uploader, ONLY uploader can delete the exam
-        $user = $this->get('security.context')->getToken()->getUser();
-        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-        $query = $repo->createQueryBuilder('e')
-                ->where('e.uploaded_by = :user and e.id = :id')
-                ->setParameter('user', $user)
-                ->setParameter('id', $examID)
-                ->getQuery();
-        $exam = $query->getOneOrNullResult();
+        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+            ->findEditableExamById($examID, $userId);
 
         if (is_null($exam)) {
-            throw $this->createNotFoundException('No exam exists for that user');
+            throw $this->createNotFoundException('No exam exists for that user or you do not have access to this exam.');
         }
 
         //remove entity
@@ -298,7 +275,7 @@ class DefaultController extends Controller
     /**
      * allows uploader to update exam
      *
-     * @param unknown $examID
+     * @param integer $examID
      * @param Request $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -313,17 +290,12 @@ class DefaultController extends Controller
         }
 
         //check that user is uploader, ONLY uploader can edit the exam
-        $user = $this->get('security.context')->getToken()->getUser();
-        $repo = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam');
-        $query = $repo->createQueryBuilder('e')
-        ->where('e.uploaded_by = :user and e.id = :id')
-        ->setParameter('user', $user)
-        ->setParameter('id', $examID)
-        ->getQuery();
-        $exam = $query->getOneOrNullResult();
+        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+            ->findEditableExamById($examID, $userId);
 
         if (is_null($exam)) {
-            throw $this->createNotFoundException('No exam exists for that user');
+            throw $this->createNotFoundException('No exam exists for that user or you do not have access to this exam.');
         }
 
         //ok, create update form!

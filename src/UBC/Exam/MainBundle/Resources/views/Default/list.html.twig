@@ -3,7 +3,7 @@
 {% if is_granted('ROLE_ADMIN') %}
     {% set caption = "All Materials" %}
 {% else %}
-    {% set caption = "Material uploaded by " ~ username %}
+    {% set caption = "Material uploaded by " ~ app.user.username %}
 {% endif %}
 
 {% block body %}

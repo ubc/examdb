@@ -74,6 +74,29 @@ class ExamRepositoryTest extends WebTestCase {
         $this->assertEmpty($exmas);
     }
 
+    public function testFindEditableExamById()
+    {
+        $exam = $this->getRepository()
+            ->findEditableExamById(1, 0);
+        $this->assertNull($exam, 'find public exam by id 1 with non-authenticated user');
+
+        $exam = $this->getRepository()
+            ->findEditableExamById(4, 0);
+        $this->assertNull($exam, 'find authentication required exam by id 4 with non-authenticated user');
+
+        $exam = $this->getRepository()
+            ->findEditableExamById(4, 1);
+        $this->assertNull($exam, 'find authentication required exam by id 4 with non owner user');
+
+        $exam = $this->getRepository()
+            ->findEditableExamById(9, 3);
+        $this->assertEquals(9, $exam->getId(), 'find exam by id 9 with the owner credential');
+
+        $exam = $this->getRepository()
+            ->findEditableExamById(9, -1);
+        $this->assertEquals(9, $exam->getId(), 'find exam by id 9 with the admin credential');
+    }
+
     public function testGetStats()
     {
         $result = ($this->getRepository()
