@@ -12,6 +12,8 @@ use UBC\Exam\MainBundle\Entity\Exam;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use ZendSearch\Lucene\Search\Query\Wildcard;
+use ZendSearch\Lucene\Search\QueryParser;
 
 /**
  * Main controller class
@@ -32,47 +34,44 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        $coursesWithKeys = $request->getSession()->get('courses') ? $request->getSession()->get('courses') : array();
-        $courses = array_keys($coursesWithKeys);
-        $faculties = array_values(
-            $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
-        );
-
-        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
-        $uniqueSubjectCodes = $em->getRepository('UBCExamMainBundle:Exam')
-            ->getAvailableSubjectCodes($userId, $faculties, $courses);
-
-        $subjectCodeForTwig = array_combine(array_values($uniqueSubjectCodes), array_values($uniqueSubjectCodes));
-
-        //ok, create a form to get user selection of exams
-        $exam = new Exam();
-        $formBuilder = $this->createFormBuilder($exam);
-        $formBuilder->add('subject_code', 'choice', array('required' => false, 'label' => 'Type a course code to see matching courses', 'empty_value' => '- Choose course code -', 'choices' => $subjectCodeForTwig));
-        $formBuilder->add('search', 'submit');
-        $form = $formBuilder->getForm();
-
-
-        $subjectCodeLabel = '';
-        $subjectCode = '';
         $exams = array();
 
-        if ($this->getRequest()->getMethod() == "POST") {
-            $form->handleRequest($request);
-            $subjectCodeLabel = $exam->getSubjectcode();
-            $subjectCode = explode(' ', $subjectCodeLabel);
-            $subjectCode = $subjectCode[0];
-            $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-                ->findExamsByCourse($exam->getSubjectcode(), $userId, $faculties, $courses);
+        $q = $request->get('q');
 
+        if (!is_null($q) && !empty($q)) {
+            // search the index
+            QueryParser::setDefaultOperator(QueryParser::B_AND);
+            Wildcard::setMinPrefixLength(1);
+            $hits = $this->get('ivory_lucene_search')->getIndex('exams')->find($q.'*');
+
+            $ids = array();
+            foreach ($hits as $hit) {
+                $ids[] = $hit->pk;
+            }
+            $ids = array_unique($ids);
+
+            // search the db by ids, because we need to get the exams only visible for current user
+            if (!empty($ids)) {
+                // find out the current user registered courses and faculty
+                $em = $this->getDoctrine()->getManager();
+                $coursesWithKeys = $request->getSession()->get('courses') ? $request->getSession()->get('courses') : array();
+                $courses = array_keys($coursesWithKeys);
+                $faculties = array_values(
+                    $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
+                );
+
+                $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+
+                $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+                    ->findExamsByIds($ids, $userId, $faculties, $courses);
+            }
         }
 
         return $this->render('UBCExamMainBundle:Default:index.html.twig', array(
-            'form' => $form->createView(),
             'exams' => $exams,
-            'subjectCodeLabel' => $subjectCodeLabel,
-            'subjectCode' => $subjectCode
+            'q' => $q,
+            'subjectCode' => '', // used by wiki content
+            'subjectCodeLabel' => '', // used by wiki content
         ));
     }
 

@@ -108,6 +108,23 @@ class ExamRepository extends EntityRepository
         return $query->getResult();
     }
 
+    public function findExamsByIds($ids, $user_id, $faculties = array(), $courses = array()) {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select('e')
+            ->from('UBCExamMainBundle:Exam', 'e')
+            ->where('e.id IN (:ids)')
+            ->orderBy('e.year', 'DESC')
+            ->setParameter('ids', $ids);
+
+        $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
+
+        $query = $qb->getQuery();
+
+        // TODO add cache
+        return $query->getResult();
+    }
+
     public function findExamByPath($path, $user_id = 0, $faculties = array(), $courses = array())
     {
         $qb = $this->getEntityManager()->createQueryBuilder();

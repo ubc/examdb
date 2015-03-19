@@ -100,4 +100,5 @@ monolog:
 ivory_lucene_search:
   # Index identifier
   exams:
-    path:  "%kernel.logs_dir%/index_%kernel.environment%"
+    path:  "%index_dir%"
+    analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive

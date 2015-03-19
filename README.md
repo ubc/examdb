@@ -131,5 +131,15 @@ NOTES
     ```
     vagrant ssh
     cd /vagrant
-    php app/console exam:user:create USERNAME PASSWORD ROLE_ADMIN;
+    php app/console exam:user:create USERNAME PASSWORD ROLE_ADMIN
     ```
+    
+* If there is an existing exam database, the search index has to be rebuild in order for search to function.
+
+    ```
+    vagrant ssh
+    cd /vagrant
+    php app/console exam:index:build
+    ```
+
+    

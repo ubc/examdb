@@ -1706,6 +1706,9 @@
             "include-path": [
                 "/"
             ],
+            "license": [
+                "PHP License"
+            ],
             "description": "A PEAR-ified version of Useful Inc's XML-RPC for PHP.\n\nIt has support for HTTP/HTTPS transport, proxies and authentication."
         },
         {

@@ -60,7 +60,7 @@ class DefaultControllerTest extends WebTestCase
         $client = self::createClient();
         $client->request('GET', $url);
 
-        $this->assertTrue($client->getResponse()->isSuccessful());
+        $this->assertTrue($client->getResponse()->isSuccessful(), "failed to load page $url");
     }
 
     public function providerPublicUrls()
@@ -238,10 +238,19 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/exam');
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertCount(1, $crawler->filter('select.main-search'));
         $this->assertCount(1, $crawler->filter('#form_search'));
-        // three public courses plus default selection
-        $this->assertCount(4, $crawler->filter('select.main-search option'));
+        $this->assertCount(1, $crawler->filter('#form_search input[name=q]'));
+        $this->assertCount(1, $crawler->filter('#search-button'));
+
+        $crawler = $client->request('GET', '/exam/?q=101');
+
+        $this->assertTrue($client->getResponse()->isSuccessful(), 'Error status code ' . $client->getResponse()->getStatusCode(). $client->getResponse()->getContent());
+        $this->assertCount(3, $crawler->filter('a.btn-download'), '3 courses should be returned by searching 101');
+
+        $crawler = $client->request('GET', '/exam/?q=201');
+
+        $this->assertTrue($client->getResponse()->isSuccessful(), 'Error status code ' . $client->getResponse()->getStatusCode(). $client->getResponse()->getContent());
+        $this->assertCount(0, $crawler->filter('a.btn-download'), '0 courses should be returned by searching 201');
     }
 
     public function testHomeWithAdmin()
@@ -254,10 +263,9 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/exam');
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertCount(1, $crawler->filter('select.main-search'));
         $this->assertCount(1, $crawler->filter('#form_search'));
-        // all courses plus default selection
-        $this->assertCount(11, $crawler->filter('select.main-search option'));
+        $this->assertCount(1, $crawler->filter('#form_search input[name=q]'));
+        $this->assertCount(1, $crawler->filter('#search-button'));
     }
 
     public function testHomeWithStudent()
@@ -270,10 +278,9 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/exam');
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertCount(1, $crawler->filter('select.main-search'));
         $this->assertCount(1, $crawler->filter('#form_search'));
-        // all courses plus default selection
-        $this->assertCount(6, $crawler->filter('select.main-search option'));
+        $this->assertCount(1, $crawler->filter('#form_search input[name=q]'));
+        $this->assertCount(1, $crawler->filter('#search-button'));
     }
 
     public function testHomeWithInstructor()
@@ -286,10 +293,9 @@ class DefaultControllerTest extends WebTestCase
         $crawler = $client->request('GET', '/exam');
 
         $this->assertTrue($client->getResponse()->isSuccessful());
-        $this->assertCount(1, $crawler->filter('select.main-search'));
         $this->assertCount(1, $crawler->filter('#form_search'));
-        // all courses plus default selection
-        $this->assertCount(8, $crawler->filter('select.main-search option'));
+        $this->assertCount(1, $crawler->filter('#form_search input[name=q]'));
+        $this->assertCount(1, $crawler->filter('#search-button'));
     }
 
     public function testDownload()

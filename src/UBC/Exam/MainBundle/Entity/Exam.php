@@ -6,6 +6,8 @@ use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
+use ZendSearch\Lucene\Document;
+use ZendSearch\Lucene\Document\Field;
 
 /**
  * This class holds the concept of exam (aka file associated with course)
@@ -250,6 +252,14 @@ class Exam
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -681,5 +691,38 @@ class Exam
     public function increaseDownloads()
     {
         $this->downloads++;
+    }
+
+    public function index($indexer, $commit = true, $optimize = true) {
+        $document = new Document();
+        $document->addField(Field::keyword('pk', $this->getId()));
+        $document->addField(Field::Text('course', $this->getSubjectcode()));
+        $document->addField(Field::Text('cross-listed', str_replace(array(';',',','|'), ' ', $this->getCrossListed())));
+        $document->addField(Field::Text('instructor', $this->getLegalContentOwner()));
+        $document->addField(Field::Unstored('comments', $this->getComments()));
+
+        $indexer->addDocument($document);
+
+        if ($commit) {
+            $indexer->commit();
+        }
+
+        if ($optimize) {
+            $indexer->optimize();
+        }
+    }
+
+    /**
+     * Delete index for the current exam entity
+     *
+     * @param \ZendSearch\Lucene\SearchIndexInterface $indexer
+     */
+    public function deleteIndex($indexer) {
+        $hits = $indexer->find('pk:'.$this->getId());
+        // there should be only one, but just in case
+        foreach($hits as $hit) {
+            $indexer->delete($hit);
+        }
+        $indexer->commit();
     }
 }

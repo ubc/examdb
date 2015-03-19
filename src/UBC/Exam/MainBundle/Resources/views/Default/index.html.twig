@@ -8,8 +8,6 @@
 
     <p>In addition to the uploaded files and additional resources below, please see the <a href="{{ url('exam_guide') }}">FAQ</a> for tips on how you can get the most out of this database.</p>
 
-        {{ form_start(form, {'attr': {'class': 'validate-form'}}) }}
-
             <h2>Find Material by Course</h2>
 
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
@@ -21,27 +19,22 @@
 
                 <div class="row-fluid search-box-row">
 
-                    <div class="span8">
-                        {{ form_label(form.subject_code) }}
-                        {{ form_widget(form.subject_code, { 'attr': {'class': 'main-search'} }) }}
-                    </div>
+                    <form action="{{ path('ubc_exam_main_homepage') }}" method="get" id="form_search">
+                        <div class="span8">
+                            <input type="text" name="q" value="{{ q }}"/>
+                        </div>
 
-                    <div class="span4">
-                        <!-- need empty label here for alignment
-                             FUTURE TO DO: change results to on click and remove submit button and label? -->
-                        <label class="hidden-phone">&nbsp;</label>
-                        {{ form_widget(form.search, { 'attr': {'class': 'btn btn-primary'}}) }}
-                    </div>
-
+                        <div class="spa4">
+                            <button type="submit" class="btn btn-primary" id="search-button">Search</button>
+                        </div>
+                    </form>
                 </div>
 
             </fieldset>
 
-        {{ form_end(form) }}
-
         <!-- show *only* when results are available AND a subject code has been selected, i.e, a search has been done
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
-        {% if exams|length > 0 and subjectCodeLabel is not empty %}
+        {% if exams|length > 0 %}
 
             <table class="table table-striped">
 
@@ -112,6 +105,8 @@
 
             </div>
 
+        {% elseif q is not null %}
+            Your search - <em>{{ q }}</em> - did not match any exams.
         {% endif %}
 
     <hr />
@@ -127,7 +122,7 @@
             <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/thinking-critically/" title="Understand what critical thinking means and how to think critically"><i class="icon-comments-alt"></i> Critical Thinking<br/> Toolkit</a>
         </div>
         <div class="span2">
-            <a class="btn btn-info" href="http://learningcommons.ubc.ca/tutoring-studying/learning-and-memory/" title="Learn to work your brain and expand your mind""><i class="icon-lightbulb"></i> Learning &amp;<br /> Memory Tips</a>
+            <a class="btn btn-info" href="http://learningcommons.ubc.ca/tutoring-studying/learning-and-memory/" title="Learn to work your brain and expand your mind"><i class="icon-lightbulb"></i> Learning &amp;<br /> Memory Tips</a>
         </div>
         <div class="span2">
             <a class="btn btn-info" href="http://www.lib.sfu.ca/sites/default/files/12333/multi-exam.pdf" title="How to reduce exam anxiety"><i class="icon-meh"></i> Overcoming Exam<br/> Anxiety (PDF)</a>
