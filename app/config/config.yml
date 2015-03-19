@@ -61,7 +61,7 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
-        
+
 stof_doctrine_extensions:
     default_locale: en_US
     orm:
@@ -79,7 +79,7 @@ stof_doctrine_extensions:
 #            login_url: https://cas.stg.id.ubc.ca/ubc-cas/login
 #            logout_url: https://cas.stg.id.ubc.ca/ubc-cas/logout
 #            validation_url: https://cas.stg.id.ubc.ca/ubc-cas/serviceValidate
- 
+
 # Swiftmailer Configuration
 swiftmailer:
     transport: "%mailer_transport%"
@@ -96,3 +96,8 @@ services:
 
 monolog:
   channels: ["upload", "access"]
+
+ivory_lucene_search:
+  # Index identifier
+  exams:
+    path:  "%kernel.logs_dir%/index_%kernel.environment%"

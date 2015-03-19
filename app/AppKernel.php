@@ -27,6 +27,7 @@ class AppKernel extends Kernel
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
             new JordiLlonch\Bundle\CrudGeneratorBundle\JordiLlonchCrudGeneratorBundle(),
+            new Ivory\LuceneSearchBundle\IvoryLuceneSearchBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
