@@ -607,7 +607,7 @@ class DefaultController extends Controller
         $response->headers->set('Accept-Ranges', 'byte');
         $response->headers->set('Content-Encoding', 'none');
         $response->headers->set('Content-type', mime_content_type($filename));
-        $response->headers->set('Content-Disposition', 'attachment;filename="' . basename($filename) . '";');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $exam->getUserFilename() . '";');
 
         // Send headers before outputting anything
         $response->sendHeaders();

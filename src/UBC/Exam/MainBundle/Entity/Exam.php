@@ -688,6 +688,23 @@ class Exam
         $this->downloads = $downloads;
     }
 
+    /**
+     * Return a user friendly filename for downloading
+     * @return string
+     */
+    public function getUserFilename() {
+        $ext = pathinfo($this->path, PATHINFO_EXTENSION);
+        return str_replace(' ', '_',
+            join('_', array(
+                $this->subject_code,
+                $this->year,
+                $this->term,
+                $this->legal_content_owner,
+                $this->getTypeString()
+            ))
+        ) . '.' . $ext;
+    }
+
     public function increaseDownloads()
     {
         $this->downloads++;
