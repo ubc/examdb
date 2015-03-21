@@ -8,7 +8,7 @@
 
     <p>In addition to the uploaded files and additional resources below, please see the <a href="{{ url('exam_guide') }}">FAQ</a> for tips on how you can get the most out of this database.</p>
 
-            <h2>Find Material by Course</h2>
+            <h2>Find Material by Keyword</h2>
 
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <!-- if user has not logged in -->
@@ -16,30 +16,34 @@
             {% endif %}
 
             <fieldset>
-
+            
                 <div class="row-fluid search-box-row">
-
+                    
                     <form action="{{ path('ubc_exam_main_homepage') }}" method="get" id="form_search">
                         <div class="span8">
-                            <input type="text" name="q" value="{{ q }}"/>
+                            <label>Enter a keyword</label>
+                            <input type="text" placeholder="e.g. a subject code, course number, instructor, etc." name="q" value="{{ q }}"/>
                         </div>
-
-                        <div class="spa4">
+                        
+                        <div class="span4">
+                            <label>&nbsp;</label>
                             <button type="submit" class="btn btn-primary" id="search-button">Search</button>
                         </div>
+                        
                     </form>
+                    
                 </div>
-
+            
             </fieldset>
 
-        <!-- show *only* when results are available AND a subject code has been selected, i.e, a search has been done
+        <!-- show *only* when results are available
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
         {% if exams|length > 0 %}
 
             <table class="table table-striped">
 
                 <!-- populate caption with course number selected and number of results after each search -->
-                <caption>{% if subjectCodeLabel is empty %}All Resources{% else %} {{ exams|length }} found for {{ subjectCodeLabel }}{% endif %} {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search for more{% endif %}</caption>
+                <caption>{{ exams|length }} found for "{{ q }}" {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search for more{% endif %}</caption>
 
                 <thead>
                     <tr>
@@ -106,7 +110,8 @@
             </div>
 
         {% elseif q is not null %}
-            Your search - <em>{{ q }}</em> - did not match any exams.
+            <h3>No results found</h3>
+            <p class="alert alert-info">Sorry, your search for "{{ q }}" did not match anything in the database. {% if not is_granted('IS_AUTHENTICATED_FULLY') %}<a href="{{ url('exam_login') }}">Log in</a> to search more content.{% endif %}</p>
         {% endif %}
 
     <hr />

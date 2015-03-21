@@ -46,7 +46,7 @@
 }
 
     /* need margin for all elements to account for movement when screen shrinks */
-    .content .search-box-row select,
+    .content .search-box-row input,
     .content .search-box-row label,
     .content .search-box-row button {
 	margin-left: 1em;
