@@ -108,7 +108,7 @@ class ExamRepository extends EntityRepository
         return $query->getResult();
     }
 
-    public function findExamsByIds($ids, $user_id, $faculties = array(), $courses = array()) {
+    public function queryExamsByIds($ids, $user_id, $faculties = array(), $courses = array()) {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('e')
@@ -117,12 +117,14 @@ class ExamRepository extends EntityRepository
             ->orderBy('e.year', 'DESC')
             ->setParameter('ids', $ids);
 
-        $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
+        return $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
+    }
 
-        $query = $qb->getQuery();
-
+    public function findExamsByIds($ids, $user_id, $faculties = array(), $courses = array()) {
         // TODO add cache
-        return $query->getResult();
+        return $this->queryExamsByIds($ids, $user_id, $faculties, $courses)
+            ->getQuery()
+            ->getResult();
     }
 
     public function findExamByPath($path, $user_id = 0, $faculties = array(), $courses = array())
@@ -158,19 +160,27 @@ class ExamRepository extends EntityRepository
         return $query->getOneOrNullResult();
     }
 
-    public function findAllEditableExams($user_id = 0) {
+    /**
+     * Query all exams that a user has permission to edit
+     *
+     * @param int $user_id
+     * @return QueryBuilder
+     */
+    public function queryAllEditableExams($user_id = 0) {
         $qb = $this->getEntityManager()->createQueryBuilder();
 
         $qb->select('e')
             ->from('UBCExamMainBundle:Exam', 'e')
             ->orderBy('e.created', 'DESC');
 
-        $qb = $this->addEditableExamCriteria($qb, $user_id);
+        return $this->addEditableExamCriteria($qb, $user_id);
+    }
 
-        $query = $qb->getQuery();
-
+    public function findAllEditableExams($user_id = 0) {
         // TODO add cache
-        return $query->getResult();
+        return $this->queryAllEditableExams($user_id)
+            ->getQuery()
+            ->getResult();
     }
     /**
      * Generate statistics by faculty.

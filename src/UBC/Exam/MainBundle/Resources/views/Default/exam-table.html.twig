@@ -4,7 +4,7 @@
             {{ caption }}  <a href="{{ url('exam_upload') }}" class="btn btn-primary btn-small pull-right"><i class="icon-plus"></i> Add New</a>
         {% endif %}
     </caption>
-    {% if exams %}
+    {% if entities is not empty %}
 
         <thead>
             <tr>
@@ -24,7 +24,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for exam in exams %}
+            {% for exam in entities %}
                 <tr>
                     {% if list is defined %}
                         <td class="td-icon"><a href="{{ url('exam_update', {'examID': exam.id}) }}"><i class="icon-pencil"></i></a></td>
@@ -65,3 +65,7 @@
         </tbody>
     {% endif %}
 </table>
+
+<div class="text-center">
+    {{ pagerHtml|raw }}
+</div>

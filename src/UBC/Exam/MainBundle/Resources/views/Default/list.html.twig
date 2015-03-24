@@ -16,6 +16,70 @@
         <p><strong>Don't see your material?</strong> If you need to edit or delete material that was uploaded by <em>someone else</em> on your behalf, please contact that individual to make the change. Alternatively, you may <a href="mailto:examdb.support@UBC.ca?subject=Request for Change&body=Please update these exam database materials as specified below:">contact this site's administrator</a> to make the change.</p>
     {% endif %}
 
-    {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'exams': exams, 'caption': caption, 'list': true }) }}
+    {% if form_errors(filterForm) %}
+        <div class="alert alert-block alert-error fade in form-errors">
+            {{ form_errors(filterForm) }}
+        </div>
+    {% endif %}
+
+    <button class="btn btn-inverse dropdown-toggle" data-toggle="collapse" data-target="#filters">
+        Filter User List By...
+        <i class="icon-caret-down"></i>
+    </button>
+
+    <div id="filters" class="collapse">
+        To search with wildcard, prepend or append the search term with "%", e.g. CPSC%.
+        <form class="well" action="{{ path('exam_list') }}" method="get" {{ form_enctype(filterForm) }}>
+
+            <div class="row-fluid">
+                <div class="span4">
+                    {{ form_row(filterForm.campus) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.faculty) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.dept) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.subject_code, {'label': 'Course'}) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.year) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.term) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.type) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.cross_listed) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.legal_content_owner) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.legal_uploader) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.legal_agreed) }}
+                </div>
+                <div class="span4">
+                    {{ form_row(filterForm.access_level) }}
+                </div>
+                {{ form_rest(filterForm) }}
+            </div>
+
+            <p>
+                <button name="filter_action" value="reset">{{ 'views.index.reset'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+                &nbsp;
+                <button class="btn btn-primary btn-small" type="submit" name="filter_action" value="filter">{{ 'views.index.filter'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+            </p>
+
+        </form>
+    </div>
+
+    {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'entities': entities, 'caption': caption, 'list': true }) }}
 
 {% endblock %}

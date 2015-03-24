@@ -3,6 +3,10 @@
 namespace UBC\Exam\MainBundle\Controller;
 
 use Doctrine\ORM\EntityNotFoundException;
+use Doctrine\ORM\QueryBuilder;
+use Pagerfanta\Adapter\DoctrineORMAdapter;
+use Pagerfanta\Pagerfanta;
+use Pagerfanta\View\TwitterBootstrapView;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -12,6 +16,7 @@ use UBC\Exam\MainBundle\Entity\Exam;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use UBC\Exam\MainBundle\Form\ExamFilterType;
 use ZendSearch\Lucene\Search\Query\Wildcard;
 use ZendSearch\Lucene\Search\QueryParser;
 
@@ -34,7 +39,9 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $exams = array();
+        $pagination = array();
+        $entities = array();
+        $pagerHtml = null;
 
         $q = $request->get('q');
 
@@ -62,18 +69,27 @@ class DefaultController extends Controller
 
                 $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
 
-                $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-                    ->findExamsByIds($ids, $userId, $faculties, $courses);
+                $qb = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
+                    ->queryExamsByIds($ids, $userId, $faculties, $courses);
+
+                $paginator  = $this->get('knp_paginator');
+                $pagination = $paginator->paginate(
+                    $qb,
+                    $request->query->get('page', 1)/*page number*/,
+                    10/*limit per page*/
+                );
+
             }
         }
 
         return $this->render('UBCExamMainBundle:Default:index.html.twig', array(
-            'exams' => $exams,
+            'pagination' => $pagination,
             'q' => $q,
             'subjectCode' => '', // used by wiki content
             'subjectCodeLabel' => '', // used by wiki content
         ));
     }
+
 
     /**
      * Handles upload page
@@ -177,13 +193,97 @@ class DefaultController extends Controller
      *
      * @Route("/list", name="exam_list")
      */
-    public function listAction()
+    public function listAction(Request $request)
     {
         $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
-        $exams = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
-            ->findAllEditableExams($userId);
+        $qb = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')->queryAllEditableExams($userId);
+//        $paginator  = $this->get('knp_paginator');
+//        $pagination = $paginator->paginate(
+//            $qb,
+//            $request->query->get('page', 1)/*page number*/,
+//            10/*limit per page*/
+//        );
+        list($filterForm, $qb) = $this->filter($qb);
 
-        return $this->render('UBCExamMainBundle:Default:list.html.twig', array('exams' => $exams));
+        list($entities, $pagerHtml) = $this->paginator($qb);
+
+        return $this->render('UBCExamMainBundle:Default:list.html.twig', array(
+            'entities' => $entities,
+            'pagerHtml' => $pagerHtml,
+            'filterForm' => $filterForm->createView(),
+        ));
+    }
+
+    /**
+     * Create filter form and process filter request.
+     * @param QueryBuilder $queryBuilder
+     * @return array
+     */
+    protected function filter(QueryBuilder $queryBuilder)
+    {
+        $request = $this->getRequest();
+        $session = $request->getSession();
+        $filterForm = $this->createForm(new ExamFilterType());
+
+        // Reset filter
+        if ($request->get('filter_action') == 'reset') {
+            $session->remove('ExamControllerFilter');
+        }
+
+        // Filter action
+        if ($request->get('filter_action') == 'filter') {
+            // Bind values from the request
+            $filterForm->bind($request);
+
+            if ($filterForm->isValid()) {
+                // Build the query from the given form object
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
+                // Save filter to session
+                $filterData = $filterForm->getData();
+                $session->set('ExamControllerFilter', $filterData);
+            }
+        } else {
+            // Get filter from session
+            if ($session->has('ExamControllerFilter')) {
+                $filterData = $session->get('ExamControllerFilter');
+                $filterForm = $this->createForm(new ExamFilterType(), $filterData);
+                $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
+            }
+        }
+
+        return array($filterForm, $queryBuilder);
+    }
+
+    /**
+     * Get results from paginator and get paginator view.
+     *
+     */
+    protected function paginator($queryBuilder)
+    {
+        // Paginator
+        $adapter = new DoctrineORMAdapter($queryBuilder);
+        $pagerfanta = new Pagerfanta($adapter);
+        $currentPage = $this->getRequest()->get('page', 1);
+        $pagerfanta->setCurrentPage($currentPage);
+        $entities = $pagerfanta->getCurrentPageResults();
+
+        // Paginator - route generator
+        $me = $this;
+        $routeGenerator = function($page) use ($me)
+        {
+            return $me->generateUrl('exam', array('page' => $page));
+        };
+
+        // Paginator - view
+        $translator = $this->get('translator');
+        $view = new TwitterBootstrapView();
+        $pagerHtml = $view->render($pagerfanta, $routeGenerator, array(
+            'proximity' => 3,
+            'prev_message' => $translator->trans('views.index.pagprev', array(), 'JordiLlonchCrudGeneratorBundle'),
+            'next_message' => $translator->trans('views.index.pagnext', array(), 'JordiLlonchCrudGeneratorBundle'),
+        ));
+
+        return array($entities, $pagerHtml);
     }
 
     /**

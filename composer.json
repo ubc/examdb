@@ -38,7 +38,8 @@
         "sensio/buzz-bundle": "dev-master",
         "jordillonch/crud-generator": "2.3.*",
         "egeloen/lucene-search-bundle": "~2.0",
-        "zendframework/zendsearch": "dev-master"
+        "zendframework/zendsearch": "dev-master",
+        "knplabs/knp-paginator-bundle": "~2.4@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "4.5.*",
@@ -50,7 +51,7 @@
         "ubc/ctlt-coding-standard": "1.0",
         "sebastian/phpcpd": "*",
         "phpdocumentor/phpdocumentor": "2.*",
-        "doctrine/data-fixtures": "~1.0@dev",
+        "doctrine/data-fixtures": "1.0.0",
         "liip/functional-test-bundle": "~1.0@dev",
         "h4cc/alice-fixtures-bundle": "dev-master",
         "mikey179/vfsStream": "~1.4"

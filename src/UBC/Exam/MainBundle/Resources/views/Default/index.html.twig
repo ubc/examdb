@@ -16,34 +16,34 @@
             {% endif %}
 
             <fieldset>
-            
+
                 <div class="row-fluid search-box-row">
-                    
+
                     <form action="{{ path('ubc_exam_main_homepage') }}" method="get" id="form_search">
                         <div class="span8">
                             <label>Enter a keyword</label>
                             <input type="text" placeholder="e.g. a subject code, course number, instructor, etc." name="q" value="{{ q }}"/>
                         </div>
-                        
+
                         <div class="span4">
                             <label>&nbsp;</label>
                             <button type="submit" class="btn btn-primary" id="search-button">Search</button>
                         </div>
-                        
+
                     </form>
-                    
+
                 </div>
-            
+
             </fieldset>
 
         <!-- show *only* when results are available
              FUTURE TO DO: can results be ordered by course year, with most recent year first? -->
-        {% if exams|length > 0 %}
+        {% if pagination|length > 0 %}
 
             <table class="table table-striped">
 
                 <!-- populate caption with course number selected and number of results after each search -->
-                <caption>{{ exams|length }} found for "{{ q }}" {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search for more{% endif %}</caption>
+                <caption>{{ pagination|length }} found for "{{ q }}" {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search for more{% endif %}</caption>
 
                 <thead>
                     <tr>
@@ -66,7 +66,7 @@
                 </thead>
 
                 <tbody>
-                    {% for exam in exams %}
+                    {% for exam in pagination %}
                         <tr>
                             <td>
                                 {{ exam.year }} {{ exam.term | capitalize }}
@@ -94,6 +94,10 @@
                 </tbody>
 
             </table>
+
+            <div class="navigation">
+                {{ knp_pagination_render(pagination) }}
+            </div>
 
             <p class="alert alert-warning"><strong>Never assume that past or sample exams will be similar to exams used in a current section of a course</strong>&mdash;unless your instructor has explicitly indicated this. Note especially when material was uploaded either by a different instructor than the instructor teaching the current course or for a course that took place more than one or two years ago.</p>
 
