@@ -9,11 +9,11 @@ use Symfony\Component\Validator\ConstraintValidator;
 
 class HasPermissionValidator extends ConstraintValidator
 {
-    private $securityContext = null;
+    private $authChecker = null;
 
-    public function __construct($securityContext)
+    public function __construct($authChecker)
     {
-        $this->securityContext = $securityContext;
+        $this->authChecker = $authChecker;
     }
 
     /**
@@ -32,7 +32,7 @@ class HasPermissionValidator extends ConstraintValidator
             $roles = $value;
         }
         foreach ($roles as $role) {
-            if ($this->securityContext == null || !$this->securityContext->isGranted($role)) {
+            if ($this->authChecker == null || !$this->authChecker->isGranted($role)) {
                 $this->context->addViolation(
                     $constraint->message,
                     array('%role%' => $role)

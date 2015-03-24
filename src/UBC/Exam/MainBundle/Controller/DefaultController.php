@@ -67,7 +67,7 @@ class DefaultController extends Controller
                     $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultiesByCourses($courses)
                 );
 
-                $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+                $userId = $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
 
                 $qb = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
                     ->queryExamsByIds($ids, $userId, $faculties, $courses);
@@ -111,7 +111,7 @@ class DefaultController extends Controller
         list($faculties, $subjectCode) = $em->getRepository('UBCExamMainBundle:SubjectFaculty')->getFacultySubjectCode();
 
         //get user
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user instanceof \UBC\Exam\MainBundle\Entity\User) {
             $fname = $user->getFirstname();
             $lname = $user->getLastname();
@@ -124,13 +124,13 @@ class DefaultController extends Controller
 
         $form = $this->createFormBuilder($exam);
 
-        $form->add('campus', 'choice', array('empty_value' => '- Choose campus -','choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')));
+        $form->add('campus', 'choice', array('placeholder' => '- Choose campus -','choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')));
 
         $form->add('faculty', 'text', array('max_length' => 50));
         $form->add('dept', 'text', array('max_length' => 10));
 
         if (count($subjectCode) > 1) {
-            $form->add('subject_code', 'choice', array('empty_value' => '- Choose campus first -', 'choices' => $subjectCode))
+            $form->add('subject_code', 'choice', array('placeholder' => '- Choose campus first -', 'choices' => $subjectCode))
                  ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
         } else {
             $form->add('subject_code', 'text', array('max_length' => 10));
@@ -138,10 +138,10 @@ class DefaultController extends Controller
 
         $form->add('comments', 'textarea', array('required' => false))
             ->add('year')
-            ->add('term', 'choice', array('empty_value' => '- Choose term -', 'choices' => Exam::$TERMS))
+            ->add('term', 'choice', array('placeholder' => '- Choose term -', 'choices' => Exam::$TERMS))
             ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
-            ->add('access_level', 'choice', array('empty_value' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
-            ->add('type', 'choice', array('empty_value' => '- Choose type of material -', 'choices' => Exam::$TYPES))
+            ->add('access_level', 'choice', array('placeholder' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
+            ->add('type', 'choice', array('placeholder' => '- Choose type of material -', 'choices' => Exam::$TYPES))
             ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
             ->add('legal_content_owner', 'text', array('max_length' => 100))
             ->add('legal_uploader', 'text', array('data' => $first.$last, 'max_length' => 100))
@@ -167,7 +167,7 @@ class DefaultController extends Controller
 
             if ($form->isValid()) {
                 //setup who did it!
-                $user = $this->get('security.context')->getToken()->getUser();
+                $user = $this->get('security.token_storage')->getToken()->getUser();
                 // if in_memory user is used to login, we manually find the first user in db
                 if ($user instanceof \Symfony\Component\Security\Core\User\User) {
                     $user = $this->getDoctrine()->getRepository('UBCExamMainBundle:User')
@@ -195,7 +195,7 @@ class DefaultController extends Controller
      */
     public function listAction(Request $request)
     {
-        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $userId = $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
         $qb = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')->queryAllEditableExams($userId);
 //        $paginator  = $this->get('knp_paginator');
 //        $pagination = $paginator->paginate(
@@ -297,7 +297,7 @@ class DefaultController extends Controller
      */
     public function loginAction(Request $request)
     {
-        $securityContext = $this->container->get('security.context');
+        $securityContext = $this->container->get('security.authorization_checker');
         if ($securityContext->isGranted('IS_AUTHENTICATED_REMEMBERED')) {
             // authenticated REMEMBERED, FULLY will imply REMEMBERED (NON anonymous)
             return $this->redirect($this->generateUrl('ubc_exam_main_homepage'));
@@ -355,7 +355,7 @@ class DefaultController extends Controller
         }
 
         //check that user is uploader, ONLY uploader can delete the exam
-        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $userId = $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
         $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
             ->findEditableExamById($examID, $userId);
 
@@ -389,7 +389,7 @@ class DefaultController extends Controller
         }
 
         //check that user is uploader, ONLY uploader can edit the exam
-        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $userId = $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
         $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
             ->findEditableExamById($examID, $userId);
 
@@ -408,7 +408,7 @@ class DefaultController extends Controller
         ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
         ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
         ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
-        ->add('type', 'choice', array('empty_value' => '- Choose type of material -', 'choices' => Exam::$TYPES))
+        ->add('type', 'choice', array('placeholder' => '- Choose type of material -', 'choices' => Exam::$TYPES))
         ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
         ->add('legal_content_owner', 'text', array('max_length' => 100))
         ->add('legal_uploader', 'text', array('read_only' => true, 'max_length' => 100))
@@ -424,7 +424,7 @@ class DefaultController extends Controller
                 $em = $this->getDoctrine()->getManager();
 
                 //setup who did it!
-                $user = $this->get('security.context')->getToken()->getUser();
+                $user = $this->get('security.token_storage')->getToken()->getUser();
                 $exam->setUploadedBy($user);
 
                 //save to DB
@@ -465,7 +465,7 @@ class DefaultController extends Controller
      */
     public function downloadAction($filename)
     {
-        $userId = $this->get('security.context')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
+        $userId = $this->get('security.authorization_checker')->isGranted('ROLE_ADMIN') ? -1 : $this->getCurrentUserId();
 
         //try to get exam based on filename
         $exam = $this->getDoctrine()->getRepository('UBCExamMainBundle:Exam')
@@ -482,7 +482,7 @@ class DefaultController extends Controller
         }
 
         $accessLogger = $this->get("monolog.logger.access");
-        $user = $this->get('security.context')->getToken()->getUser();
+        $user = $this->get('security.token_storage')->getToken()->getUser();
         if ($user instanceof \UBC\Exam\MainBundle\Entity\User ||
             $user instanceof \Symfony\Component\Security\Core\User\User
         ) {

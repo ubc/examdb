@@ -134,7 +134,7 @@ class UserController extends Controller
         // check if the target user has higher level of role than current user
         $roles = $entity->getRoles();
         foreach ($roles as $role) {
-            if (!$this->get('security.context')->isGranted($role)) {
+            if (!$this->get('security.authorization_checker')->isGranted($role)) {
                 throw new AccessDeniedException("You don't have permission to create the user with role $role.");
             }
         }
@@ -217,7 +217,7 @@ class UserController extends Controller
         // check if the target user has higher level of role than current user
         $roles = $entity->getRoles();
         foreach ($roles as $role) {
-            if (!$this->get('security.context')->isGranted($role)) {
+            if (!$this->get('security.authorization_checker')->isGranted($role)) {
                 throw new AccessDeniedException('You don\'t have permission to edit this user with role ' . $role);
             }
         }

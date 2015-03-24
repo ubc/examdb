@@ -31,6 +31,6 @@ services:
         arguments: [%ubc_exam_main.user_entity.class%]
     ubc.exam.has_permission_validator:
         class: %ubc_exam_main.has_permission_validator.class%
-        arguments: [@security.context]
+        arguments: [@security.authorization_checker]
         tags:
             - { name: validator.constraint_validator, alias: has_permission }
