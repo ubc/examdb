@@ -102,3 +102,10 @@ ivory_lucene_search:
   exams:
     path:  "%index_dir%"
     analyzer: ZendSearch\Lucene\Analysis\Analyzer\Common\TextNum\CaseInsensitive
+
+doctrine_cache:
+  providers:
+    wiki_content:
+      file_system:
+        extension: cache
+        directory: %kernel.cache_dir%/wiki/

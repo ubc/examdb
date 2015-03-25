@@ -249,4 +249,8 @@ class SubjectFaculty
     {
         return $this->urn;
     }
+
+    public function getCacheKey() {
+        return $this->campus . '_' . $this->department;
+    }
 }

@@ -67,7 +67,7 @@ class DefaultControllerTest extends WebTestCase
     {
         return array(
             array('/exam/'),
-            array('/exam/wikicontent/CHIN'),
+//            array('/exam/wikicontent/UBC/CHIN'), disabled as it's depending on external service
             array('/exam/subjectcode/UBC'),
             array('/exam/subjectcode/UBC/CHIN'),
             array('/exam/guide'),
@@ -99,8 +99,8 @@ class DefaultControllerTest extends WebTestCase
             ->disableOriginalConstructor()
             ->getMock();
         $mockSubjectCodeRepository->expects($this->any())
-            ->method('findBy')
-            ->will($this->returnValue(array($code)));
+            ->method('findOneBy')
+            ->will($this->returnValue($code));
 
         // mock the EntityManager to return the mock of the repository
         $entityManager = $this->getMockBuilder('\Doctrine\Common\Persistence\ObjectManager')
@@ -130,15 +130,27 @@ class DefaultControllerTest extends WebTestCase
             ->with($this->equalTo($this->client->getContainer()->getParameter('wiki_base_url') . urlencode('UBC/ARTS/ASIA')))
             ->will($this->returnValue($response));
 
+        // remove cache
+        $this->client->getContainer()->get('doctrine_cache.providers.wiki_content')->delete($code->getCacheKey());
+
 //        $this->client->getContainer()->set('doctrine.orm.default_entity_manager', $entityManager);
         $this->client->getContainer()->set('buzz', $buzz);
 
-        $crawler = $this->client->request('GET', '/exam/wikicontent/CHIN');
+        $crawler = $this->client->request('GET', '/exam/wikicontent/UBC/CHIN');
         $this->assertTrue($this->client->getResponse()->isSuccessful());
         $this->assertGreaterThan(
             0,
             $crawler->filter('html:contains("test")')->count()
         );
+
+        // should not call buzz but retrieve from cache
+        $client = self::createClient();
+        $buzz = $this->getMockBuilder('\Buzz\Browser')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $buzz->expects($this->never())->method('get');
+        $client->getContainer()->set('buzz', $buzz);
+        $crawler = $client->request('GET', '/exam/wikicontent/UBC/CHIN');
     }
 
     public function testGetSubjectCodes()

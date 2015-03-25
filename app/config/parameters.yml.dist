@@ -29,3 +29,4 @@ parameters:
 
     upload_dir: "%kernel.root_dir%/data/uploads/documents"
     index_dir: "%kernel.logs_dir%/index_%kernel.environment%"
+    wiki_cache_lifetime: 86400

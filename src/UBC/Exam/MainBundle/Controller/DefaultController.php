@@ -40,7 +40,6 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $pagination = array();
-        $entities = array();
         $pagerHtml = null;
 
         $q = $request->get('q');
@@ -517,37 +516,48 @@ class DefaultController extends Controller
     }
 
     /**
+     * @param $campus  string the campus code
      * @param $subject string the course subject code
      * @return \Symfony\Component\HttpFoundation\Response
      *
-     * @Route("/wikicontent/{subject}", name="exam_wiki", methods={"GET"})
+     * @Route("/wikicontent/{campus}/{subject}", name="exam_wiki", methods={"GET"})
      */
-    public function getWikiContentAction($subject)
+    public function getWikiContentAction($campus, $subject)
     {
         $logger = $this->get('logger');
-        $wikiBaseUrl = $this->container->getParameter('wiki_base_url');
-        $subjectCodes = $this->getDoctrine()
+
+        $subjectCode = $this->getDoctrine()
             ->getRepository('UBCExamMainBundle:SubjectFaculty')
-            ->findBy(array('code' => $subject));
+            ->findOneBy(array('campus' => $campus, 'code' => $subject));
+
+        // loading wiki contents from cache first
+        $cache = $this->get('doctrine_cache.providers.wiki_content');
+        $content = $cache->fetch($subjectCode->getCacheKey());
+        if ($content) {
+            $logger->debug('Getting wiki content from cache');
+            return new Response($content);
+        }
+
+        $wikiBaseUrl = $this->container->getParameter('wiki_base_url');
 
         $browser = $this->get('buzz');
         $content = array();
-        foreach($subjectCodes as $code) {
-            $title = sprintf('%s/%s/%s',
-                $code->getCampus(), $code->getFaculty(), $code->getDepartment());
-            $logger->debug('Getting wiki content from ' . $wikiBaseUrl.urlencode($title));
-            $response = $browser->get($wikiBaseUrl.urlencode($title));
-            // only take the content from HTTP 200, ignore others
-            if ($response->getStatusCode() == 200) {
-                $content[] = $response->getContent();
-            }
+        $title = sprintf('%s/%s/%s',
+            $subjectCode->getCampus(), $subjectCode->getFaculty(), $subjectCode->getDepartment());
+        $logger->debug('Getting wiki content from ' . $wikiBaseUrl.urlencode($title));
+        $response = $browser->get($wikiBaseUrl.urlencode($title));
+        // only take the content from HTTP 200, ignore others
+        if ($response->getStatusCode() == 200) {
+            $content = $response->getContent();
         }
+
+        $cache->save($subjectCode->getCacheKey(), $content, $this->container->getParameter('wiki_cache_lifetime'));
 
 //        if (empty($content)) {
 //            throw $this->createNotFoundException('No wiki content available for subject ' . $subject);
 //        }
 
-        return new Response(join('<hr>', $content));
+        return new Response($content);
     }
 
     /**

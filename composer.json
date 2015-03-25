@@ -41,7 +41,8 @@
         "zendframework/zendsearch": "dev-master",
         "knplabs/knp-paginator-bundle": "~2.4@dev",
         "elao/web-profiler-extra-bundle": "dev-master",
-        "pagerfanta/pagerfanta": "dev-master"
+        "pagerfanta/pagerfanta": "dev-master",
+        "doctrine/doctrine-cache-bundle": "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "4.5.*",
