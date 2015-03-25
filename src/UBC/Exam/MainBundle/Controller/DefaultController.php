@@ -279,8 +279,8 @@ class DefaultController extends Controller
         $view = new TwitterBootstrapView();
         $pagerHtml = $view->render($pagerfanta, $routeGenerator, array(
             'proximity' => 3,
-            'prev_message' => 'Previous',
-            'next_message' => 'Next',
+            'prev_message' => '← Previous',
+            'next_message' => 'Next →',
         ));
 
         return array($entities, $pagerHtml);
