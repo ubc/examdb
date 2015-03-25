@@ -1,7 +1,7 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% block title %}
-{{ parent() }} - {{ 'views.show.show'|trans({'%entity%': 'User'}, 'JordiLlonchCrudGeneratorBundle') }}
+{{ parent() }} - Show User
 {% endblock %}
 
 {% block body %}
@@ -43,19 +43,19 @@
 <div>
     <div class="float-left">
         <a class="btn" href="{{ path('user') }}">
-            {{ 'views.recordactions.backtothelist'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
+            Back to the List
         </a>
     </div>
     <div class="float-left">
         <a class="btn btn-primary" href="{{ path('user_edit', { 'id': entity.id }) }}">
-            {{ 'views.recordactions.edit'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}
+            Edit
         </a>
     </div>
     <div class="float-left">
         <form action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
             <input type="hidden" name="_method" value="DELETE" />
             {{ form_widget(delete_form) }}
-            <button class="btn btn-danger" type="submit" onclick="return confirm('{{ 'views.recordactions.confirm'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}');">{{ 'views.recordactions.delete'|trans({}, 'JordiLlonchCrudGeneratorBundle') }}</button>
+            <button class="btn btn-danger" type="submit" onclick="return confirm('Delete?');">Delete</button>
         </form>
     </div>
 </div>

@@ -26,7 +26,6 @@ class AppKernel extends Kernel
             new UBC\LtCommonsBundle\UBCLtCommonsBundle(),
             new Sensio\Bundle\BuzzBundle\SensioBuzzBundle(),
             new Lexik\Bundle\FormFilterBundle\LexikFormFilterBundle(),
-            new JordiLlonch\Bundle\CrudGeneratorBundle\JordiLlonchCrudGeneratorBundle(),
             new Ivory\LuceneSearchBundle\IvoryLuceneSearchBundle(),
             new Knp\Bundle\PaginatorBundle\KnpPaginatorBundle(),
         );
@@ -37,6 +36,7 @@ class AppKernel extends Kernel
             $bundles[] = new Sensio\Bundle\GeneratorBundle\SensioGeneratorBundle();
             $bundles[] = new h4cc\AliceFixturesBundle\h4ccAliceFixturesBundle();
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
+            $bundles[] = new Elao\WebProfilerExtraBundle\WebProfilerExtraBundle();
         }
         if (in_array($this->getEnvironment(), array('test'))) {
             $bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();
