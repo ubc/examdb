@@ -30,3 +30,9 @@ parameters:
     upload_dir: "%kernel.root_dir%/data/uploads/documents"
     index_dir: "%kernel.logs_dir%/index_%kernel.environment%"
     wiki_cache_lifetime: 86400
+
+    cache_driver: array
+    cache_driver_wiki: file_system
+    redis_host: 127.0.0.1
+    redis_port: 6379
+    redis_password: ~

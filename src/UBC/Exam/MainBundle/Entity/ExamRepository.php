@@ -77,8 +77,8 @@ class ExamRepository extends EntityRepository
 
         $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
 
-        $query = $qb->getQuery();
-        // TODO add cache
+        $query = $qb->getQuery()->useResultCache(true);
+
         $codes = $query->getResult();
 
         return array_map(
@@ -102,9 +102,8 @@ class ExamRepository extends EntityRepository
 
         $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
 
-        $query = $qb->getQuery();
+        $query = $qb->getQuery()->useResultCache(true);
 
-        // TODO add cache
         return $query->getResult();
     }
 
@@ -121,7 +120,7 @@ class ExamRepository extends EntityRepository
     }
 
     public function findExamsByIds($ids, $user_id, $faculties = array(), $courses = array()) {
-        // TODO add cache
+        // no cache enabled as the same query (same ids and user_id) is not likely to be reused later
         return $this->queryExamsByIds($ids, $user_id, $faculties, $courses)
             ->getQuery()
             ->getResult();
@@ -138,9 +137,8 @@ class ExamRepository extends EntityRepository
 
         $qb = $this->addVisibleExamCriteria($qb, $user_id, $faculties, $courses);
 
-        $query = $qb->getQuery();
+        $query = $qb->getQuery()->useResultCache(true);
 
-        // TODO add cache
         return $query->getOneOrNullResult();
     }
 
@@ -154,9 +152,9 @@ class ExamRepository extends EntityRepository
 
         $qb = $this->addEditableExamCriteria($qb, $user_id);
 
+        // no cache enabled as the same query (same id) is not likely to be reused later
         $query = $qb->getQuery();
 
-        // TODO add cache
         return $query->getOneOrNullResult();
     }
 
@@ -177,9 +175,9 @@ class ExamRepository extends EntityRepository
     }
 
     public function findAllEditableExams($user_id = 0) {
-        // TODO add cache
         return $this->queryAllEditableExams($user_id)
             ->getQuery()
+            ->useResultCache(true)
             ->getResult();
     }
     /**
@@ -203,6 +201,8 @@ class ExamRepository extends EntityRepository
             ->from('UBCExamMainBundle:Exam', 'e')
             ->groupBy('e.campus, e.faculty');
 
-        return $qb->getQuery()->getResult();
+        return $qb->getQuery()
+            ->useResultCache(true)
+            ->getResult();
     }
 } 

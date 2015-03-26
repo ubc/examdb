@@ -61,6 +61,15 @@ doctrine:
     orm:
         auto_generate_proxy_classes: "%kernel.debug%"
         auto_mapping: true
+        result_cache_driver:
+          type: service
+          id: doctrine_cache.providers.result_cache
+        metadata_cache_driver:
+          type: service
+          id: doctrine_cache.providers.metadata_cache
+        query_cache_driver:
+          type: service
+          id: doctrine_cache.providers.query_cache
 
 stof_doctrine_extensions:
     default_locale: en_US
@@ -106,6 +115,38 @@ ivory_lucene_search:
 doctrine_cache:
   providers:
     wiki_content:
+      type: "%cache_driver_wiki%"
+      redis:
+        host: "%redis_host%"
+        port: "%redis_port%"
+        password: "%redis_password%"
       file_system:
         extension: cache
         directory: %kernel.cache_dir%/wiki/
+    query_cache:
+      type: "%cache_driver%"
+      redis:
+        host: "%redis_host%"
+        port: "%redis_port%"
+        password: "%redis_password%"
+      file_system:
+        extension: cache
+        directory: %kernel.cache_dir%/query/
+    result_cache:
+      type: "%cache_driver%"
+      redis:
+        host: "%redis_host%"
+        port: "%redis_port%"
+        password: "%redis_password%"
+      file_system:
+        extension: cache
+        directory: %kernel.cache_dir%/result/
+    metadata_cache:
+      type: "%cache_driver%"
+      redis:
+        host: "%redis_host%"
+        port: "%redis_port%"
+        password: "%redis_password%"
+      file_system:
+        extension: cache
+        directory: %kernel.cache_dir%/metadata/

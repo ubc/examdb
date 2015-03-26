@@ -1,6 +1,8 @@
 <?php
 namespace UBC\Exam\MainBundle\Entity;
 
+use Doctrine\Common\Persistence\Event\PreUpdateEventArgs;
+use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -16,6 +18,7 @@ use ZendSearch\Lucene\Document\Field;
  * @ORM\Table(name="exam", indexes={@Index(name="IDX_STATS",   columns={"campus", "faculty"}),
  *                                  @Index(name="IDX_SUBJECT", columns={"subject_code"})})
  * @ORM\Entity(repositoryClass="UBC\Exam\MainBundle\Entity\ExamRepository")
+ * @ORM\HasLifecycleCallbacks
  */
 class Exam
 {
@@ -741,5 +744,20 @@ class Exam
             $indexer->delete($hit);
         }
         $indexer->commit();
+    }
+
+    /**
+     * @ORM\PostPersist
+     * @ORM\PostUpdate
+     * @ORM\PostRemove
+     * @param LifecycleEventArgs $event
+     */
+    public function flushCache(LifecycleEventArgs $event) {
+        $em = $event->getEntityManager();
+        $cacheDriver = $em->getConfiguration()->getResultCacheImpl();
+
+        if ($cacheDriver) {
+            $cacheDriver->flushAll();
+        }
     }
 }

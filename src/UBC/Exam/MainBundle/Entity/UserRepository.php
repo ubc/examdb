@@ -19,12 +19,12 @@ class UserRepository extends EntityRepository implements CasUserProviderInterfac
 {
     /**
      * This function is called when user logs into cas.  checks if user exists, if not then creates one (non-PHPdoc)
-     * 
+     *
      * @param String $username
-     * 
+     *
      * @see \Symfony\Component\Security\Core\User\UserProviderInterface::loadUserByUsername()
-     * 
-     * @return \Entities\User
+     *
+     * @return mixed|UserInterface
      */
     public function loadUserByUsername($username)
     {
@@ -32,7 +32,8 @@ class UserRepository extends EntityRepository implements CasUserProviderInterfac
             ->createQueryBuilder('u')
             ->where('u.username = :username')
             ->setParameter('username', $username)
-            ->getQuery();
+            ->getQuery()
+            ->useResultCache(true, 3600);
 
         try {
             // The Query::getSingleResult() method throws an exception
@@ -49,12 +50,12 @@ class UserRepository extends EntityRepository implements CasUserProviderInterfac
 
     /**
      * I think it's called when refreshing user session.(non-PHPdoc)
-     * 
+     *
      * @param UserInterface $user
-     * 
+     *
      * @see \Symfony\Component\Security\Core\User\UserProviderInterface::refreshUser()
-     * 
-     * @return \Entities\User
+     *
+     * @return mixed|UserInterface
      */
     public function refreshUser(UserInterface $user)
     {
@@ -92,8 +93,8 @@ class UserRepository extends EntityRepository implements CasUserProviderInterfac
      * @param TokenInterface $token
      *
      * @inheritDoc
-     * 
-     * @return \Entities\User
+     *
+     * @return mixed|UserInterface
      */
     public function createUser(TokenInterface $token)
     {

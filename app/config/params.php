@@ -21,11 +21,18 @@ $envs = array(
     'auth2_service_url' => 'auth2_service_url',
     'sis_base_url' => 'sis_base_url',
     'upload_dir' => 'upload_dir',
+    'cache_driver' => 'cache_driver',
+    'cache_driver_wiki' => 'cache_driver_wiki',
+    'OPENSHIFT_REDIS_HOST' => 'redis_host',
+    'OPENSHIFT_REDIS_PORT' => 'redis_port',
+    'REDIS_HOST' => 'redis_host',
+    'REDIS_PORT' => 'redis_port',
+    'REDIS_PASSWORD' => 'redis_password',
 );
 
 array_walk($envs, function($v, $k) use ($container) {
     $val = getEnv($k);
-   if (false !== $val) {
-       $container->setParameter($v, is_numeric($val) ? intval($val) : $val);
-   }
+    if (false !== $val) {
+        $container->setParameter($v, is_numeric($val) ? intval($val) : $val);
+    }
 });

@@ -23,6 +23,13 @@ class SubjectCodeRepository extends EntityRepository
             $em->persist($subjectFaculty);
         }
         $em->flush();
+
+        // flush cache
+        $cacheDriver = $em->getConfiguration()->getResultCacheImpl();
+
+        if ($cacheDriver) {
+            $cacheDriver->flushAll();
+        }
     }
 
     /**
@@ -36,7 +43,9 @@ class SubjectCodeRepository extends EntityRepository
             ->createQueryBuilder('s')
             ->select(array('s.code', 's.faculty'))
             ->from('UBCExamMainBundle:SubjectFaculty', 's');
-        $results = $subjectFacultyQuery->getQuery()->getResult();
+        $results = $subjectFacultyQuery->getQuery()
+            ->useResultCache(true)
+            ->getResult();
         $faculties = array_map(create_function('$o', 'return $o["faculty"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
         $subjectCode = array_map(create_function('$o', 'return $o["code"];'), $results);  //props to http://stackoverflow.com/questions/1118994/php-extracting-a-property-from-an-array-of-objects
         $facultiesValue = array_unique(array_values($faculties));
@@ -64,6 +73,7 @@ class SubjectCodeRepository extends EntityRepository
             ->where('s.campus = :campus')
             ->setParameter('campus', $campus)
             ->getQuery()
+            ->useResultCache(true)
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 
@@ -86,6 +96,7 @@ class SubjectCodeRepository extends EntityRepository
             ->setParameter('campus', $campus)
             ->setParameter('code', $subjectCode)
             ->getQuery()
+            ->useResultCache(true)
             ->getOneOrNullResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 
@@ -107,6 +118,7 @@ class SubjectCodeRepository extends EntityRepository
                 'SELECT DISTINCT s.faculty FROM UBCExamMainBundle:SubjectFaculty s WHERE s.code IN (:subjects)'
             )
             ->setParameter('subjects', $subjects)
+            ->useResultCache(true)
             ->getResult();
 
         return array_map(
