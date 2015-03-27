@@ -18,12 +18,13 @@ monolog:
             type:  stream
             path:  "%kernel.logs_dir%/%kernel.environment%.log"
             level: debug
-        firephp:
-            type:  firephp
-            level: info
-        chromephp:
-            type:  chromephp
-            level: info
+    # chromephp is causing nginx throw 502 gateway error (upstream sent too big header)
+#        firephp:
+#            type:  firephp
+#            level: info
+#        chromephp:
+#            type:  chromephp
+#            level: info
         access:
             type: stream
             path:  "%kernel.logs_dir%/access.log"
