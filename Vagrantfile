@@ -38,6 +38,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     sudo su - vagrant
     cd /www_data/app
     php app/console doctrine:schema:update --force
+    php app/console cache:clear --env=prod
+    php app/console cache:warmup --env=prod
     php app/console assetic:dump --env=prod
     php app/console exam:subjectcode:refresh --local
     php app/console exam:user:create admin admin ROLE_SUPER_ADMIN
