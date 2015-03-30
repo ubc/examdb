@@ -335,12 +335,38 @@ class DefaultControllerTest extends WebTestCase
     /**
      * This test whether the upload page has validate form
      */
-//     public function testUpload()
-//     {
-//         $this->logIn();
+     public function testUpload()
+     {
+         $client = static::createClient(array(), array(
+             'PHP_AUTH_USER' => 'instructor',
+             'PHP_AUTH_PW' => 'pass',
+         ));
 
-//         $crawler = $this->client->request('GET', '/exam/upload');
+         $crawler = $client->request('GET', '/exam/upload');
 
-//         $this->assertTrue($crawler->filter('div.content > form.validate-form')->count() === 1);
-//     }
+         $this->assertTrue($client->getResponse()->isSuccessful());
+
+         $form = $crawler->selectButton('Save')->form();
+         $form['form[campus]']->select('UBC');
+         $form['form[subject_code]']->select('CHIN');
+         $form['form[subject_code_number]'] = '999';
+         $form['form[faculty]'] = 'ASIA';
+         $form['form[dept]'] = 'COMM';
+         $form['form[year]'] = 2015;
+         $form['form[term]']->select('w1');
+         $form['form[type]']->select('Actual Assessment');
+         $form['form[access_level]']->select('1');
+         $form['form[legal_content_owner]'] = 'Test User';
+         $form['form[legal_agreed]']->tick();
+         $form['form[legal_uploader]'] = 'Test User1';
+         $form['form[file]']->upload(__DIR__ . '../Fixtures/Exam.yml');
+
+         $client->submit($form);
+
+         $this->assertTrue(
+             $client->getResponse()->isRedirect('/exam/list')
+         );
+         $crawler = $client->followRedirect();
+         $this->assertTrue($crawler->filter('td:contains("2015 W1 - CHIN 999")')->count() === 1, 'should have the new exam');
+     }
 }
