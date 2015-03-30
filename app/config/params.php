@@ -28,6 +28,7 @@ $envs = array(
     'REDIS_HOST' => 'redis_host',
     'REDIS_PORT' => 'redis_port',
     'REDIS_PASSWORD' => 'redis_password',
+    'session_handler' => 'session_handler',
 );
 
 array_walk($envs, function($v, $k) use ($container) {
@@ -36,3 +37,18 @@ array_walk($envs, function($v, $k) use ($container) {
         $container->setParameter($v, is_numeric($val) ? intval($val) : $val);
     }
 });
+
+// construct redis dsn with optional password and port
+$redis_dsn = "redis://";
+if ($container->getParameter('redis_password')) {
+    $redis_dsn .= $container->getParameter('redis_password') . '@';
+}
+$redis_dsn .= $container->getParameter('redis_host');
+if ($container->getParameter('redis_port')) {
+    $redis_dsn .= ':'.$container->getParameter('redis_port');
+}
+$container->setParameter('redis_dsn', $redis_dsn);
+
+
+// change pdo_DRIVER to driver for pdoSessionHandler
+$container->setParameter('database_session_driver', str_replace('pdo_', '', $container->getParameter('database_driver')));
