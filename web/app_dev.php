@@ -21,9 +21,16 @@ $loader = require_once __DIR__.'/../app/bootstrap.php.cache';
 Debug::enable();
 
 require_once __DIR__.'/../app/AppKernel.php';
+require_once __DIR__.'/../app/AppCache.php';
 
 $kernel = new AppKernel('dev', true);
 $kernel->loadClassCache();
+$kernel = new AppCache($kernel);
+
+// fix for http_method_override and AppCache
+// http://symfony.com/doc/current/reference/configuration/framework.html#configuration-framework-http-method-override
+Request::enableHttpMethodParameterOverride();
+
 $request = Request::createFromGlobals();
 $response = $kernel->handle($request);
 $response->send();
