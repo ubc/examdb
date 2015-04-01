@@ -113,44 +113,7 @@
       <div class="navbar-inner expand">
 	<div class="container">
 	  <div class="nav-collapse collapse" id="ubc7-unit-navigation">
-	    <ul class="nav">
-	      <!-- **changes here need to be replicated in the footer mobile navigation below!** -->
-	      <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
-	      </li>
-	      {% if is_granted('ROLE_STAFF') %}
-		<li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
-		  <a href="{{ url('exam_upload') }}">Upload New</a>
-		</li>
-		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'exam_list' or
-				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
-		  <a href="{{ url('exam_list') }}">Manage Existing</a>
-		</li>
-	      {% endif %}
-	      {% if is_granted('ROLE_ADMIN') %}
-		<li class="{% if app.request.attributes.get('_route') == 'user' or
-				 app.request.attributes.get('_route') == 'user_edit' or
-				 app.request.attributes.get('_route') == 'user_new' %}active{% endif %}">
-		  <a href="{{ url('user') }}">Edit Users</a>
-		</li>
-	      {% endif %}
-	      {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AMS') %}
-		<li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
-		  <a href="{{ url('exam_log') }}">View Statistics</a>
-	        </li>
-	      {% endif %}
-	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
-		<a href="{{ url('exam_guide') }}">FAQ</a>
-	      </li>
-	      <li class="pull-right">
-		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
-		{% else %}
-		  <a href="{{ url('exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
-		{% endif %}
-	      </li>
-	    </ul>
+		  {{ render_esi(url('exam_nav', {'currentRoute': app.request.attributes.get('_route')})) }}
 	  </div><!-- /nav-collapse -->
 	</div><!-- /container -->
       </div><!-- /navbar-inner -->
@@ -198,44 +161,7 @@
         <div class="navbar-inner expand">
 	<div class="container">
 	  <div class="nav-collapse collapse">
-	    <ul class="nav">
-	      <!-- **changes here need to be replicated in the main navigation above!** -->
-	      <li class="{% if app.request.attributes.get('_route') == 'ubc_exam_main_homepage' %}active{% endif %}">
-		<a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
-	      </li>
-	      {% if is_granted('ROLE_STAFF') %}
-			  <li class="{% if app.request.attributes.get('_route') == 'exam_upload' %}active{% endif %}">
-		  <a href="{{ url('exam_upload') }}">Upload New</a>
-		</li>
-		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'exam_list' or
-				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
-		  <a href="{{ url('exam_list') }}">Manage Existing</a>
-		</li>
-	      {% endif %}
-	      {% if is_granted('ROLE_ADMIN') %}
-		<li class="{% if app.request.attributes.get('_route') == 'user' or
-				 app.request.attributes.get('_route') == 'user_edit' or
-				 app.request.attributes.get('_route') == 'user_new' %}active{% endif %}">
-		  <a href="{{ url('user') }}">Edit Users</a>
-		</li>
-	      {% endif %}
-	      {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AMS') %}
-		<li class="{% if app.request.attributes.get('_route') == 'exam_log' %}active{% endif %}">
-		  <a href="{{ url('exam_log') }}">View Statistics</a>
-		</li>
-	      {% endif %}
-	      <li class="{% if app.request.attributes.get('_route') == 'exam_guide' %}active{% endif %}">
-			  <a href="{{ url('exam_guide') }}">FAQ</a>
-	      </li>
-	      <li class="pull-right">
-		{% if not is_granted('IS_AUTHENTICATED_FULLY') %}
-		  <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
-		{% else %}
-		  <a href="{{ url('exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
-		{% endif %}
-	      </li>
-	    </ul>
+		  {{ render_esi(url('exam_nav', {'currentRoute': app.request.attributes.get('_route')})) }}
 	  </div><!-- /nav-collapse -->
 	</div><!-- /container -->
       </div><!-- /navbar-inner -->

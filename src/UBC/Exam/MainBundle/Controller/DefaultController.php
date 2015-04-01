@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\Pagerfanta;
 use Pagerfanta\View\TwitterBootstrapView;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
@@ -688,6 +689,21 @@ class DefaultController extends Controller
         $response->setContent($logContent);
 
         return $response;
+    }
+
+    /**
+     * @param $currentRoute
+     *
+     * @return Response
+     *
+     * @Cache(smaxage=60)
+     * @Route("/nav/{currentRoute}", name="exam_nav")
+     */
+    public function getNavBarAction($currentRoute) {
+        return $this->render(
+            '@UBCExamMain/Default/nav.html.twig',
+            array('currentRoute' => $currentRoute)
+        );
     }
 
     /**

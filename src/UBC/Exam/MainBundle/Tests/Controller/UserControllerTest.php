@@ -111,7 +111,6 @@ class UserControllerTest extends WebTestCase
 
     public function testEditUser()
     {
-        $this->client->followRedirects();
         $crawler = $this->client->request('GET', '/exam/user/');
         // edit instructor
         $crawler = $this->client->click($crawler->filter('div.content table a')->eq(3)->link());
@@ -127,7 +126,13 @@ class UserControllerTest extends WebTestCase
 
         $crawler = $this->client->submit($form);
 
-        $this->assertTrue($crawler->filter('[value="TestEdit"]')->count() > 0);
+        $this->assertTrue(
+            $this->client->getResponse()->isRedirect('/exam/user/')
+        );
+
+        $crawler = $this->client->followRedirect();
+
+        $this->assertTrue($crawler->filter('td:contains("TestEdit")')->count() > 0, 'Did the new user go to the second page of list?');
     }
 
     public function testDeleteUser()
