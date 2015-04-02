@@ -38,3 +38,4 @@ parameters:
     redis_password: ~
 
     session_handler: session.handler.pdo
+    analytics_tracker: ~

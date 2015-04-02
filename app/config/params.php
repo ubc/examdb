@@ -29,6 +29,7 @@ $envs = array(
     'REDIS_PORT' => 'redis_port',
     'REDIS_PASSWORD' => 'redis_password',
     'session_handler' => 'session_handler',
+    'analytics_tracker' => 'analytics_tracker',
 );
 
 array_walk($envs, function($v, $k) use ($container) {
