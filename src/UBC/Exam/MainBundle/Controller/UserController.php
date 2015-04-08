@@ -258,7 +258,7 @@ class UserController extends Controller
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Update successful!');
 
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('user'));
         } else {
             $this->get('session')->getFlashBag()->add('error', 'Update Failed!');
         }

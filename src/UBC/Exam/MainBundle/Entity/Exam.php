@@ -31,7 +31,7 @@ class Exam
         self::ACCESS_LEVEL_EVERYONE => 'Everyone',
         self::ACCESS_LEVEL_CWL      => 'People with UBC CWLs',
         self::ACCESS_LEVEL_FACULTY  => 'Students with Courses in This Faculty',
-        self::ACCESS_LEVEL_COURSE   => 'Current Course Participants',
+        self::ACCESS_LEVEL_COURSE   => 'Any Course Participants',
         self::ACCESS_LEVEL_ME       => 'Only Me'
     );
     static public $TYPES = array('Actual Assessment' => 'Past Exam', 'Practice Assessment' => 'Practice Exam', 'Other Material' => 'Other Exam Prep Material');

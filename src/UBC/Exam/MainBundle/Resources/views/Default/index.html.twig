@@ -21,8 +21,8 @@
 
                     <form action="{{ path('ubc_exam_main_homepage') }}" method="get" id="form_search">
                         <div class="span8">
-                            <label>Enter a keyword</label>
-                            <input type="text" placeholder="e.g. a subject code, course number, instructor, etc." name="q" value="{{ q }}"/>
+                            <label>Search the subject codes, instructors, and notes</label>
+                            <input type="text" placeholder="e.g. 'ENGL 112'" name="q" value="{{ q }}"/>
                         </div>
 
                         <div class="span4">
@@ -43,7 +43,7 @@
             <table class="table table-striped">
 
                 <!-- populate caption with course number selected and number of results after each search -->
-                <caption>{{ pagination|length }} found for "{{ q }}" {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search for more{% endif %}</caption>
+                <caption>{{ pagination.getTotalItemCount }} found for "{{ q }}" {% if not is_granted('IS_AUTHENTICATED_FULLY') %}- <a href="{{ url('exam_login') }}">Log in</a> to search more content{% endif %}</caption>
 
                 <thead>
                     <tr>
@@ -51,6 +51,7 @@
                         <th>Course</th>
                         <th>Cross Listed</th>
                         <th>File</th>
+                        <th>Other Resources</th>
                         <th class="hidden-phone">Type
                             <a class="exam-tooltip">
                                 <i class="icon-question-sign"></i>
@@ -80,6 +81,27 @@
                             <td>
                                 <a class="btn-download btn btn-primary" href="{{ path('exam_download', {'filename': exam.path}) }}"><i class="icon-download-alt"></i> Download</a>
                             </td>
+                            <td>
+                                <span class="{{ exam.dept }} no-wiki"><em>none provided</em></span>
+                                <span class="{{ exam.dept }} yes-wiki"><a href="" data-toggle="modal" data-target="#{{ exam.dept }}-modal">{{ exam.dept }} Study Tips</a></span>
+                                <!-- Pop-up -->
+                                <div class="modal fade" id="{{ exam.dept }}-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel">{{ exam.dept }} Department Study Tips</h4>
+                                      </div>
+                                      <div class="modal-body">
+                                        ...
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                            </td>
                             <td class="hidden-phone">
                                 {{ exam.getTypeString }}
                             </td>
@@ -95,23 +117,11 @@
 
             </table>
 
-            <div class="navigation">
+            <div class="navigation text-center">
                 {{ knp_pagination_render(pagination) }}
             </div>
 
             <p class="alert alert-warning"><strong>Never assume that past or sample exams will be similar to exams used in a current section of a course</strong>&mdash;unless your instructor has explicitly indicated this. Note especially when material was uploaded either by a different instructor than the instructor teaching the current course or for a course that took place more than one or two years ago.</p>
-
-            <div class="wiki-toggle">
-
-                <hr />
-
-                <h3 class="resource-header">Study resources for exams in this department</h3>
-
-                <div class="wiki-content">
-                    <!-- wiki content loads here -->
-                </div>
-
-            </div>
 
         {% elseif q is not null %}
             <h3>No results found</h3>

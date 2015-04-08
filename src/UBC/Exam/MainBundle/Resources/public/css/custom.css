@@ -51,45 +51,11 @@
     .content .search-box-row button {
 	margin-left: 1em;
     }
-    
-	/* span around auto-fill search field */
-       .custom-combobox {
-	  margin: 0 0 1em 1em;
-	  display: inline-block;
-	  width: 96%;
-	}
-	
-	    /* input in span */
-	    .custom-combobox-input {
-	      padding: .4em;
-	      width: 88%;
-	      background: #fff !important;
-	    }
-	    
-	    /* a tag that is down arrow for input */
-	    .custom-combobox-toggle {
-	      padding: .5em;
-	      display: inline-block;
-	    }
-	    
-	    /* options in the select */
-	    .ui-menu-item {
-	      color: #222;
-	    }
-		.ui-menu-item.ui-state-focus {
-		  background: #eee !important;
-		}
 
-/* .wiki-toggle class used for div that contains wiki content */
-.content .wiki-toggle {
+/* .wiki-yes class used for span that contains link to wiki content */
+.content .yes-wiki {
     display: none;
 }
-
-    /* .wiki-content class used for div where wiki content loads */
-    .content .wiki-content {
-	max-height: 150px;
-	overflow-y: scroll;
-    }
 
 /* .resource-header used on h3 before resource links */
 .content .resource-header {

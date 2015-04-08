@@ -75,7 +75,7 @@ class DefaultController extends Controller
                 $pagination = $paginator->paginate(
                     $qb,
                     $request->query->get('page', 1)/*page number*/,
-                    10/*limit per page*/
+                    20/*limit per page*/
                 );
 
             }
@@ -270,7 +270,7 @@ class DefaultController extends Controller
         $me = $this;
         $routeGenerator = function($page) use ($me)
         {
-            return $me->generateUrl('exam', array('page' => $page));
+            return $me->generateUrl('exam_list', array('page' => $page));
         };
 
         // Paginator - view
@@ -447,6 +447,7 @@ class DefaultController extends Controller
                     $exam->getPath(),
                 )));
 
+                $this->get('session')->getFlashBag()->add('success', 'Update successful!');
                 return $this->redirect($this->generateUrl('exam_list'));
             }
         }

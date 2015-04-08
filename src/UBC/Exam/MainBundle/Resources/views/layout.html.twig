@@ -126,7 +126,8 @@
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'exam_list' %}active{% endif %}">
+				 app.request.attributes.get('_route') == 'exam_list' or
+				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
 		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
@@ -175,18 +176,18 @@
       <!-- Content Area -->
       <div class="content expand" role="main">
 		  {% for flashMessage in app.session.flashbag.get('notice') %}
-			  <div class="flash-notice">
+			  <br /><div class="flash-notice alert alert-warning">
 				  {{ flashMessage }}
 			  </div>
 		  {% endfor %}
 		  {% for flashMessage in app.session.flashbag.get('success') %}
-			  <div class="flash-success">
+			  <br /><div class="flash-success alert alert-success">
 				  {{ flashMessage }}
 			  </div>
 		  {% endfor %}
 
 		  {% for flashMessage in app.session.flashbag.get('error') %}
-			  <div class="flash-error">
+			  <br /><div class="flash-error alert alert-error">
 				  {{ flashMessage }}
 			  </div>
 		  {% endfor %}
@@ -210,7 +211,8 @@
 		  <a href="{{ url('exam_upload') }}">Upload New</a>
 		</li>
 		<li class="{% if app.request.attributes.get('_route') == 'list' or
-				 app.request.attributes.get('_route') == 'exam_list' %}active{% endif %}">
+				 app.request.attributes.get('_route') == 'exam_list' or
+				 app.request.attributes.get('_route') == 'exam_update' %}active{% endif %}">
 		  <a href="{{ url('exam_list') }}">Manage Existing</a>
 		</li>
 	      {% endif %}
@@ -298,23 +300,33 @@
     {% javascripts 'bundles/ubcexammain/js/*' %}
       <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}
-    {% if (app.request.attributes.get('_route') == 'ubc_exam_main_homepage' and subjectCode) %}
+    {% if (app.request.attributes.get('_route') == 'ubc_exam_main_homepage' and q) %}
       <script>
-	$.ajax({
-	  type: 'GET',
-	  url: '{{ path('exam_wiki', {'subject': subjectCode}) }}',
-	  async: false,
-	  success: function (data) {
-	    if (data.length > 0) {
-	      $(".wiki-content").html(data);  // load Wiki HTML
-	      $(".wiki-toggle").show();       // show hidden Wiki div
+	{% for exam in pagination %}
+	  var campus = '{{ exam.campus }}';
+	  var subjectcode = '{{ exam.subjectcode }}';
+	  var subject = subjectcode.split(' ')[0];
+	  var url = '{{ path('exam_wiki', {'campus': 'UBC','subject': 'ENGL'}) }}';
+	  url = url.replace("UBC", campus); 		// need to overwrite defaults this way
+	  var urlToUse = url.replace("ENGL", subject);  // can't pass these in initially
+	  var department = '{{ exam.dept }}';
+	  $.ajax({
+	    type: 'GET',
+	    url: urlToUse,
+	    async: false,
+	    success: function (data) {
+	      if (data.length > 0) {
+		$("#"+department+"-modal .modal-body").html(data);  // load Wiki HTML
+		$("."+department+".yes-wiki").show();       	    // show hidden Wiki link
+		$("."+department+".no-wiki").hide();        	    // hide visible no link text
+	      }
+	      // alert("success");
+	    },
+	    error: function() {
+	      // alert("error");
 	    }
-	    //alert("success");
-	  },
-	  error: function() {
-	    //alert("error");
-	  }
-	});
+	  });
+	{% endfor %}
       </script>
     {% endif %}
     {% if app.request.attributes.get('_route') == 'exam_upload' %}

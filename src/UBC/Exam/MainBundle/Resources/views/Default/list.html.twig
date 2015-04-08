@@ -1,7 +1,7 @@
 {% extends 'UBCExamMainBundle::layout.html.twig' %}
 
 {% if is_granted('ROLE_ADMIN') %}
-    {% set caption = "All Materials" %}
+    {% set caption = "All materials" %}
 {% else %}
     {% set caption = "Material uploaded by " ~ app.user.username %}
 {% endif %}
@@ -23,26 +23,19 @@
     {% endif %}
 
     <button class="btn btn-inverse dropdown-toggle" data-toggle="collapse" data-target="#filters">
-        Filter User List By...
+        Filter Material By...
         <i class="icon-caret-down"></i>
     </button>
 
     <div id="filters" class="collapse">
-        To search with wildcard, prepend or append the search term with "%", e.g. CPSC%.
+        
         <form class="well" action="{{ path('exam_list') }}" method="get" {{ form_enctype(filterForm) }}>
-
+            
+            <p>To search with a wildcard, add "%" to the front or end of your search term, e.g., "CPSC%".</p>
+            
             <div class="row-fluid">
                 <div class="span4">
-                    {{ form_row(filterForm.campus) }}
-                </div>
-                <div class="span4">
-                    {{ form_row(filterForm.faculty) }}
-                </div>
-                <div class="span4">
-                    {{ form_row(filterForm.dept) }}
-                </div>
-                <div class="span4">
-                    {{ form_row(filterForm.subject_code, {'label': 'Course'}) }}
+                    {{ form_row(filterForm.subject_code, {'label': 'Course', 'attr': {'placeholder': 'e.g. ENGL 112'}}) }}
                 </div>
                 <div class="span4">
                     {{ form_row(filterForm.year) }}
@@ -50,25 +43,16 @@
                 <div class="span4">
                     {{ form_row(filterForm.term) }}
                 </div>
+            </div>
+            
+            <div class="row-fluid">
                 <div class="span4">
-                    {{ form_row(filterForm.type) }}
+                    {{ form_row(filterForm.legal_content_owner, {'label': 'Content owner'}) }}
                 </div>
                 <div class="span4">
-                    {{ form_row(filterForm.cross_listed) }}
+                    {{ form_row(filterForm.legal_uploader, {'label': 'File uploaded by'}) }}
                 </div>
-                <div class="span4">
-                    {{ form_row(filterForm.legal_content_owner) }}
-                </div>
-                <div class="span4">
-                    {{ form_row(filterForm.legal_uploader) }}
-                </div>
-                <div class="span4">
-                    {{ form_row(filterForm.legal_agreed) }}
-                </div>
-                <div class="span4">
-                    {{ form_row(filterForm.access_level) }}
-                </div>
-                {{ form_rest(filterForm) }}
+                {{ form_widget(filterForm._token) }}
             </div>
 
             <p>
