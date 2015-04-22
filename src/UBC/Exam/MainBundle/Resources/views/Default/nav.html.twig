@@ -1,0 +1,38 @@
+<ul class="nav">
+    <li class="{% if currentRoute == 'ubc_exam_main_homepage' %}active{% endif %}">
+        <a href="{{ url('ubc_exam_main_homepage') }}">Search</a>
+    </li>
+    {% if app.security.token is not null and is_granted('ROLE_STAFF') %}
+        <li class="{% if currentRoute == 'exam_upload' %}active{% endif %}">
+            <a href="{{ url('exam_upload') }}">Upload New</a>
+        </li>
+        <li class="{% if currentRoute == 'list' or
+                         currentRoute == 'exam_list' or
+                         currentRoute == 'exam_update'
+                    %}active{% endif %}">
+            <a href="{{ url('exam_list') }}">Manage Existing</a>
+        </li>
+    {% endif %}
+    {% if app.security.token is not null and is_granted('ROLE_ADMIN') %}
+        <li class="{% if currentRoute == 'user' or
+        currentRoute == 'user_edit' or
+        currentRoute == 'user_new' %}active{% endif %}">
+            <a href="{{ url('user') }}">Edit Users</a>
+        </li>
+    {% endif %}
+    {% if app.security.token is not null and (is_granted('ROLE_ADMIN') or is_granted('ROLE_AMS')) %}
+        <li class="{% if currentRoute == 'exam_log' %}active{% endif %}">
+            <a href="{{ url('exam_log') }}">View Statistics</a>
+        </li>
+    {% endif %}
+    <li class="{% if currentRoute == 'exam_guide' %}active{% endif %}">
+        <a href="{{ url('exam_guide') }}">FAQ</a>
+    </li>
+    <li class="pull-right">
+        {% if app.security.token is null or not is_granted('IS_AUTHENTICATED_FULLY') %}
+            <a class="a-img-cwl" href="{{ url('exam_login') }}"><img src="{{ asset('bundles/ubcexammain/images/CWL_login_button.gif') }}" alt="CWL Login"></a>
+        {% else %}
+            <a href="{{ url('exam_logout') }}">Log Out &nbsp;<i class="icon-signout"></i></a>
+        {% endif %}
+    </li>
+</ul>

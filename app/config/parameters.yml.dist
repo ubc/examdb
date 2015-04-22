@@ -36,3 +36,6 @@ parameters:
     redis_host: 127.0.0.1
     redis_port: 6379
     redis_password: ~
+
+    session_handler: session.handler.pdo
+    analytics_tracker: ~

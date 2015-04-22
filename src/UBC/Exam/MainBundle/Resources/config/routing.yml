@@ -1,6 +1,11 @@
 exam_guide:
     path:     /exam/guide
-    defaults:  { _controller: FrameworkBundle:Template:template, template: "UBCExamMainBundle:Default:guide.html.twig" }
+    defaults:
+        _controller: FrameworkBundle:Template:template
+        template: "UBCExamMainBundle:Default:guide.html.twig"
+        maxAge: 0
+        sharedAge: 86400
+        public: true
 
 examdb:
     resource: "@UBCExamMainBundle/Controller/"
