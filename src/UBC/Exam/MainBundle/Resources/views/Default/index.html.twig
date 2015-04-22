@@ -65,8 +65,9 @@
                         <th>Notes</th>
                     </tr>
                 </thead>
-
+                
                 <tbody>
+                    {% set departments = [] %}
                     {% for exam in pagination %}
                         <tr>
                             <td>
@@ -83,24 +84,27 @@
                             </td>
                             <td>
                                 <span class="{{ exam.dept }} no-wiki"><em>none provided</em></span>
-                                <span class="{{ exam.dept }} yes-wiki"><a href="" data-toggle="modal" data-target="#{{ exam.dept }}-modal">{{ exam.dept }} Study Tips</a></span>
-                                <!-- Pop-up -->
-                                <div class="modal fade" id="{{ exam.dept }}-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">{{ exam.dept }} Department Study Tips</h4>
-                                      </div>
-                                      <div class="modal-body">
-                                        ...
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                                <span class="{{ exam.dept }} yes-wiki"><a href="#{{ exam.dept }}-modal" data-toggle="modal" data-target="#{{ exam.dept }}-modal">{{ exam.dept }} Study Tips</a></span>
+                                {% if exam.dept not in departments %}
+                                    <!-- Pop-up -->
+                                    <div class="modal fade" id="{{ exam.dept }}-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                      <div class="modal-dialog">
+                                        <div class="modal-content">
+                                          <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            <h4 class="modal-title" id="myModalLabel">{{ exam.dept }} Department Study Tips</h4>
+                                          </div>
+                                          <div class="modal-body">
+                                            ...
+                                          </div>
+                                          <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" data-dismiss="modal">Done</button>
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                                </div>
+                                {% endif %}
+                                {% set departments = departments|merge([exam.dept]) %}
                             </td>
                             <td class="hidden-phone">
                                 {{ exam.getTypeString }}

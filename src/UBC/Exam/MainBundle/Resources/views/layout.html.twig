@@ -317,12 +317,15 @@
 	    success: function (data) {
 	      if (data.length > 0) {
 		$("#"+department+"-modal .modal-body").html(data);  // load Wiki HTML
+		$("#"+department+"-modal").hide();		    // ensure modal is hidden
 		$("."+department+".yes-wiki").show();       	    // show hidden Wiki link
 		$("."+department+".no-wiki").hide();        	    // hide visible no link text
 	      }
 	      // alert("success");
 	    },
 	    error: function() {
+	      // $("#"+department+"-modal .modal-body").html('<p>hello world!</p>');
+	      // $("#"+department+"-modal").hide();
 	      // alert("error");
 	    }
 	  });
