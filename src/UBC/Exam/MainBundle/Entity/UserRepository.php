@@ -32,8 +32,8 @@ class UserRepository extends EntityRepository implements CasUserProviderInterfac
             ->createQueryBuilder('u')
             ->where('u.username = :username')
             ->setParameter('username', $username)
-            ->getQuery()
-            ->useResultCache(true, 3600);
+            ->getQuery();
+            //->useResultCache(true, 3600);
 
         try {
             // The Query::getSingleResult() method throws an exception
