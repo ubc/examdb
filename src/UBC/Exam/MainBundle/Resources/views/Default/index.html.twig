@@ -4,15 +4,15 @@
 
     <h1>Search the Exam Prep Database</h1>
 
-    <p>Welcome to UBC's Exam Prep Database, a searchable database of current and past course exams and other assessment-related material. All files in this database have been uploaded by instructors for private study purposes. Please do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content.</p>
+    <p>Welcome to UBC's exam database, a searchable archive of current and past UBC exams and other assessment-related material. All files in the exam database have been uploaded by instructors for private study purposes. Please do not repurpose, redistribute, or publish anything from this site. University copyright applies to all content.</p>
 
-    <p>In addition to the uploaded files and additional resources below, please see the <a href="{{ url('exam_guide') }}">FAQ</a> for tips on how you can get the most out of this database.</p>
+    <p>In addition to the uploaded files and additional resources below, please see the <a href="{{ url('exam_guide') }}">FAQ</a> for tips on how you can get the most out of the UBC exam database.</p>
 
             <h2>Find Material by Keyword</h2>
 
             {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
                 <!-- if user has not logged in -->
-                <p><i class="icon-exclamation-sign"></i> <strong>UBC Users:</strong> To access <em>all</em> materials available to you, first <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong>, and then conduct a search below.</p>
+                <p><i class="icon-exclamation-sign"></i> <strong>UBC Users:</strong> To access <em>all</em> UBC exam materials available to you, first <strong><a href="{{ url('exam_login') }}">log in with your UBC CWL</a></strong>, and then conduct a search below.</p>
             {% endif %}
 
             <fieldset>
@@ -129,7 +129,7 @@
 
         {% elseif q is not null %}
             <h3>No results found</h3>
-            <p class="alert alert-info">Sorry, your search for "{{ q }}" did not match anything in the database. {% if not is_granted('IS_AUTHENTICATED_FULLY') %}<a href="{{ url('exam_login') }}">Log in</a> to search more content.{% endif %}</p>
+            <p class="alert alert-info">Sorry, your search for "{{ q }}" did not match anything in the {% if not is_granted('IS_AUTHENTICATED_FULLY') %}public {% endif %}exam database. {% if not is_granted('IS_AUTHENTICATED_FULLY') %}<a href="{{ url('exam_login') }}">Log in</a> to search more content.{% endif %}</p>
         {% endif %}
 
     <hr />
@@ -139,7 +139,7 @@
     <div class="row-fluid resource-links">
 
         <div class="span2">
-            <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/preparing-for-exams/" title="Follow steps to help you prepare for exams"><i class="icon-archive"></i> Exam Prep<br/> Toolkit</a>
+            <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/preparing-for-exams/" title="Follow steps to help you prepare for UBC exams"><i class="icon-archive"></i> Exam Prep<br/> Toolkit</a>
         </div>
         <div class="span2">
             <a class="btn btn-info" href="http://learningcommons.ubc.ca/student-toolkits-2/thinking-critically/" title="Understand what critical thinking means and how to think critically"><i class="icon-comments-alt"></i> Critical Thinking<br/> Toolkit</a>
@@ -154,7 +154,7 @@
             <a class="btn btn-info" href="http://www.lib.sfu.ca/sites/default/files/12333/multi-examPrep.pdf" title="How to prepare for different types of exams, including essay exams"><i class="icon-pencil"></i> Exam Preparation<br /> &amp; Writing (PDF)</a>
         </div>
         <div class="span2">
-            <a class="btn btn-info" href="http://www.calendar.ubc.ca/vancouver/index.cfm?tree=3,41,91,0" title="How to handle exam hardships and clashes"><i class="icon-calendar"></i> Handling Exam<br /> Schedule Conflicts</a>
+            <a class="btn btn-info" href="http://www.calendar.ubc.ca/vancouver/index.cfm?tree=3,41,91,0" title="How to handle UBC exam hardships and clashes"><i class="icon-calendar"></i> Handling Exam<br /> Schedule Conflicts</a>
         </div>
 
     </div>
