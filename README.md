@@ -142,4 +142,12 @@ NOTES
     php app/console exam:index:build
     ```
 
+* Upgrade notes:
+
+    ```
+    sudo su app
+    cd /www_data/app
+    git pull
+    chmod 775 app/data/uploads app/data/uploads/documents
+    ```
     
