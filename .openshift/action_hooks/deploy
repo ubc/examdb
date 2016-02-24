@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+#GITHUB_API_TOKEN should be defined in the environment variable
+
 GIT_DIR_SAVE=$GIT_DIR ; unset GIT_DIR
 GIT_WORK_TREE_SAVE=$GIT_WORK_TREE ; unset GIT_WORK_TREE
 
@@ -13,8 +15,10 @@ else
     php $OPENSHIFT_DATA_DIR/composer.phar self-update
 fi
 
-echo "Running composer install"
 cd $OPENSHIFT_REPO_DIR
+echo "Setup composer config"
+php $OPENSHIFT_DATA_DIR/composer.phar config -g github-oauth.github.com $GITHUB_API_TOKEN
+echo "Running composer install"
 php $OPENSHIFT_DATA_DIR/composer.phar install
 
 export GIT_DIR=$GIT_DIR_SAVE ; unset GIT_DIR_SAVE
