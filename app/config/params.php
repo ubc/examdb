@@ -35,7 +35,7 @@ $envs = array(
 array_walk($envs, function($v, $k) use ($container) {
     $val = getEnv($k);
     if (false !== $val) {
-        $container->setParameter($v, is_numeric($val) ? intval($val) : $val);
+        $container->setParameter($v, is_numeric($val) ? (int)$val : $val);
     }
 });
 
