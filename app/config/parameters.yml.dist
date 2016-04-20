@@ -25,7 +25,7 @@ parameters:
     auth2_service_application: service_app
     auth2_service_url: https://www.auth.stg.id.ubc.ca
 
-    sis_base_url: http://sis-apiappvrf01.as.it.ubc.ca:8101/sisapi/v3-PRODUCTION_JAVA_JBOSS-SNAPSHOT
+    sis_base_url: http://sis-apiappvrf01.as.it.ubc.ca:8101/sisapi/v3/
 
     upload_dir: "%kernel.root_dir%/data/uploads/documents"
     index_dir: "%kernel.logs_dir%/index_%kernel.environment%"
