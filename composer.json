@@ -85,7 +85,8 @@
     },
     "config": {
         "bin-dir": "bin",
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "secure-http": false
     },
     "include-path": ["vendor/pdepend/pdepend/src/main/php"],
     "minimum-stability": "dev",
