@@ -13,6 +13,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use UBC\Exam\MainBundle\Entity\Exam;
 use UBC\Exam\MainBundle\Entity\SubjectFaculty;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,6 +36,7 @@ use ZendSearch\Lucene\Search\QueryParser;
  */
 class DefaultController extends Controller
 {
+
     /**
      * just shows empty page. need to determine what to show on default page.
      *
@@ -124,34 +132,42 @@ class DefaultController extends Controller
 
         $form = $this->createFormBuilder($exam);
 
-        $form->add('campus', 'choice', array('placeholder' => '- Choose campus -','choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')));
+        $form->add('campus', ChoiceType::class, array(
+            'placeholder' => '- Choose campus -',
+            'choices' => Exam::$CAMPUSES,
+            'choices_as_values' => true
+        ));
 
-        $form->add('faculty', 'text', array('max_length' => 50));
-        $form->add('dept', 'text', array('max_length' => 10));
+        $form->add('faculty', TextType::class, array('max_length' => 50));
+        $form->add('dept', TextType::class, array('max_length' => 10));
 
         if (count($subjectCode) > 1) {
-            $form->add('subject_code', 'choice', array('placeholder' => '- Choose campus first -', 'choices' => $subjectCode))
-                 ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
+            $form->add('subject_code', ChoiceType::class, array(
+                'placeholder' => '- Choose campus first -',
+                'choices' => array_flip($subjectCode),
+                'choices_as_values' => true
+                ))
+                 ->add('subject_code_number', TextType::class, array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
         } else {
-            $form->add('subject_code', 'text', array('max_length' => 10));
+            $form->add('subject_code', TextType::class, array('max_length' => 10));
         }
 
-        $form->add('comments', 'textarea', array('required' => false))
+        $form->add('comments', TextareaType::class, array('required' => false))
             ->add('year')
-            ->add('term', 'choice', array('placeholder' => '- Choose term -', 'choices' => Exam::$TERMS))
-            ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
-            ->add('access_level', 'choice', array('placeholder' => '- Choose access level -', 'choices' => Exam::$ACCESS_LEVELS))
-            ->add('type', 'choice', array('placeholder' => '- Choose type of material -', 'choices' => Exam::$TYPES))
-            ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
-            ->add('legal_content_owner', 'text', array('max_length' => 100))
-            ->add('legal_uploader', 'text', array('data' => $first.$last, 'max_length' => 100))
-            ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
-            ->add('file', 'file')
-            ->add('upload', 'submit');
+            ->add('term', ChoiceType::class, array('placeholder' => '- Choose term -', 'choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
+            ->add('cross_listed', TextType::class, array('required' => false, 'max_length' => 10))
+            ->add('access_level', ChoiceType::class, array('placeholder' => '- Choose access level -', 'choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
+            ->add('type', ChoiceType::class, array('placeholder' => '- Choose type of material -', 'choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
+            ->add('legal_date', DateType::class, array('widget' => 'single_text', 'attr' => array('read_only' => true)))
+            ->add('legal_content_owner', TextType::class, array('max_length' => 100))
+            ->add('legal_uploader', TextType::class, array('data' => $first.$last, 'max_length' => 100))
+            ->add('legal_agreed', CheckboxType::class, array('label' => 'I agree', 'required' => true))
+            ->add('file', FileType::class)
+            ->add('upload', SubmitType::class);
 
         $form = $form->getForm();
 
-        if ($this->getRequest()->getMethod() == "POST") {
+        if ($request->getMethod() == "POST") {
             $form->handleRequest($request);
             $formSubjectCodeNumber = $exam->getSubjectcode();
 
@@ -203,9 +219,9 @@ class DefaultController extends Controller
 //            $request->query->get('page', 1)/*page number*/,
 //            10/*limit per page*/
 //        );
-        list($filterForm, $qb) = $this->filter($qb);
+        list($filterForm, $qb) = $this->filter($qb, $request);
 
-        list($entities, $pagerHtml) = $this->paginator($qb);
+        list($entities, $pagerHtml) = $this->paginator($qb, $request);
 
         return $this->render('UBCExamMainBundle:Default:list.html.twig', array(
             'entities' => $entities,
@@ -219,11 +235,10 @@ class DefaultController extends Controller
      * @param QueryBuilder $queryBuilder
      * @return array
      */
-    protected function filter(QueryBuilder $queryBuilder)
+    protected function filter(QueryBuilder $queryBuilder, Request $request)
     {
-        $request = $this->getRequest();
         $session = $request->getSession();
-        $filterForm = $this->createForm(new ExamFilterType());
+        $filterForm = $this->createForm(ExamFilterType::class);
 
         // Reset filter
         if ($request->get('filter_action') == 'reset') {
@@ -246,7 +261,7 @@ class DefaultController extends Controller
             // Get filter from session
             if ($session->has('ExamControllerFilter')) {
                 $filterData = $session->get('ExamControllerFilter');
-                $filterForm = $this->createForm(new ExamFilterType(), $filterData);
+                $filterForm = $this->createForm(ExamFilterType::class, $filterData);
                 $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
             }
         }
@@ -258,12 +273,12 @@ class DefaultController extends Controller
      * Get results from paginator and get paginator view.
      *
      */
-    protected function paginator($queryBuilder)
+    protected function paginator($queryBuilder, Request $request)
     {
         // Paginator
         $adapter = new DoctrineORMAdapter($queryBuilder);
         $pagerfanta = new Pagerfanta($adapter);
-        $currentPage = $this->getRequest()->get('page', 1);
+        $currentPage = $request->get('page', 1);
         $pagerfanta->setCurrentPage($currentPage);
         $entities = $pagerfanta->getCurrentPageResults();
 
@@ -399,25 +414,25 @@ class DefaultController extends Controller
 
         //ok, create update form!
         $form = $this->createFormBuilder($exam)
-        ->add('campus', 'choice', array('choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')))
-        ->add('faculty', 'text', array('max_length' => 50))
-        ->add('dept', 'text', array('max_length' => 50))
-        ->add('subject_code', 'text', array('max_length' => 10))
-        ->add('comments', 'textarea', array('required' => false))
-        ->add('year')
-        ->add('term', 'choice', array('choices' => array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD')))
-        ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
-        ->add('access_level', 'choice', array('choices' => Exam::$ACCESS_LEVELS))
-        ->add('type', 'choice', array('placeholder' => '- Choose type of material -', 'choices' => Exam::$TYPES))
-        ->add('legal_date', 'date', array('widget' => 'single_text', 'read_only' => true))
-        ->add('legal_content_owner', 'text', array('max_length' => 100))
-        ->add('legal_uploader', 'text', array('read_only' => true, 'max_length' => 100))
-        /*->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'disabled' => true))*/
-        /*->add('file', 'file', array('required' => false))*/
-        ->add('upload', 'submit')
-        ->getForm();
+            ->add('campus', ChoiceType::class, array('choices' => Exam::$CAMPUSES, 'choices_as_values' => true))
+            ->add('faculty', TextType::class, array('max_length' => 50))
+            ->add('dept', TextType::class, array('max_length' => 50))
+            ->add('subject_code', TextType::class, array('max_length' => 10))
+            ->add('comments', TextareaType::class, array('required' => false))
+            ->add('year')
+            ->add('term', ChoiceType::class, array('choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
+            ->add('cross_listed', TextType::class, array('required' => false, 'max_length' => 10))
+            ->add('access_level', ChoiceType::class, array('choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
+            ->add('type', ChoiceType::class, array('placeholder' => '- Choose type of material -', 'choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
+            ->add('legal_date', DateType::class, array('widget' => 'single_text', 'attr' => array('read_only' => true)))
+            ->add('legal_content_owner', TextType::class, array('max_length' => 100))
+            ->add('legal_uploader', TextType::class, array('max_length' => 100, 'attr' => array('read_only' => true)))
+            /*->add('legal_agreed', CheckboxType::class, array('label' => 'I agree', 'required' => true, 'disabled' => true))*/
+            /*->add('file', FileType::class, array('required' => false))*/
+            ->add('upload', SubmitType::class)
+            ->getForm();
 
-        if ($this->getRequest()->getMethod() == "POST") {
+        if ($request->getMethod() == "POST") {
             $form->handleRequest($request);
 
             if ($form->isValid()) {

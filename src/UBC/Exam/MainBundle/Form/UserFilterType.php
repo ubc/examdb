@@ -34,10 +34,10 @@ class UserFilterType extends AbstractType
 
             $event->getForm()->addError(new FormError('Filter empty'));
         };
-        $builder->addEventListener(FormEvents::POST_BIND, $listener);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, $listener);
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'ubc_exam_mainbundle_userfiltertype';
     }

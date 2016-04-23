@@ -8,30 +8,35 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\Form\FormError;
 use UBC\Exam\MainBundle\Entity\Exam;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\TextFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\ChoiceFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\NumberFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\DateRangeFilterType;
+use Lexik\Bundle\FormFilterBundle\Filter\Form\Type\BooleanFilterType;
 
 class ExamFilterType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-//            ->add('id', 'filter_number_range')
-            ->add('campus', 'filter_choice', array('choices' => array('UBC' => 'Vancouver', 'UBCO' => 'Okanagan')))
-            ->add('faculty', 'filter_text')
-            ->add('dept', 'filter_text')
-            ->add('subject_code', 'filter_text')
-            ->add('year', 'filter_number')
-            ->add('term', 'filter_choice', array('choices' => Exam::$TERMS))
-            ->add('type', 'filter_choice', array('choices' => Exam::$TYPES))
-//            ->add('comments', 'filter_text')
-            ->add('cross_listed', 'filter_text')
-            ->add('legal_content_owner', 'filter_text')
-            ->add('legal_uploader', 'filter_text')
-//            ->add('legal_date', 'filter_date_range')
-            ->add('legal_agreed', 'filter_boolean')
-            ->add('access_level', 'filter_choice', array('choices' => Exam::$ACCESS_LEVELS))
-//            ->add('created', 'filter_date_range')
-//            ->add('modified', 'filter_date_range')
-//            ->add('downloads', 'filter_number_range')
+            //->add('id', NumberRangeFilterType::class)
+            ->add('campus', ChoiceFilterType::class, array('choices' => Exam::$CAMPUSES, 'choices_as_values' => true))
+            ->add('faculty', TextFilterType::class)
+            ->add('dept', TextFilterType::class)
+            ->add('subject_code', TextFilterType::class)
+            ->add('year', NumberFilterType::class)
+            ->add('term', ChoiceFilterType::class, array('choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
+            ->add('type', ChoiceFilterType::class, array('choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
+            //->add('comments', TextFilterType::class)
+            ->add('cross_listed', TextFilterType::class)
+            ->add('legal_content_owner', TextFilterType::class)
+            ->add('legal_uploader', TextFilterType::class)
+            //            ->add('legal_date', DateRangeFilterType::class)
+            ->add('legal_agreed', BooleanFilterType::class)
+            ->add('access_level', ChoiceFilterType::class, array('choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
+            //->add('created', DateRangeFilterType::class)
+            //->add('modified', DateRangeFilterType::class)
+            //->add('downloads', NumberRangeFilterType::class)
         ;
 
         $listener = function(FormEvent $event)
@@ -50,10 +55,10 @@ class ExamFilterType extends AbstractType
 
             $event->getForm()->addError(new FormError('Filter empty'));
         };
-        $builder->addEventListener(FormEvents::POST_BIND, $listener);
+        $builder->addEventListener(FormEvents::POST_SUBMIT, $listener);
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'ubc_exam_mainbundle_examfiltertype';
     }

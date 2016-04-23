@@ -10,15 +10,15 @@ parameters:
 services:
     ubc.exam.course_code_injection_listener:
         class: %ubc_exam_main.course_code_inject_listener.class%
-        arguments: [ @session, @ubc_lt_commons.service.student, @logger ]
+        arguments: [ "@session", "@ubc_lt_commons.service.student", "@logger" ]
         tags: [{ name: kernel.event_listener, event: security.interactive_login, method: onLoginSuccess }]
     ubc.exam.login_listener:
         class: %ubc_exam_main.login_listener.class%
-        arguments: [ @doctrine ]
+        arguments: [ "@doctrine" ]
         tags: [{ name: kernel.event_listener, event: security.interactive_login, method: onLoginSuccess }]
     ubc.exam.search_indexer_subscriber:
         class: %ubc_exam_main.search_indexer_subscriber.class%
-        arguments: [ @ivory_lucene_search ]
+        arguments: [ "@ivory_lucene_search" ]
         tags: [{ name: doctrine.event_subscriber, connection: default }]
     ubc.exam.file_upload_subscriber:
         class: %ubc_exam_main.file_upload_subscriber.class%
@@ -26,11 +26,10 @@ services:
         tags: [{ name: doctrine.event_subscriber, connection: default }]
     ubc.exam.user_provider:
         class: %ubc_exam_main.user_provider.class%
-        factory_service: doctrine
-        factory_method: getRepository
+        factory: ["@doctrine", getRepository]
         arguments: [%ubc_exam_main.user_entity.class%]
     ubc.exam.has_permission_validator:
         class: %ubc_exam_main.has_permission_validator.class%
-        arguments: [@security.authorization_checker]
+        arguments: ["@security.authorization_checker"]
         tags:
             - { name: validator.constraint_validator, alias: has_permission }

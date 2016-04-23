@@ -7,23 +7,23 @@
 {% block body %}
 
     <h1>Edit Users</h1>
-    
+
     {% if form_errors(filterForm) %}
         <div class="alert alert-block alert-error fade in form-errors">
             {{ form_errors(filterForm) }}
         </div>
     {% endif %}
-    
+
     <p>You can update a user's role in the application here. Users can have one or more of five different roles: User, Student, Staff, Admin, and Super Admin.</p>
-    
+
     <button class="btn btn-inverse dropdown-toggle" data-toggle="collapse" data-target="#filters">
         Filter User List By...
         <i class="icon-caret-down"></i>
     </button>
-    
+
     <div id="filters" class="collapse">
-        <form class="well" action="{{ path('user') }}" method="get" {{ form_enctype(filterForm) }}>
-            
+        {{ form_start(filterForm, {'class': 'well', 'method': 'GET', 'action': path('user')})  }}
+
             <div class="row-fluid">
                 <div class="span4">
                     {{ form_row(filterForm.username) }}
@@ -36,16 +36,16 @@
                 </div>
                 {{ form_rest(filterForm) }}
             </div>
-            
+
             <p>
                 <button name="filter_action" value="reset">Reset</button>
                 &nbsp;
                 <button class="btn btn-primary btn-small" type="submit" name="filter_action" value="filter">Filter</button>
             </p>
-            
-        </form>
+
+        {{ form_end(filterForm)  }}
     </div>
-    
+
     <table class="table table-striped list-uploads">
         <caption>
             Current Users
@@ -82,13 +82,13 @@
             {% if entities is empty %}
                 <tr>
                     <td colspan="6">
-                        No users found   
+                        No users found
                     </td>
                 </tr>
             {% endif %}
         </tbody>
     </table>
-    
+
     <div class="text-center">
         {{ pagerHtml|raw }}
     </div>

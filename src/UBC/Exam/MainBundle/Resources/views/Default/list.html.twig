@@ -28,11 +28,11 @@
     </button>
 
     <div id="filters" class="collapse">
-        
-        <form class="well" action="{{ path('exam_list') }}" method="get" {{ form_enctype(filterForm) }}>
-            
+
+        {{ form_start(filterForm, {'class': 'well', 'method': 'GET', 'action': path('exam_list')})  }}
+
             <p>To search with a wildcard, add "%" to the front or end of your search term, e.g., "CPSC%".</p>
-            
+
             <div class="row-fluid">
                 <div class="span4">
                     {{ form_row(filterForm.subject_code, {'label': 'Course', 'attr': {'placeholder': 'e.g. ENGL 112'}}) }}
@@ -44,7 +44,7 @@
                     {{ form_row(filterForm.term) }}
                 </div>
             </div>
-            
+
             <div class="row-fluid">
                 <div class="span4">
                     {{ form_row(filterForm.legal_content_owner, {'label': 'Content owner'}) }}
@@ -61,7 +61,7 @@
                 <button class="btn btn-primary btn-small" type="submit" name="filter_action" value="filter">Filter</button>
             </p>
 
-        </form>
+        {{ form_end(filterForm)  }}
     </div>
 
     {{ include ('UBCExamMainBundle:Default:exam-table.html.twig', {'entities': entities, 'caption': caption, 'list': true }) }}

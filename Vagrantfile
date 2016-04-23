@@ -16,6 +16,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.include_offline = true
 
   config.vm.box = "puppetlabs/ubuntu-14.04-64-puppet"
+  config.vm.box_version = "1.0.1"
   config.vm.network "private_network", ip: "192.168.50.4"
   config.vm.network "forwarded_port", guest: 80, host: 8089, auto_correct: true
   #config.vm.network "forwarded_port", guest: 3306, host: 23306, auto_correct: true

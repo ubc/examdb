@@ -32,14 +32,14 @@ class ExamType extends AbstractType
         ;
     }
 
-    public function setDefaultOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'UBC\Exam\MainBundle\Entity\Exam'
         ));
     }
 
-    public function getName()
+    public function getBlockPrefix()
     {
         return 'ubc_exam_mainbundle_exam';
     }

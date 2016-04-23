@@ -98,10 +98,10 @@ class UserControllerTest extends WebTestCase
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Save')->form(array(
-            'ubc_exam_mainbundle_user[username]'  => 'Test',
+            'ubc_exam_mainbundle_user[username]'   => 'Test',
             'ubc_exam_mainbundle_user[firstname]'  => 'Test',
-            'ubc_exam_mainbundle_user[lastname]'  => 'Test',
-            'ubc_exam_mainbundle_user[roleString]'  => 'ROLE_USER',
+            'ubc_exam_mainbundle_user[lastname]'   => 'Test',
+            'ubc_exam_mainbundle_user[roleString]' => 'ROLE_USER',
         ));
 
         $crawler = $this->client->submit($form);
@@ -118,10 +118,10 @@ class UserControllerTest extends WebTestCase
 
         // Fill in the form and submit it
         $form = $crawler->selectButton('Save')->form(array(
-            'ubc_exam_mainbundle_user[username]'  => 'TestEdit',
+            'ubc_exam_mainbundle_user[username]'   => 'TestEdit',
             'ubc_exam_mainbundle_user[firstname]'  => 'TestEdit',
-            'ubc_exam_mainbundle_user[lastname]'  => 'TestEdit',
-            'ubc_exam_mainbundle_user[roleString]'  => 'ROLE_USER',
+            'ubc_exam_mainbundle_user[lastname]'   => 'TestEdit',
+            'ubc_exam_mainbundle_user[roleString]' => 'ROLE_USER',
         ));
 
         $crawler = $this->client->submit($form);

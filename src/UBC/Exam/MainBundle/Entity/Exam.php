@@ -36,6 +36,7 @@ class Exam
     );
     static public $TYPES = array('Actual Assessment' => 'Past Exam', 'Practice Assessment' => 'Practice Exam', 'Other Material' => 'Other Exam Prep Material');
     static public $TERMS = array('w' => 'W', 'w1' => 'W1', 'w2' => 'W2', 's' => 'S', 's1' => 'S1', 's2' => 'S2', 'sa' => 'SA', 'sb' => 'SB', 'sc' => 'SC', 'sd' => 'SD');
+    static public $CAMPUSES = array('Vancouver' => 'UBC', 'Okanagan' => 'UBCO');
 
     /**
      * @ORM\Column(type="integer")

@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-    
+
     <ul class="breadcrumb expand">
         <li>
             <a href="{{ url('user') }}">Edit Users</a> <span class="divider">/</span>
@@ -14,9 +14,9 @@
     </ul>
 
     <h1>Edit '{{ entity.username }}'</h1>
-    
+
     <p>Users can have one or more of the following roles:</p>
-    
+
     <ul>
         <li><strong>ROLE_USER</strong> (Default): All users who log into the application receive this role</li>
         <li><strong>ROLE_STUDENT</strong>: Users with a student role can see additional exam prep material based on courses they are enrolled in</li>
@@ -25,20 +25,18 @@
         <li><strong>ROLE_ADMIN</strong>: Users with an admin role can see and manage all material in the database, upload new material, edit users (users, students, staff, and other admins), and view or download the database statistics</li>
         <li><strong>ROLE_SUPER_ADMIN</strong>: Users with a super admin role are identical to those with an admin role, but they can edit all user roles</li>
     </ul>
-    
-    <form action="{{ path('user_update', { 'id': entity.id }) }}" method="post" {{ form_enctype(edit_form) }}>
+
+    {{ form_start(edit_form, {'method': 'POST', 'action': path('user_update', { 'id': entity.id })})  }}
         <fieldset>
             <!-- hide the delete button for now as we don't have a use case for it
             <legend>
-                <form action="{{ path('user_delete', { 'id': entity.id }) }}" method="post">
-                    <input type="hidden" name="_method" value="DELETE" />
+                {{ form_start(delete_form) }}
                     {{ form_widget(delete_form) }}
                     <button class="btn btn-primary btn-small pull-right" type="submit" onclick="return confirm('Are you sure you want to delete this user?');"><i class="icon-trash"></i> Delete User?</button>
-                </form>
+                {{ form_end(delete_form) }}
                 User Details
             </legend> -->
             <legend>User Details</legend>
-            <input type="hidden" name="_method" value="PUT" />
             <div class="row-fluid">
                 <div class="span6">
                     {{ form_label(edit_form.username) }}

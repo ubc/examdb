@@ -12,6 +12,7 @@ use Pagerfanta\Adapter\DoctrineORMAdapter;
 use Pagerfanta\View\TwitterBootstrapView;
 
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use UBC\Exam\MainBundle\Entity\User;
 use UBC\Exam\MainBundle\Form\UserType;
 use UBC\Exam\MainBundle\Form\UserFilterType;
@@ -30,11 +31,11 @@ class UserController extends Controller
      * @Method("GET")
      * @Template()
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        list($filterForm, $queryBuilder) = $this->filter();
+        list($filterForm, $queryBuilder) = $this->filter($request);
 
-        list($entities, $pagerHtml) = $this->paginator($queryBuilder);
+        list($entities, $pagerHtml) = $this->paginator($queryBuilder, $request);
 
         return array(
             'entities' => $entities,
@@ -47,11 +48,10 @@ class UserController extends Controller
     * Create filter form and process filter request.
     *
     */
-    protected function filter()
+    protected function filter(Request $request)
     {
-        $request = $this->getRequest();
         $session = $request->getSession();
-        $filterForm = $this->createForm(new UserFilterType());
+        $filterForm = $this->createForm(UserFilterType::class);
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->getRepository('UBCExamMainBundle:User')->createQueryBuilder('e');
 
@@ -63,9 +63,9 @@ class UserController extends Controller
         // Filter action
         if ($request->get('filter_action') == 'filter') {
             // Bind values from the request
-            $filterForm->bind($request);
+            $filterForm->handleRequest($request);
 
-            if ($filterForm->isValid()) {
+            if ($filterForm->isSubmitted() && $filterForm->isValid()) {
                 // Build the query from the given form object
                 $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
                 // Save filter to session
@@ -76,7 +76,7 @@ class UserController extends Controller
             // Get filter from session
             if ($session->has('UserControllerFilter')) {
                 $filterData = $session->get('UserControllerFilter');
-                $filterForm = $this->createForm(new UserFilterType(), $filterData);
+                $filterForm = $this->createForm(UserFilterType::class, $filterData);
                 $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
             }
         }
@@ -88,12 +88,12 @@ class UserController extends Controller
     * Get results from paginator and get paginator view.
     *
     */
-    protected function paginator($queryBuilder)
+    protected function paginator($queryBuilder, Request $request)
     {
         // Paginator
         $adapter = new DoctrineORMAdapter($queryBuilder);
         $pagerfanta = new Pagerfanta($adapter);
-        $currentPage = $this->getRequest()->get('page', 1);
+        $currentPage = $request->get('page', 1);
         $pagerfanta->setCurrentPage($currentPage);
         $entities = $pagerfanta->getCurrentPageResults();
 
@@ -128,8 +128,8 @@ class UserController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new User();
-        $form = $this->createForm(new UserType(), $entity);
-        $form->bind($request);
+        $form = $this->createForm(UserType::class, $entity);
+        $form->handleRequest($request);
 
         // check if the target user has higher level of role than current user
         $roles = $entity->getRoles();
@@ -139,7 +139,7 @@ class UserController extends Controller
             }
         }
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->persist($entity);
             $em->flush();
@@ -164,7 +164,7 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new User();
-        $form   = $this->createForm(new UserType(), $entity);
+        $form   = $this->createForm(UserType::class, $entity);
 
         return array(
             'entity' => $entity,
@@ -222,7 +222,7 @@ class UserController extends Controller
             }
         }
 
-        $editForm = $this->createForm(new UserType(), $entity);
+        $editForm = $this->createForm(UserType::class, $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -236,7 +236,7 @@ class UserController extends Controller
      * Edits an existing User entity.
      *
      * @Route("/{id}", name="user_update")
-     * @Method("PUT")
+     * @Method("POST")
      * @Template("UBCExamMainBundle:User:edit.html.twig")
      */
     public function updateAction(Request $request, $id)
@@ -250,10 +250,10 @@ class UserController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(new UserType(), $entity);
-        $editForm->bind($request);
+        $editForm = $this->createForm(UserType::class, $entity);
+        $editForm->handleRequest($request);
 
-        if ($editForm->isValid()) {
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
             $em->persist($entity);
             $em->flush();
             $this->get('session')->getFlashBag()->add('success', 'Update successful!');
@@ -279,9 +279,9 @@ class UserController extends Controller
     public function deleteAction(Request $request, $id)
     {
         $form = $this->createDeleteForm($id);
-        $form->bind($request);
+        $form->handleRequest($request);
 
-        if ($form->isValid()) {
+        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $entity = $em->getRepository('UBCExamMainBundle:User')->find($id);
 
@@ -309,7 +309,9 @@ class UserController extends Controller
     private function createDeleteForm($id)
     {
         return $this->createFormBuilder(array('id' => $id))
-            ->add('id', 'hidden')
+            ->setAction($this->generateUrl('user_delete', array('id' => $id)))
+            ->setMethod('DELETE')
+            ->add('id', HiddenType::class)
             ->getForm()
         ;
     }
