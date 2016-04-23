@@ -132,38 +132,38 @@ class DefaultController extends Controller
 
         $form = $this->createFormBuilder($exam);
 
-        $form->add('campus', ChoiceType::class, array(
+        $form->add('campus', 'choice', array(
             'placeholder' => '- Choose campus -',
             'choices' => Exam::$CAMPUSES,
             'choices_as_values' => true
         ));
 
-        $form->add('faculty', TextType::class, array('max_length' => 50));
-        $form->add('dept', TextType::class, array('max_length' => 10));
+        $form->add('faculty', 'text', array('max_length' => 50));
+        $form->add('dept', 'text', array('max_length' => 10));
 
         if (count($subjectCode) > 1) {
-            $form->add('subject_code', ChoiceType::class, array(
+            $form->add('subject_code', 'choice', array(
                 'placeholder' => '- Choose campus first -',
                 'choices' => array_flip($subjectCode),
                 'choices_as_values' => true
                 ))
-                 ->add('subject_code_number', TextType::class, array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
+                 ->add('subject_code_number', 'text', array('label' => false, 'mapped' => false, 'max_length' => 5));  //extra field to
         } else {
-            $form->add('subject_code', TextType::class, array('max_length' => 10));
+            $form->add('subject_code', 'text', array('max_length' => 10));
         }
 
-        $form->add('comments', TextareaType::class, array('required' => false))
+        $form->add('comments', 'textarea', array('required' => false))
             ->add('year')
-            ->add('term', ChoiceType::class, array('placeholder' => '- Choose term -', 'choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
-            ->add('cross_listed', TextType::class, array('required' => false, 'max_length' => 10))
-            ->add('access_level', ChoiceType::class, array('placeholder' => '- Choose access level -', 'choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
-            ->add('type', ChoiceType::class, array('placeholder' => '- Choose type of material -', 'choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
-            ->add('legal_date', DateType::class, array('widget' => 'single_text', 'attr' => array('read_only' => true)))
-            ->add('legal_content_owner', TextType::class, array('max_length' => 100))
-            ->add('legal_uploader', TextType::class, array('data' => $first.$last, 'max_length' => 100))
-            ->add('legal_agreed', CheckboxType::class, array('label' => 'I agree', 'required' => true))
-            ->add('file', FileType::class)
-            ->add('upload', SubmitType::class);
+            ->add('term', 'choice', array('placeholder' => '- Choose term -', 'choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
+            ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
+            ->add('access_level', 'choice', array('placeholder' => '- Choose access level -', 'choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
+            ->add('type', 'choice', array('placeholder' => '- Choose type of material -', 'choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
+            ->add('legal_date', 'date', array('widget' => 'single_text', 'attr' => array('read_only' => true)))
+            ->add('legal_content_owner', 'text', array('max_length' => 100))
+            ->add('legal_uploader', 'text', array('data' => $first.$last, 'max_length' => 100))
+            ->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true))
+            ->add('file', 'file')
+            ->add('upload', 'submit');
 
         $form = $form->getForm();
 
@@ -238,7 +238,7 @@ class DefaultController extends Controller
     protected function filter(QueryBuilder $queryBuilder, Request $request)
     {
         $session = $request->getSession();
-        $filterForm = $this->createForm(ExamFilterType::class);
+        $filterForm = $this->createForm(new ExamFilterType());
 
         // Reset filter
         if ($request->get('filter_action') == 'reset') {
@@ -261,7 +261,7 @@ class DefaultController extends Controller
             // Get filter from session
             if ($session->has('ExamControllerFilter')) {
                 $filterData = $session->get('ExamControllerFilter');
-                $filterForm = $this->createForm(ExamFilterType::class, $filterData);
+                $filterForm = $this->createForm(new ExamFilterType(), $filterData);
                 $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
             }
         }
@@ -414,22 +414,22 @@ class DefaultController extends Controller
 
         //ok, create update form!
         $form = $this->createFormBuilder($exam)
-            ->add('campus', ChoiceType::class, array('choices' => Exam::$CAMPUSES, 'choices_as_values' => true))
-            ->add('faculty', TextType::class, array('max_length' => 50))
-            ->add('dept', TextType::class, array('max_length' => 50))
-            ->add('subject_code', TextType::class, array('max_length' => 10))
-            ->add('comments', TextareaType::class, array('required' => false))
+            ->add('campus', 'choice', array('choices' => Exam::$CAMPUSES, 'choices_as_values' => true))
+            ->add('faculty', 'text', array('max_length' => 50))
+            ->add('dept', 'text', array('max_length' => 50))
+            ->add('subject_code', 'text', array('max_length' => 10))
+            ->add('comments', 'textarea', array('required' => false))
             ->add('year')
-            ->add('term', ChoiceType::class, array('choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
-            ->add('cross_listed', TextType::class, array('required' => false, 'max_length' => 10))
-            ->add('access_level', ChoiceType::class, array('choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
-            ->add('type', ChoiceType::class, array('placeholder' => '- Choose type of material -', 'choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
-            ->add('legal_date', DateType::class, array('widget' => 'single_text', 'attr' => array('read_only' => true)))
-            ->add('legal_content_owner', TextType::class, array('max_length' => 100))
-            ->add('legal_uploader', TextType::class, array('max_length' => 100, 'attr' => array('read_only' => true)))
-            /*->add('legal_agreed', CheckboxType::class, array('label' => 'I agree', 'required' => true, 'disabled' => true))*/
-            /*->add('file', FileType::class, array('required' => false))*/
-            ->add('upload', SubmitType::class)
+            ->add('term', 'choice', array('choices' => array_flip(Exam::$TERMS), 'choices_as_values' => true))
+            ->add('cross_listed', 'text', array('required' => false, 'max_length' => 10))
+            ->add('access_level', 'choice', array('choices' => array_flip(Exam::$ACCESS_LEVELS), 'choices_as_values' => true))
+            ->add('type', 'choice', array('placeholder' => '- Choose type of material -', 'choices' => array_flip(Exam::$TYPES), 'choices_as_values' => true))
+            ->add('legal_date', 'date', array('widget' => 'single_text', 'attr' => array('read_only' => true)))
+            ->add('legal_content_owner', 'text', array('max_length' => 100))
+            ->add('legal_uploader', 'text', array('max_length' => 100, 'attr' => array('read_only' => true)))
+            /*->add('legal_agreed', 'checkbox', array('label' => 'I agree', 'required' => true, 'disabled' => true))*/
+            /*->add('file', 'file', array('required' => false))*/
+            ->add('upload', 'submit')
             ->getForm();
 
         if ($request->getMethod() == "POST") {

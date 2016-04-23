@@ -51,7 +51,7 @@ class UserController extends Controller
     protected function filter(Request $request)
     {
         $session = $request->getSession();
-        $filterForm = $this->createForm(UserFilterType::class);
+        $filterForm = $this->createForm(new UserFilterType());
         $em = $this->getDoctrine()->getManager();
         $queryBuilder = $em->getRepository('UBCExamMainBundle:User')->createQueryBuilder('e');
 
@@ -76,7 +76,7 @@ class UserController extends Controller
             // Get filter from session
             if ($session->has('UserControllerFilter')) {
                 $filterData = $session->get('UserControllerFilter');
-                $filterForm = $this->createForm(UserFilterType::class, $filterData);
+                $filterForm = $this->createForm(new UserFilterType(), $filterData);
                 $this->get('lexik_form_filter.query_builder_updater')->addFilterConditions($filterForm, $queryBuilder);
             }
         }
@@ -128,7 +128,7 @@ class UserController extends Controller
     public function createAction(Request $request)
     {
         $entity  = new User();
-        $form = $this->createForm(UserType::class, $entity);
+        $form = $this->createForm(new UserType(), $entity);
         $form->handleRequest($request);
 
         // check if the target user has higher level of role than current user
@@ -164,7 +164,7 @@ class UserController extends Controller
     public function newAction()
     {
         $entity = new User();
-        $form   = $this->createForm(UserType::class, $entity);
+        $form   = $this->createForm(new UserType(), $entity);
 
         return array(
             'entity' => $entity,
@@ -222,7 +222,7 @@ class UserController extends Controller
             }
         }
 
-        $editForm = $this->createForm(UserType::class, $entity);
+        $editForm = $this->createForm(new UserType(), $entity);
         $deleteForm = $this->createDeleteForm($id);
 
         return array(
@@ -250,7 +250,7 @@ class UserController extends Controller
         }
 
         $deleteForm = $this->createDeleteForm($id);
-        $editForm = $this->createForm(UserType::class, $entity);
+        $editForm = $this->createForm(new UserType(), $entity);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
@@ -311,7 +311,7 @@ class UserController extends Controller
         return $this->createFormBuilder(array('id' => $id))
             ->setAction($this->generateUrl('user_delete', array('id' => $id)))
             ->setMethod('DELETE')
-            ->add('id', HiddenType::class)
+            ->add('id', 'hidden')
             ->getForm()
         ;
     }
