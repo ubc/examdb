@@ -20,7 +20,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.network "private_network", ip: "192.168.50.4"
   config.vm.network "forwarded_port", guest: 80, host: 8089, auto_correct: true
   #config.vm.network "forwarded_port", guest: 3306, host: 23306, auto_correct: true
-  config.vm.synced_folder "./", "/www_data/app", create: true, type: :nfs
+  config.vm.synced_folder "./", "/www_data/app", create: true
   #config.bindfs.bind_folder "/vagrant-nfs", "/www_data/app"
   config.vm.hostname = "examdb.dev"
   config.vm.provision :shell, :inline => <<-SHELL
@@ -38,6 +38,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, :inline => <<-SHELL
     sudo su - vagrant
     cd /www_data/app
+    if [ ! -f app/config/parameters.yml ];then composer install; fi
     php app/console doctrine:schema:update --force
     php app/console cache:clear --env=prod
     php app/console cache:warmup --env=prod
