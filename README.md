@@ -107,6 +107,14 @@ The project environment can be provision by [Vagrant](http://www.vagrantup.com/)
 
     bin/phing test
 
+
+### Using Docker
+WIP: app container has issue using environment variable for database connection.
+
+```bash
+docker-compose up
+```
+
 NOTES
 -----
 * Default username and password are both "admin"

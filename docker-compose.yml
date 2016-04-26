@@ -1,0 +1,32 @@
+version: '2'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php-fpm/Dockerfile
+    environment:
+      ENVIRONMENT: dev
+      DB_HOST: db
+      REDIS_HOST: cache
+    depends_on:
+      - db
+      - cache
+  db:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: examdb
+      MYSQL_USER: examdb
+      MYSQL_PASSWORD: examdb
+  cache:
+    image: redis:alpine
+  web:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    environment:
+      ENVIRONMENT: dev
+    ports:
+      - 8089:80
+    depends_on:
+      - app
